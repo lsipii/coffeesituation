@@ -12,6 +12,5 @@ api = Api(app)
 
 api.add_resource(Zoinks, '/<string:accessKey>', '/')
 
-
 if __name__ == '__main__':
     app.run(debug=True)
