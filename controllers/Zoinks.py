@@ -2,13 +2,14 @@
 """
 @author lsipii
 """
-from flask_restful import Resource
+
+from controllers.BaseController import BaseController
 from features.CoffeeChecker import CoffeeChecker
 from app.AccessChecker import AccessChecker
 
-class Zoinks(Resource):
-	def get(self, accessKey = None):
-		if AccessChecker().ifAccessGranted(accessKey):
+class Zoinks(BaseController):
+	def get(self, params = None):
+		if AccessChecker().ifAccessGranted():
 			return CoffeeChecker().hasWeCoffee()
 		else:
-			return {"message": "Why are you jamming?"}
+			return self.getNotFoundResponse()
