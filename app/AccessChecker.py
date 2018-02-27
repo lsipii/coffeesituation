@@ -3,14 +3,14 @@
 @author lsipii
 """
 from flask import request
-from flask import current_app as app
 
 class AccessChecker():
 
 	"""
 	Module initialization
 	"""
-	def __init__(self):
+	def __init__(self, debugMode):
+		self.debugMode = debugMode
 		self.accessKeyParamKeyName = "accessKey"
 		self.accessKey = "kyllig"
 
@@ -23,7 +23,7 @@ class AccessChecker():
 
 		requestAccessKey = None
 
-		if app.debug and self.requestHasAccessKeyByGetRequest():
+		if self.debugMode and self.requestHasAccessKeyByGetRequest():
 			requestAccessKey = self.getAccessKeyFromGetRequest()
 		elif self.requestHasAccessKeyByPostRequest():
 			requestAccessKey = self.getAccessKeyFromPostRequest()
@@ -38,7 +38,7 @@ class AccessChecker():
 	@return (bool) hasCorrectAccessParams
 	"""
 	def requestHasAccessKeyByGetRequest(self):
-		if app.debug and request.method == 'GET':
+		if self.debugMode and request.method == 'GET':
 			param = self.getAccessKeyFromGetRequest()
 			return param is not None
 		return False
@@ -49,9 +49,8 @@ class AccessChecker():
 	@return (bool) hasCorrectAccessParams
 	"""
 	def requestHasAccessKeyByPostRequest(self):
-		if request.method == 'POST':
-			param = self.getAccessKeyFromPostRequest()
-			return param is not None
+		if request.method == 'POST' and self.accessKeyParamKeyName in request.form:
+			return True
 		return False
 
 	"""
@@ -68,5 +67,4 @@ class AccessChecker():
 	@return (string|None) accessKey
 	"""
 	def getAccessKeyFromPostRequest(self):
-		return request.json.get(self.accessKeyParamKeyName)
-
+		return request.form[self.accessKeyParamKeyName]

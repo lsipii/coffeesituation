@@ -2,10 +2,7 @@
 """
 @author lsipii
 """
-import sh
-import datetime
-
-from hardware.Camera import Camera
+from hardware.CameraShots import CameraShots
 
 class CoffeeChecker():
 
@@ -13,11 +10,10 @@ class CoffeeChecker():
 	Module initialization
 	"""
 	def __init__(self):
-		self.camera = Camera()
 		self.imageDirectory = "~/.zoinks/coffee"
 		self.imageFilename = "cameraOutput.jpg"
 		self.imagePath = self.imageDirectory+"/"+self.imageFilename
-		sh.mkdir("-p", self.imageDirectory)
+		self.camera = CameraShots(self.imageDirectory)
 
 	"""
 	Checks if we have coffe
@@ -40,11 +36,7 @@ class CoffeeChecker():
 	@return (bool) 
 	"""
 	def shouldWeTakeAPhoto(self):
-		if self.camera.photoShootTime is None:
+		howLongAgoLastShoot = self.camera.howManySecsAgoLastCapturingStarted()
+		if howLongAgoLastShoot == 0 or howLongAgoLastShoot > 30:
 			return True
-
-		howLongAgoLastShoot = datetime.now() - self.camera.photoShootTime
-		if howLongAgoLastShoot.total_seconds() > 30:
-			return True
-			
 		return False

@@ -2,36 +2,100 @@
 """
 @author lsipii
 """
+from datetime import datetime
 import sh
-import base64 
-import datetime
 
 class Camera():
 
 	"""
-	Module initialization
+	Camera module initialization
+
+	@param (string) storagePath
 	"""
-	def __init__(self):
-		self.photoShootTime = None
+	def __init__(self, storagePath = None):
+
+		# Times, good times
+		self.times = {
+			"captureStartTime": None, # timedate
+			"captureStopTime": None, # timedate
+			"captureTotalTime": None, # timedelta
+			"captureTimesResetTime": None, # timedate
+		}
+
+		# If storing to a folder, ensure dir
+		if storagePath is not None:
+			sh.mkdir("-p", storagePath)
 
 	"""
-	Takes a photo
-	
-	@param (string) imagePath
+	Start shooting
 	"""
-	def takeAPhoto(self, imagePath):
-		self.photoShootTime = datetime.now()
-		sh.raspistil('-o', imagePath)
+	def captureStart(self):
+		self.times["captureStartTime"] = datetime.now()
+		self.times["captureTimesResetTime"] = self.times["captureStartTime"] # Note that python datetime getters are immutable, this is a copy
+
+	
+	"""
+	Stop shooting
+	"""
+	def captureStop(self):
+
+		# Lil validation
+		if self.hasNotCapturedAtAll():
+			raise Exception('Camera.cameraStop must be called after cameraStart!')
+
+		self.times["captureStopTime"] = datetime.now()
+		self.times["captureTotalTime"] = self.times["captureStopTime"] - self.times["captureStartTime"]
+
 
 	"""
-	Reads taken photo as base64 bin string
-	
-	@param (string) imagePath
-	@return (base64 string) image64
+	Reset, restart shooting
 	"""
-	def readImageAsB64String(self, imagePath):
-		image = open(imagePath, 'rb') #open binary file in read mode
-		imageRead = image.read()
-		image64 = base64.encodestring(imageRead)
-		return image64
-		
+	def captureRestart(self):
+		self.times["captureStopTime"] = None
+		self.times["captureTotalTime"] = None
+		self.captureStart()
+
+	"""
+	Checks if there has been any camera usage on runtime
+
+	@return (bool) 
+	"""
+	def hasNotCapturedAtAll(self):
+		return self.howManySecsAgoLastCapturingStarted() == 0
+
+	"""
+	Checks how long time ago was the last frames capturing started
+
+	@return (int) 
+	"""
+	def howManySecsAgoLastCapturingStarted(self):
+		return self.howManySecsAgoWasLastCameraSomething("captureStartTime")
+
+	"""
+	Checks how long time ago was the something something something
+
+	@return (int) 
+	"""
+	def howManySecsAgoWasLastCameraSomething(self, timeObjName):
+
+		timeObj = self.getTimeObj(timeObjName)
+		if timeObj is None:
+			return 0
+
+		difference = datetime.now() - timeObj #  Note: returns timedelta obj
+		return difference.total_seconds()
+
+	"""
+	Get shooting time obj by name
+
+	@param (string) timeObjName
+	@return (datetime|timedelta)
+	"""
+	def getTimeObj(self, timeObjName):
+		# Lil validation
+		if timeObjName not in self.times:
+			raise Exception("No timeObjName "+timeObjName+" defined in Camera.times dict")
+		return self.times[timeObjName]
+
+	
+

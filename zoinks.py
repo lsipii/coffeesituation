@@ -3,14 +3,20 @@
 @author lsipii
 """
 from flask import Flask
-from flask_restful import Api
-
 from controllers.Zoinks import Zoinks
 
-app = Flask("tshzoink")
-api = Api(app)
+# Sets the app debug mode
+debugMode = True
 
-api.add_resource(Zoinks, '/')
+# Creates the flask app
+app = Flask(__name__)
+# App controller
+controller = Zoinks(debugMode)
+
+# Defines the app routes
+@app.route('/', methods=controller.knownHttpMethods)
+def request():
+	return controller.getZoinkResponse()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=debugMode)
