@@ -32,7 +32,7 @@ class Zoinks(BaseController):
 				else:
 					return self.getErrorResponse()
 		else:
-			return self.getNotFoundResponse()
+			return self.getAccessDeniedResponse()
 
 	"""
 	Zoinks module accepted http methods

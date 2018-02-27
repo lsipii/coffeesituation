@@ -6,7 +6,7 @@ from flask import Flask
 from controllers.Zoinks import Zoinks
 
 # Sets the app debug mode
-debugMode = True
+debugMode = False
 
 # Creates the flask app
 app = Flask(__name__)

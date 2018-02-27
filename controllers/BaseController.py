@@ -105,6 +105,15 @@ class BaseController():
 		return self.getJsonResponse({"message": "Why are you jamming?"}, 404)
 
 	"""
+	The base 401 response
+	
+	@params (dict) params = None
+	@return (json ojb)
+	"""
+	def getAccessDeniedResponse(self, params = None):
+		return self.getJsonResponse({"message": "Why are you jamming?"}, 401)
+
+	"""
 	The base 500 response
 	
 	@param (mixed) message
