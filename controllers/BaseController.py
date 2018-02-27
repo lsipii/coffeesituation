@@ -16,7 +16,7 @@ class BaseController():
 	The base request handler
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def get(self, params = None):
 		return self.getNotFoundResponse()
@@ -25,7 +25,7 @@ class BaseController():
 	The base request handler
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def head(self, params = None):
 		return self.getMethodNotSupportedResponse()
@@ -34,7 +34,7 @@ class BaseController():
 	The base request handler
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def put(self, params = None):
 		return self.getMethodNotSupportedResponse()
@@ -45,7 +45,7 @@ class BaseController():
 	The base request handler
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def delete(self, params = None):
 		return self.getMethodNotSupportedResponse()
@@ -54,7 +54,7 @@ class BaseController():
 	The base request handler
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def connect(self, params = None):
 		return self.getMethodNotSupportedResponse()
@@ -63,7 +63,7 @@ class BaseController():
 	The base request handler
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def options(self, params = None):
 		return self.getMethodNotSupportedResponse()
@@ -72,7 +72,7 @@ class BaseController():
 	The base request handler
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def trace(self, params = None):
 		return self.getMethodNotSupportedResponse()
@@ -81,7 +81,7 @@ class BaseController():
 	The base request handler
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def patch(self, params = None):
 		return self.getMethodNotSupportedResponse()
@@ -90,7 +90,7 @@ class BaseController():
 	The base request method not supported response
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def getMethodNotSupportedResponse(self, params = None):
 		return self.getJsonResponse({"message": "Why are you jamming?"}, 405)
@@ -99,7 +99,7 @@ class BaseController():
 	The base 404 response
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def getNotFoundResponse(self, params = None):
 		return self.getJsonResponse({"message": "Why are you jamming?"}, 404)
@@ -108,7 +108,7 @@ class BaseController():
 	The base 401 response
 	
 	@params (dict) params = None
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def getAccessDeniedResponse(self, params = None):
 		return self.getJsonResponse({"message": "Why are you jamming?"}, 401)
@@ -117,7 +117,7 @@ class BaseController():
 	The base 500 response
 	
 	@param (mixed) message
-	@return (json ojb)
+	@return (json_response)
 	"""
 	def getErrorResponse(self, message = None):
 		if message is None:
