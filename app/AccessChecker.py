@@ -9,7 +9,7 @@ class AccessChecker():
 	"""
 	Module initialization
 	"""
-	def __init__(self, debugMode):
+	def __init__(self, debugMode = False):
 		self.debugMode = debugMode
 		self.accessKeyParamKeyName = "accessKey"
 		self.accessKey = "kyllig"
@@ -68,3 +68,11 @@ class AccessChecker():
 	"""
 	def getAccessKeyFromPostRequest(self):
 		return request.form[self.accessKeyParamKeyName]
+
+	"""
+	Sets debug mode
+	
+	@param (bool) debugMode
+	"""
+	def setDebugMode(self, debugMode):
+		self.debugMode = debugMode

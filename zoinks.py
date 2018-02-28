@@ -9,7 +9,7 @@ from controllers.Zoinks import Zoinks
 # Creates the flask app
 app = Flask(__name__)
 # App controller
-controller = Zoinks(debugMode)
+controller = Zoinks()
 
 # Defines the app routes
 @app.route('/', methods=controller.knownHttpMethods)
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
 	# Help texts
 	def printHelp():
-		print("Usage: zoinks.py [--help|--version|--production]") 
+		print("Usage: zoinks.py --help|--version|--production") 
 		exit()
 		
 	try:
@@ -45,4 +45,5 @@ if __name__ == '__main__':
 			debugMode = False
 
 	# Run app
-    app.run(debug=debugMode)
+	controller.setDebugMode(debugMode)
+	app.run(debug=debugMode)

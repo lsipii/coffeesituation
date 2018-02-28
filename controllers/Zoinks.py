@@ -13,7 +13,8 @@ class Zoinks(BaseController):
 	
 	@param (bool) debugMode
 	"""
-	def __init__(self, debugMode):	
+	def __init__(self, debugMode = False):	
+		self.debugMode = debugMode
 		self.accessChecker = AccessChecker(debugMode)
 		
 	"""
@@ -41,3 +42,12 @@ class Zoinks(BaseController):
 	"""
 	def getAccpetedMethods(self):	
 		return self.acceptedHttpMethods;
+
+	"""
+	Sets debug mode
+	
+	@param (bool) debugMode
+	"""
+	def setDebugMode(self, debugMode):
+		self.debugMode = debugMode
+		self.accessChecker.setDebugMode(self.debugMode)
