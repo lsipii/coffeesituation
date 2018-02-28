@@ -14,11 +14,10 @@ class Zoinks(BaseController):
 	@param (bool) debugMode
 	"""
 	def __init__(self, debugMode = False):
-		super().__init__()	
 		self.debugMode = debugMode
-		self.setRequiredShellApps(CoffeeChecker.getRequiredShellApps())
-		self.validateControllersFunctionality()
-		self.accessChecker = AccessChecker(debugMode)
+		self.coffeeChecker = CoffeeChecker()
+		self.accessChecker = AccessChecker(self.debugMode)
+		self.validateZoinksFunctionality()
 		
 	"""
 	Basic a very much of a intresting response, or maybe something different
@@ -28,8 +27,7 @@ class Zoinks(BaseController):
 	def getZoinkResponse(self):
 		if self.accessChecker.ifAccessGranted():
 			try:
-				coffeeChecker = CoffeeChecker()
-				coffeeResponse = coffeeChecker.hasWeCoffee()
+				coffeeResponse = self.coffeeChecker.hasWeCoffee()
 				return self.getJsonResponse(coffeeResponse)
 			except Exception as e:
 				if self.accessChecker.debugMode:
@@ -55,3 +53,15 @@ class Zoinks(BaseController):
 	def setDebugMode(self, debugMode):
 		self.debugMode = debugMode
 		self.accessChecker.setDebugMode(self.debugMode)
+
+	"""
+	Validate app runtime
+	"""
+	def validateZoinksFunctionality(self):
+
+		from utils.Utils import validateAppRequirements
+		for shellApp in self.coffeeChecker.getRequiredShellApps():
+			validateAppRequirements(shellApp) # Throws
+
+		self.coffeeChecker.storage.validateStorageFunctionality() # Throws
+

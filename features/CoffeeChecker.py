@@ -3,6 +3,7 @@
 @author lsipii
 """
 from hardware.CameraShots import CameraShots
+from hardware.MediaStorage import MediaStorage
 
 class CoffeeChecker():
 
@@ -10,10 +11,13 @@ class CoffeeChecker():
 	Module initialization
 	"""
 	def __init__(self):
-		self.imageDirectory = "~/.zoinks/coffee"
-		self.imageFilename = "cameraOutput.jpg"
-		self.imagePath = self.imageDirectory+"/"+self.imageFilename
-		self.camera = CameraShots(self.imageDirectory)
+		self.storage = MediaStorage({
+			"driver": "local",
+			"mediaDirectory": "/var/www/media/coffee",
+			"mediaFilename": "zoinks.jpg",
+			"mediaHost": "https://morphotic-cow-5470.dataplicity.io/images",
+		})
+		self.cameraShooter = CameraShots(self.storage)
 
 	"""
 	Checks if we have coffe
@@ -23,10 +27,10 @@ class CoffeeChecker():
 	def hasWeCoffee(self):
 
 		if self.shouldWeTakeAPhoto(): 
-			self.camera.takeAPhoto(self.imagePath)
-		imageBinStr = self.camera.readImageAsB64String(self.imagePath)
+			self.cameraShooter.takeAPhoto()
+		imageUrl = self.cameraShooter.getPhotoStorageUrl()
 
-		return {"message": "maybe?", "image": imageBinStr}
+		return {"message": "maybe?", "image": imageUrl}
 
 	
 	
@@ -36,7 +40,7 @@ class CoffeeChecker():
 	@return (bool) 
 	"""
 	def shouldWeTakeAPhoto(self):
-		howLongAgoLastShoot = self.camera.howManySecsAgoLastCapturingStarted()
+		howLongAgoLastShoot = self.cameraShooter.howManySecsAgoLastCapturingStarted()
 		if howLongAgoLastShoot == 0 or howLongAgoLastShoot > 30:
 			return True
 		return False

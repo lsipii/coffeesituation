@@ -3,16 +3,14 @@
 @author lsipii
 """
 from datetime import datetime
-import sh
 
 class Camera():
 
 	"""
 	Camera module initialization
 
-	@param (string) storagePath
 	"""
-	def __init__(self, storagePath = None):
+	def __init__(self):
 
 		# Times, good times
 		self.times = {
@@ -21,10 +19,6 @@ class Camera():
 			"captureTotalTime": None, # timedelta
 			"captureTimesResetTime": None, # timedate
 		}
-
-		# If storing to a folder, ensure dir
-		if storagePath is not None:
-			sh.mkdir("-p", storagePath)
 
 	"""
 	Start shooting

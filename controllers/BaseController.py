@@ -7,18 +7,6 @@ from flask_responses import json_response
 class BaseController():
 
 	"""
-	Constructor
-	"""
-	def __init__(self):
-		"""
-		List of shell apps that we require
-
-		@var (array) shellApplicationRequirements
-		"""
-		self.shellApplicationRequirements = []
-
-
-	"""
 	Base controller module initialization
 	@var (array) knownHttpMethods
 	"""
@@ -147,20 +135,3 @@ class BaseController():
 		if response is None:
 			response = {"message": "Undefined error"}
 		return json_response(response, status_code=responseCode)
-
-
-	"""
-	Sets the list of shell apps that we require
-	"""
-	def setRequiredShellApps(self, listOfShellAppNames):
-		self.shellApplicationRequirements = listOfShellAppNames
-
-	"""
-	Validate controller
-	"""
-	def validateControllersFunctionality(self):
-
-		from utils.Utils import validateAppRequirements
-
-		for shellApp in self.shellApplicationRequirements:
-			validateAppRequirements(shellApp) # Exits
