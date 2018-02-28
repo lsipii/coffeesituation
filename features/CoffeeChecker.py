@@ -13,9 +13,9 @@ class CoffeeChecker():
 	def __init__(self):
 		self.storage = MediaStorage({
 			"driver": "local",
-			"mediaDirectory": "/var/www/media/coffee",
+			"mediaDirectory": "/var/www/html/images/coffee",
 			"mediaFilename": "zoinks.jpg",
-			"mediaHost": "https://morphotic-cow-5470.dataplicity.io/images",
+			"mediaHost": "https://morphotic-cow-5470.dataplicity.io/images/coffee",
 		})
 		self.cameraShooter = CameraShots(self.storage)
 
