@@ -12,7 +12,7 @@ class MediaStorage():
 
 	@var (array) shellApplicationRequirements
 	"""
-	shellApplicationRequirements = ["sh"]
+	shellApplicationRequirements = []
 
 	"""
 	Storage constructor

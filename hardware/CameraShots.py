@@ -22,6 +22,7 @@ class CameraShots(Camera):
 	@param (MediaStorage) storage
 	"""
 	def __init__(self, storage):
+		super().__init__()
 		self.storage = storage
 		
 	"""
