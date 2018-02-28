@@ -13,6 +13,7 @@ controller = Zoinks()
 
 # Defines the app routes
 @app.route('/', methods=controller.knownHttpMethods)
+@app.route('/<any>', methods=controller.knownHttpMethods)
 def request():
 	return controller.getZoinkResponse()
 

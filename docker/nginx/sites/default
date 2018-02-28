@@ -52,8 +52,6 @@ server {
 
 	# Zoink files serving
 	location /images/ {
-        root /var/www/media;
-		autoindex off;
 		try_files $uri /images/404.jpg;
 	}
 }
