@@ -26,7 +26,8 @@ class Zoinks(BaseController):
 		if self.accessChecker.ifAccessGranted():
 			try:
 				coffeeChecker = CoffeeChecker()
-				return coffeeChecker.hasWeCoffee()
+				coffeeResponse = coffeeChecker.hasWeCoffee()
+				return self.getJsonResponse(coffeeResponse)
 			except Exception as e:
 				if self.accessChecker.debugMode:
 					return self.getErrorResponse(str(e))
