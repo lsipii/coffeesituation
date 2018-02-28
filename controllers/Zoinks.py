@@ -13,8 +13,11 @@ class Zoinks(BaseController):
 	
 	@param (bool) debugMode
 	"""
-	def __init__(self, debugMode = False):	
+	def __init__(self, debugMode = False):
+		super().__init__()	
 		self.debugMode = debugMode
+		self.setRequiredShellApps(CoffeeChecker.getRequiredShellApps())
+		self.validateControllersFunctionality()
 		self.accessChecker = AccessChecker(debugMode)
 		
 	"""

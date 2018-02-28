@@ -40,3 +40,13 @@ class CoffeeChecker():
 		if howLongAgoLastShoot == 0 or howLongAgoLastShoot > 30:
 			return True
 		return False
+
+	"""
+	Returns the list of required shell aps
+	
+	@return (array) 
+	"""
+	@staticmethod
+	def getRequiredShellApps():
+		return CameraShots.shellApplicationRequirements;
+	

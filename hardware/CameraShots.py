@@ -2,7 +2,6 @@
 """
 @author lsipii
 """
-from utils.Utils import validateAppRequirements
 from hardware.Camera import Camera
 
 import sh
@@ -11,14 +10,20 @@ import base64
 class CameraShots(Camera):
 
 	"""
+	List of shell apps that we require
+
+	@var (array) shellApplicationRequirements
+	"""
+	shellApplicationRequirements = ["raspistill"]
+
+	"""
 	Camera shots module initialization
 
 	@param (string) storagePath
 	"""
 	def __init__(self, storagePath = None):
-		super().__init__(storagePath);
-		validateAppRequirements("raspistill") # Exits
-
+		super().__init__(storagePath)
+		
 	"""
 	Takes a photo
 	
