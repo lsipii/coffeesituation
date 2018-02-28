@@ -58,11 +58,13 @@ class MediaStorage():
 			self.configurations["local"]["mediaDirectory"] = configs["mediaDirectory"]
 		if "mediaFilename" in configs:
 			self.configurations["local"]["mediaFilename"] = configs["mediaFilename"]
+		if "mediaHost" in configs:
+			self.configurations["local"]["mediaHost"] = configs["mediaHost"]
 
 		if self.configurations["local"]["mediaDirectory"] is not None and self.configurations["local"]["mediaFilename"] is not None:
 			self.configurations["local"]["mediaPath"] = self.configurations["local"]["mediaDirectory"]+"/"+self.configurations["local"]["mediaFilename"]
 		if self.configurations["local"]["mediaHost"] is not None and self.configurations["local"]["mediaFilename"] is not None:
-			self.configurations["local"]["mediaUrl"] = self.configurations["local"]["mediaDirectory"]+"/"+self.configurations["local"]["mediaFilename"]
+			self.configurations["local"]["mediaUrl"] = self.configurations["local"]["mediaHost"]+"/"+self.configurations["local"]["mediaFilename"]
 
 	"""
 	Validates we'r good to go
@@ -98,3 +100,4 @@ class MediaStorage():
 	def getMediaFileUrl(self):
 		if self.driver == "local":
 			return self.configurations["local"]["mediaUrl"]
+		return None

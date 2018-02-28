@@ -30,7 +30,7 @@ class CoffeeChecker():
 			self.cameraShooter.takeAPhoto()
 		imageUrl = self.cameraShooter.getPhotoStorageUrl()
 
-		return {"message": "maybe?", "image": imageUrl}
+		return {"message": "Maybe we have coffee but the API is not quite sure", "image": imageUrl}
 
 	
 	
