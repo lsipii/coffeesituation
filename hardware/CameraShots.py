@@ -17,7 +17,7 @@ class CameraShots(Camera):
 	"""
 	def __init__(self, storagePath = None):
 		super().__init__(storagePath);
-		validateAppRequirements("raspistil") # Exits
+		validateAppRequirements("raspistill") # Exits
 
 	"""
 	Takes a photo
@@ -26,7 +26,7 @@ class CameraShots(Camera):
 	"""
 	def takeAPhoto(self, imagePath):
 		super().captureStart()
-		sh.raspistil('-o', imagePath)
+		sh.raspistill('-o', imagePath)
 		super().captureStop()
 
 	"""
