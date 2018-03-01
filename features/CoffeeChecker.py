@@ -32,13 +32,16 @@ class CoffeeChecker():
 			self.cameraShooter.takeAPhoto() 
 			imageUrl = self.cameraShooter.getPhotoStorageUrl()
 			message = random.choise(self.coffeeMessages)
-            slackNotice = message+" <"+imageUrl+"|Check the coffee situation here>"
+			slackNotice = message+" <"+imageUrl+"|Check the coffee situation here>"
+
 			return {
 				"message": message, 
 				"image": imageUrl,
 				"slackNotice": slackNotice
 			}
-		return {"message": "Situation has not changed"}
+
+		else:
+			return {"message": "Situation has not changed"}
 
 	
 	
