@@ -34,6 +34,6 @@ class Slack():
 	def send(self, payload):
 		payload_json = json.dumps(payload)
 		data = urlencode({"payload": payload_json})
-		req = urlrequest.Request(self.url)
+		req = urlrequest.Request(self.accessPoint)
 		response = self.requestHandler.open(req, data.encode('utf-8')).read()
 		return response.decode('utf-8')
