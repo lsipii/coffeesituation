@@ -27,19 +27,19 @@ Checks if coffee was asked, fires the asker if so
 def checkIfShouldAskForCoffee(data, bufferp, uber_empty, tagsn, isdisplayed, ishilight, prefix, message):
 
     acceptedChannels = ["#tests"]
-	
-    #coffeeQuestions = ["Onkohan yläkerrassa kahvia", "coffee can I has"]
-	#if message in coffeeQuestions:
+
+    #coffeeQuestions = ["Onkohan kahvia", "coffee can I has"]
+    #if message in coffeeQuestions:
 
     coffeeKeywords = ["kahvia", "kahvii", "kahvi", "coffee"]
     if any(keyWord in message for keyWord in coffeeKeywords):
-		# Resolve channel
-		chan = (weechat.buffer_get_string(bufferp, "short_name") or weechat.buffer_get_string(bufferp, "name"))
+        # Resolve channel
+        chan = (weechat.buffer_get_string(bufferp, "short_name") or weechat.buffer_get_string(bufferp, "name"))
 
-		if chan in acceptedChannels:
-			askForCoffee()
+        if chan in acceptedChannels:
+            askForCoffee()
 
-	return weechat.WEECHAT_RC_OK
+    return weechat.WEECHAT_RC_OK
 
 """
 Asks for coffee
