@@ -5,7 +5,7 @@
 import os
 import sh
 import time
-import shutil
+import glob
 
 class MediaStorage():
 
@@ -119,4 +119,6 @@ class MediaStorage():
 	Clears media folder from files
 	"""
 	def clearPreviousMediaFiles(self):
-		shutil.rmtree(self.configurations["local"]["mediaDirectory"]+"/*")
+		files = glob.glob(self.configurations["local"]["mediaDirectory"])
+		for file in files:
+			os.remove(file)
