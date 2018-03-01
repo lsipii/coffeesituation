@@ -43,8 +43,6 @@ class Slack():
 		if not channel.startswith("#"):
 			channel = "#"+channel
 
-		print(self.configs[payload["network"]]["accessPoint"])
-		
 		return self.sendSlackTextPayload({
 			"message": payload["message"],
 			"channel": channel,
