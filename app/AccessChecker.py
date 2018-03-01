@@ -15,12 +15,12 @@ class AccessChecker():
 	def __init__(self, accessConfig, debugMode = False):
 		self.accessConfig = accessConfig
 		self.debugMode = debugMode
-		self.accessKeyParamKeyName = "api_key"
+		self.accessKeyParamKeyName = "api_token"
 
 	"""
 	Checks the request for correct credential details, passed as request params 
 
-	@param (dict) requestParams, [app, api_key]
+	@param (dict) requestParams, [app, api_token]
 	@param (string) requestMethod
 	@return (bool) accessGranted
 	"""
@@ -40,7 +40,7 @@ class AccessChecker():
 	"""
 	Checks the request has access params by get method
 	
-	@param (dict) requestParams, [app, api_key]
+	@param (dict) requestParams, [app, api_token]
 	@return (bool) hasCorrectAccessParams
 	"""
 	def getAccessDetailsFromTheRequest(self, requestParams):
