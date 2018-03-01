@@ -4,6 +4,7 @@
 """
 import os
 import sh
+import time
 
 class MediaStorage():
 
@@ -61,10 +62,20 @@ class MediaStorage():
 		if "mediaHost" in configs:
 			self.configurations["local"]["mediaHost"] = configs["mediaHost"]
 
-		if self.configurations["local"]["mediaDirectory"] is not None and self.configurations["local"]["mediaFilename"] is not None:
-			self.configurations["local"]["mediaPath"] = self.configurations["local"]["mediaDirectory"]+"/"+self.configurations["local"]["mediaFilename"]
-		if self.configurations["local"]["mediaHost"] is not None and self.configurations["local"]["mediaFilename"] is not None:
-			self.configurations["local"]["mediaUrl"] = self.configurations["local"]["mediaHost"]+"/"+self.configurations["local"]["mediaFilename"]
+		self.setupMediaFilename()
+
+	"""
+	Setups media filename
+	"""
+	def setupMediaFilename(self):
+
+		stampBase64 = "{0:x}".format(int(time.time()))
+		self.configurations[self.driver]["mediaFilename"] = stampBase64+".jpg"
+
+		if self.configurations[self.driver]["mediaDirectory"] is not None:
+			self.configurations[self.driver]["mediaPath"] = self.configurations[self.driver]["mediaDirectory"]+"/"+self.configurations[self.driver]["mediaFilename"]
+		if self.configurations[self.driver]["mediaHost"] is not None:
+			self.configurations[self.driver]["mediaUrl"] = self.configurations[self.driver]["mediaHost"]+"/"+self.configurations[self.driver]["mediaFilename"]
 
 	"""
 	Validates we'r good to go
@@ -82,7 +93,6 @@ class MediaStorage():
 		else:
 			raise Exception("Storage driver "+self.driver+" not supported")	
 		
-
 	"""
 	Gets the media file path
 
@@ -101,3 +111,9 @@ class MediaStorage():
 		if self.driver == "local":
 			return self.configurations["local"]["mediaUrl"]
 		return None
+
+	"""
+	Clears media folder from files
+	"""
+	def clearPreviousMediaFiles(self):
+		sh.rm(self.configurations["local"]["mediaDirectory"]+"/*")

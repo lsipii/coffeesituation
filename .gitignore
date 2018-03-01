@@ -1,3 +1,5 @@
 *.pyc
 .pyc
 *.sublime-workspace
+configs/*
+!configs/.gitkeep

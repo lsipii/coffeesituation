@@ -3,8 +3,10 @@
 @author lsipii
 """
 from app.AccessChecker import AccessChecker
+from app.ConfigReader import ConfigReader
 from controllers.BaseController import BaseController
 from features.CoffeeChecker import CoffeeChecker
+from utils.Slack import Slack
 
 class Zoinks(BaseController):
 
@@ -15,8 +17,12 @@ class Zoinks(BaseController):
 	"""
 	def __init__(self, debugMode = False):
 		self.debugMode = debugMode
-		self.coffeeChecker = CoffeeChecker()
+
+		self.config = ConfigReader().getConfig()		
 		self.accessChecker = AccessChecker(self.debugMode)
+		self.coffeeChecker = CoffeeChecker(self.config["storage"])
+		self.notifier = Slack(self.config["slack"])
+
 		self.validateZoinksFunctionality()
 		
 	"""
@@ -28,6 +34,8 @@ class Zoinks(BaseController):
 		if self.accessChecker.ifAccessGranted():
 			try:
 				coffeeResponse = self.coffeeChecker.hasWeCoffee()
+				notice = coffeeResponse["message"]+" Check here: "+coffeeResponse["image"]
+				self.notifier.send(notice)
 				return self.getJsonResponse(coffeeResponse)
 			except Exception as e:
 				if self.accessChecker.debugMode:

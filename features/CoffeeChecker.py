@@ -9,14 +9,11 @@ class CoffeeChecker():
 
 	"""
 	Module initialization
+
+	@param (dict) configs [storage]
 	"""
-	def __init__(self):
-		self.storage = MediaStorage({
-			"driver": "local",
-			"mediaDirectory": "/var/www/html/images/coffee",
-			"mediaFilename": "zoinks.jpg",
-			"mediaHost": "https://morphotic-cow-5470.dataplicity.io/images/coffee",
-		})
+	def __init__(self, configs):
+		self.storage = MediaStorage(configs)
 		self.cameraShooter = CameraShots(self.storage)
 
 	"""
@@ -27,10 +24,10 @@ class CoffeeChecker():
 	def hasWeCoffee(self):
 
 		if self.shouldWeTakeAPhoto(): 
-			self.cameraShooter.takeAPhoto()
+			self.cameraShooter.takeAPhoto() 
 		imageUrl = self.cameraShooter.getPhotoStorageUrl()
 
-		return {"message": "Maybe we have coffee but the API is not quite sure", "image": imageUrl}
+		return {"message": "Maybe we have coffee but the API is not yet quite sure.", "image": imageUrl}
 
 	
 	
