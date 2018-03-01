@@ -30,7 +30,6 @@ class CameraShots(Camera):
 	"""
 	def takeAPhoto(self):
 		super().captureStart()
-		print("Taking a shot")
 		self.storage.clearPreviousMediaFiles()
 		self.storage.setupMediaFilename()
 		sh.raspistill('-w', '640', '-h', '480', '-o', self.storage.getMediaFilePath())

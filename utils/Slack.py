@@ -29,10 +29,17 @@ class Slack():
 	"""
 	Sends message to slack
 	
-	@param (dict) payload
+	@param (string) message
 	"""
-	def send(self, payload):
-		payload_json = json.dumps(payload)
+	def send(self, message):
+
+		payload_json = json.dumps({
+			"text": message,
+			"channel": self.channel, 
+			"username": self.username, 
+			"icon_emoji": self.icon
+		})
+		
 		data = urlencode({"payload": payload_json})
 		req = urlrequest.Request(self.accessPoint)
 		response = self.requestHandler.open(req, data.encode('utf-8')).read()
