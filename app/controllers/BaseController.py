@@ -15,75 +15,75 @@ class BaseController():
 	"""
 	The base request handler
 	
-	@params (dict) params = None
+	@params (string) path = None
 	@return (json_response)
 	"""
-	def get(self, params = None):
+	def get(self, path = None):
 		return self.getNotFoundResponse()
 
 	"""
 	The base request handler
 	
-	@params (dict) params = None
+	@params (string) path = None
 	@return (json_response)
 	"""
-	def head(self, params = None):
+	def head(self, path = None):
 		return self.getMethodNotSupportedResponse()
 
 	"""
 	The base request handler
 	
-	@params (dict) params = None
+	@params (string) path = None
 	@return (json_response)
 	"""
-	def put(self, params = None):
+	def put(self, path = None):
 		return self.getMethodNotSupportedResponse()
-	def set(self, params = None):
-		return self.getMethodNotSupportedResponse()
-
-	"""
-	The base request handler
-	
-	@params (dict) params = None
-	@return (json_response)
-	"""
-	def delete(self, params = None):
+	def set(self, path = None):
 		return self.getMethodNotSupportedResponse()
 
 	"""
 	The base request handler
 	
-	@params (dict) params = None
+	@params (string) path = None
 	@return (json_response)
 	"""
-	def connect(self, params = None):
+	def delete(self, path = None):
 		return self.getMethodNotSupportedResponse()
 
 	"""
 	The base request handler
 	
-	@params (dict) params = None
+	@params (string) path = None
 	@return (json_response)
 	"""
-	def options(self, params = None):
+	def connect(self, path = None):
 		return self.getMethodNotSupportedResponse()
 
 	"""
 	The base request handler
 	
-	@params (dict) params = None
+	@params (string) path = None
 	@return (json_response)
 	"""
-	def trace(self, params = None):
+	def options(self, path = None):
 		return self.getMethodNotSupportedResponse()
 
 	"""
 	The base request handler
 	
-	@params (dict) params = None
+	@params (string) path = None
 	@return (json_response)
 	"""
-	def patch(self, params = None):
+	def trace(self, path = None):
+		return self.getMethodNotSupportedResponse()
+
+	"""
+	The base request handler
+	
+	@params (string) path = None
+	@return (json_response)
+	"""
+	def patch(self, path = None):
 		return self.getMethodNotSupportedResponse()
 
 	"""

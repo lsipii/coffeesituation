@@ -2,8 +2,8 @@
 """
 @author lsipii
 """
-from hardware.CameraShots import CameraShots
-from hardware.MediaStorage import MediaStorage
+from app.features.CameraShooter import CameraShooter
+from app.hardware.MediaStorage import MediaStorage
 import random
 
 class CoffeeChecker():
@@ -15,7 +15,7 @@ class CoffeeChecker():
 	"""
 	def __init__(self, configs):
 		self.storage = MediaStorage(configs)
-		self.cameraShooter = CameraShots(self.storage)
+		self.cameraShooter = CameraShooter(self.storage)
 		self.coffeeMessages = [
 			"I a badger. I know not many coffee things.",
 			"For a cup of coffee there I would dans.",
@@ -64,5 +64,5 @@ class CoffeeChecker():
 	"""
 	@staticmethod
 	def getRequiredShellApps():
-		return CameraShots.shellApplicationRequirements;
+		return CameraShooter.shellApplicationRequirements;
 	

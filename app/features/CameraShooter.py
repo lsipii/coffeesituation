@@ -2,12 +2,12 @@
 """
 @author lsipii
 """
-from hardware.Camera import Camera
+from app.hardware.Camera import Camera
 
 import sh
 import base64 
 
-class CameraShots(Camera):
+class CameraShooter(Camera):
 
 	"""
 	List of shell apps that we require

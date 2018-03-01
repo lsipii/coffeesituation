@@ -4,9 +4,10 @@
 """
 from app.AccessChecker import AccessChecker
 from app.ConfigReader import ConfigReader
-from controllers.BaseController import BaseController
-from features.CoffeeChecker import CoffeeChecker
-from utils.Slack import Slack
+from app.controllers.BaseController import BaseController
+from app.features.CoffeeChecker import CoffeeChecker
+from app.utils.Utils import validateAppRequirements
+from app.utils.Slack import Slack
 
 class Zoinks(BaseController):
 
@@ -27,10 +28,11 @@ class Zoinks(BaseController):
 		
 	"""
 	Basic a very much of a intresting response, or maybe something different
-
+	
+	@param (string) path = None
 	@return (BaseController response)
 	"""
-	def getZoinkResponse(self):
+	def getZoinkResponse(self, path = None):
 		if self.accessChecker.ifAccessGranted():
 			try:
 				coffeeResponse = self.coffeeChecker.hasWeCoffee()
@@ -67,7 +69,6 @@ class Zoinks(BaseController):
 	"""
 	def validateZoinksFunctionality(self):
 
-		from utils.Utils import validateAppRequirements
 		for shellApp in self.coffeeChecker.getRequiredShellApps():
 			validateAppRequirements(shellApp) # Throws
 

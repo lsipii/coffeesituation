@@ -4,7 +4,7 @@
 """
 import sys, getopt
 from flask import Flask
-from controllers.Zoinks import Zoinks
+from app.controllers.Zoinks import Zoinks
 
 # Creates the flask app
 app = Flask(__name__)
@@ -15,7 +15,7 @@ controller = Zoinks()
 @app.route('/', methods=controller.knownHttpMethods)
 @app.route('/<path>', methods=controller.knownHttpMethods)
 def request(path = None):
-	return controller.getZoinkResponse()
+	return controller.getZoinkResponse(path)
 
 # App runner
 if __name__ == '__main__':
