@@ -45,7 +45,7 @@ class CoffeesHasWeController(BaseController):
 				if coffeeResponse["newObservationFappened"]:
 
 					# Force request channel
-					if "channel" in requestParams
+					if "channel" in requestParams:
 						coffeeResponse["channel"] = requestParams["channel"]
 
 					self.notifier.notify(coffeeResponse)
