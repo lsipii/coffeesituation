@@ -38,7 +38,8 @@ class Slack():
 			"channel": self.channel, 
 			"username": self.username, 
 			"icon_emoji": self.icon,
-			"unfurl_medias": False
+			"unfurl_media": False,
+			"unfurl_links": False
 		})
 		
 		data = urlencode({"payload": payload_json})
