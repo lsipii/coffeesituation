@@ -16,33 +16,30 @@ class CoffeeChecker():
 	def __init__(self, configs):
 		self.storage = MediaStorage(configs)
 		self.cameraShooter = CameraShooter(self.storage)
-		self.coffeeMessages = [
-			"I a badger. I know not many coffee things.",
-			"For a cup of coffee there I would dans.",
-			"If coffee is could I have as well?"
-		]
 
 	"""
 	Checks if we have coffe
 
-	@return (bool) weHave
+	@return (dict) {
+		(string) hasCoffee
+		(string) coffeeObservationImageUrl
+		(bool) newObservationFappened
+	}
 	"""
 	def hasWeCoffee(self):
 
+		newObservationFappened = False
 		if self.shouldWeTakeAPhoto(): 
 			self.cameraShooter.takeAPhoto() 
-			imageUrl = self.cameraShooter.getPhotoStorageUrl()
-			message = random.choice(self.coffeeMessages)
-			slackNotice = message+" <"+imageUrl+"|Check the coffee situation here>"
-
-			return {
-				"message": message, 
-				"image": imageUrl,
-				"slackNotice": slackNotice
-			}
-
-		else:
-			return {"message": "Situation has not changed"}
+			newObservationFappened = True
+			
+		coffeeObservationImageUrl = self.cameraShooter.getPhotoStorageUrl()
+			
+		return {
+			"hasCoffee": "dunno",
+			"coffeeObservationImageUrl": coffeeObservationImageUrl,
+			"newObservationFappened": newObservationFappened
+		}
 
 	
 	

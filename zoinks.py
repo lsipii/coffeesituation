@@ -4,18 +4,18 @@
 """
 import sys, getopt
 from flask import Flask
-from app.controllers.Zoinks import Zoinks
+from app.controllers.CoffeesHasWeController import CoffeesHasWeController
 
 # Creates the flask app
 app = Flask(__name__)
 # App controller
-controller = Zoinks()
+controller = CoffeesHasWeController()
 
 # Defines the app routes
 @app.route('/', methods=controller.knownHttpMethods)
 @app.route('/<path>', methods=controller.knownHttpMethods)
 def request(path = None):
-	return controller.getZoinkResponse(path)
+	return controller.getCoffeeResponse(path)
 
 # App runner
 if __name__ == '__main__':

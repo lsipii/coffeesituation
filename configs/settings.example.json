@@ -1,0 +1,13 @@
+{
+    "slack": {
+        "accessPoint": "https://hooks.slack.com/services/XXXX",
+        "defaultChannel": "#tests",
+        "defaultUsername": "Coffee situation badger",
+        "defaultIcon": ":badger:"
+    },
+    "storage": {
+        "driver": "local",
+        "mediaDirectory": "/var/www/html/images/coffee",
+        "mediaHost": "https://xxxxx.dataplicity.io/images/coffee"
+    }
+}

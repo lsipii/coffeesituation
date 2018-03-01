@@ -6,10 +6,10 @@ from app.AccessChecker import AccessChecker
 from app.ConfigReader import ConfigReader
 from app.controllers.BaseController import BaseController
 from app.features.CoffeeChecker import CoffeeChecker
+from app.features.CoffeeToSlacker import CoffeeToSlacker
 from app.utils.Utils import validateAppRequirements
-from app.utils.Slack import Slack
 
-class Zoinks(BaseController):
+class CoffeesHasWeController(BaseController):
 
 	"""
 	Zoinks module initialization
@@ -22,7 +22,7 @@ class Zoinks(BaseController):
 		self.config = ConfigReader().getConfig()		
 		self.accessChecker = AccessChecker(self.debugMode)
 		self.coffeeChecker = CoffeeChecker(self.config["storage"])
-		self.notifier = Slack(self.config["slack"])
+		self.notifier = CoffeeToSlacker(self.config["slack"])
 
 		self.validateZoinksFunctionality()
 		
@@ -32,12 +32,15 @@ class Zoinks(BaseController):
 	@param (string) path = None
 	@return (BaseController response)
 	"""
-	def getZoinkResponse(self, path = None):
+	def getCoffeeResponse(self, path = None):
 		if self.accessChecker.ifAccessGranted():
 			try:
 				coffeeResponse = self.coffeeChecker.hasWeCoffee()
-				if "slackNotice" in coffeeResponse:
-					self.notifier.send(coffeeResponse["slackNotice"])
+
+				# If a new image was taken, report to slack channels
+				if coffeeResponse["newObservationFappened"]:
+					self.notifier.notify(coffeeResponse)
+
 				return self.getJsonResponse(coffeeResponse)
 			except Exception as e:
 				if self.accessChecker.debugMode:
