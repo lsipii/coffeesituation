@@ -44,15 +44,12 @@ Asks for coffee
 def askForCoffee():
     API_TOKEN = weechat.config_get_plugin("api_token")
     if API_TOKEN != "":
-    	weechat.prnt("", "TSH Zoink asks for coffee")
         url = "https://morphotic-cow-5470.dataplicity.io/"
         postdata = urllib.urlencode({'accessKey':API_TOKEN,'version':1})
-        hook1 = weechat.hook_process_hashtable("url:"+url, {"postfields":  postdata}, 2000, "handleAskingResponse", "")
+        hook1 = weechat.hook_process_hashtable("url:"+url, {"postfields":  postdata}, 6000, "handleAskingResponse", "")
 
 """
 Asks for coffee
 """
 def handleAskingResponse(pointer, data, command, returnCode, stdout = None, stderr = None):
-    weechat.prnt("", "TSH Zoink asked for coffee")
-    weechat.prnt("", pointer)
     return weechat.WEECHAT_RC_OK
