@@ -41,11 +41,13 @@ class Slack():
 
 		# Validate and set the channel
 		channel = ("channel" in payload) and payload["channel"] or self.defaultChannel
-		if not channel.startsWith("#"):
+		print(channel)
+
+		if not channel.startswith("#"):
 			channel = "#"+channel
 
 		print(channel)
-		
+
 		self.sendSlackTextPayload({
 			"message": payload["message"],
 			"channel": channel,
