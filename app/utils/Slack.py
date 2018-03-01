@@ -39,9 +39,16 @@ class Slack():
 		if "message" not in payload:
 			raise Exception("Slack.notify payload param must have a message")
 
+		# Validate and set the channel
+		channel = ("channel" in payload) and payload["channel"] or self.defaultChannel
+		if not channel.startsWith("#"):
+			channel = "#"+channel
+
+		print(channel)
+		
 		self.sendSlackTextPayload({
 			"message": payload["message"],
-			"channel": ("channel" in payload) and payload["channel"] or self.defaultChannel,
+			"channel": channel,
 			"username": ("username" in payload) and payload["username"] or self.defaultUsername,
 			"icon": ("icon" in payload) and payload["icon"] or self.defaultIcon
 		})
