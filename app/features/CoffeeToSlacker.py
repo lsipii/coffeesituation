@@ -63,7 +63,7 @@ class CoffeeToSlacker(Slack):
 		message = messageData["message"] +" <"+coffeeSituationUrl+"|Check the current coffee situation here>"
 		icon = messageData["icon"]
 		username = messageData["username"]
-		channel = ("channel" in payload) and payload["channel"] or self.defaultChannel,
+		channel = ("channel" in payload) and payload["channel"] or self.defaultChannel
 
 		return super().notify({
 			"message": message,
