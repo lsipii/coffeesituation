@@ -34,9 +34,8 @@ class Zoinks(BaseController):
 		if self.accessChecker.ifAccessGranted():
 			try:
 				coffeeResponse = self.coffeeChecker.hasWeCoffee()
-				if "image" in coffeeResponse:
-					notice = coffeeResponse["message"]+" Check here: "+coffeeResponse["image"]
-					self.notifier.send(notice)
+				if "slackNotice" in coffeeResponse:
+					self.notifier.send(coffeeResponse["slackNotice"])
 				return self.getJsonResponse(coffeeResponse)
 			except Exception as e:
 				if self.accessChecker.debugMode:

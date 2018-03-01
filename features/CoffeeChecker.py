@@ -4,6 +4,7 @@
 """
 from hardware.CameraShots import CameraShots
 from hardware.MediaStorage import MediaStorage
+import random
 
 class CoffeeChecker():
 
@@ -15,6 +16,10 @@ class CoffeeChecker():
 	def __init__(self, configs):
 		self.storage = MediaStorage(configs)
 		self.cameraShooter = CameraShots(self.storage)
+		self.coffeeMessages = [
+			"I a badger. I know not many coffee things.",
+			"For a cup of coffee there I would dans",
+		]
 
 	"""
 	Checks if we have coffe
@@ -26,7 +31,13 @@ class CoffeeChecker():
 		if self.shouldWeTakeAPhoto(): 
 			self.cameraShooter.takeAPhoto() 
 			imageUrl = self.cameraShooter.getPhotoStorageUrl()
-			return {"message": "Maybe we have coffee but the API is not yet quite sure.", "image": imageUrl}
+			message = random.choise(self.coffeeMessages)
+            slackNotice = message+" <"+imageUrl+"|Check the coffee situation here>"
+			return {
+				"message": message, 
+				"image": imageUrl,
+				"slackNotice": slackNotice
+			}
 		return {"message": "Situation has not changed"}
 
 	

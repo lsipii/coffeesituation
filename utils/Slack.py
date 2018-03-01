@@ -38,9 +38,10 @@ class Slack():
 			"channel": self.channel, 
 			"username": self.username, 
 			"icon_emoji": self.icon
+			"unfurl_medias": False,
 		})
 		
 		data = urlencode({"payload": payload_json})
 		req = urlrequest.Request(self.accessPoint)
 		response = self.requestHandler.open(req, data.encode('utf-8')).read()
-		return response.decode('utf-8')
+		return response.decode('utf-8') 
