@@ -25,9 +25,9 @@ class CoffeeChecker():
 
 		if self.shouldWeTakeAPhoto(): 
 			self.cameraShooter.takeAPhoto() 
-		imageUrl = self.cameraShooter.getPhotoStorageUrl()
-
-		return {"message": "Maybe we have coffee but the API is not yet quite sure.", "image": imageUrl}
+			imageUrl = self.cameraShooter.getPhotoStorageUrl()
+			return {"message": "Maybe we have coffee but the API is not yet quite sure.", "image": imageUrl}
+		return {"message": "Situation has not changed"}
 
 	
 	
@@ -38,7 +38,7 @@ class CoffeeChecker():
 	"""
 	def shouldWeTakeAPhoto(self):
 		howLongAgoLastShoot = self.cameraShooter.howManySecsAgoLastCapturingStarted()
-		if howLongAgoLastShoot == 0 or howLongAgoLastShoot > 30:
+		if howLongAgoLastShoot == 0 or howLongAgoLastShoot > 60:
 			return True
 		return False
 
