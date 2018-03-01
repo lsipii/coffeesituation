@@ -20,7 +20,7 @@ class Slack():
 	@param (dict) configs
 	"""
 	def __init__(self, configs):
-		self.config = configs
+		self.configs = configs
 		self.requestHandler = urlrequest.build_opener(urlrequest.HTTPHandler())
 
 
