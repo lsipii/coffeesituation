@@ -5,6 +5,7 @@
 import os
 import sh
 import time
+import shutil
 
 class MediaStorage():
 
@@ -34,6 +35,8 @@ class MediaStorage():
 			}
 		}
 		
+		self.imageExtension = "jpg"
+
 		if configs is not None:
 			self.setupStorage(configs)
 
@@ -70,7 +73,7 @@ class MediaStorage():
 	def setupMediaFilename(self):
 
 		stampBase64 = "{0:x}".format(int(time.time()))
-		self.configurations[self.driver]["mediaFilename"] = stampBase64+".jpg"
+		self.configurations[self.driver]["mediaFilename"] = stampBase64+"."+self.imageExtension
 
 		if self.configurations[self.driver]["mediaDirectory"] is not None:
 			self.configurations[self.driver]["mediaPath"] = self.configurations[self.driver]["mediaDirectory"]+"/"+self.configurations[self.driver]["mediaFilename"]
@@ -116,4 +119,4 @@ class MediaStorage():
 	Clears media folder from files
 	"""
 	def clearPreviousMediaFiles(self):
-		sh.rm(self.configurations["local"]["mediaDirectory"]+"/*")
+		shutil.rmtree(self.configurations["local"]["mediaDirectory"]+"/*")
