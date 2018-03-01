@@ -47,8 +47,6 @@ class CoffeesHasWeController(BaseController):
 					# Force request channel
 					if "channel" in requestParams:
 						coffeeResponse["channel"] = requestParams["channel"]
-						print("Moro:"+coffeeResponse["channel"])
-
 					self.notifier.notify(coffeeResponse)
 
 				return self.getJsonResponse(coffeeResponse)
