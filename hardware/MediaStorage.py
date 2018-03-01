@@ -119,7 +119,7 @@ class MediaStorage():
 	Clears media folder from files
 	"""
 	def clearPreviousMediaFiles(self):
-		files = glob.glob(self.configurations["local"]["mediaDirectory"])
+		files = glob.glob(self.configurations["local"]["mediaDirectory"]+"/*")
 		print("clearing")
 		for f in files:
 			print(f)
