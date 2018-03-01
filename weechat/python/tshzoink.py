@@ -19,25 +19,56 @@ for option, default_value in settings.items():
         weechat.prnt("", "tshzoink: /set plugins.var.python.tshzoink.%s STRING" % option)
 
 # Hook message listener
-weechat.hook_print("", "", "", 1, "checkIfShouldAskForCoffee", "")
+weechat.hook_print("", "", "", 1, "checkIfShouldAskForACoffee", "")
 
 """
 Checks if coffee was asked, fires the asker if so
 """
-def checkIfShouldAskForCoffee(data, bufferp, uber_empty, tagsn, isdisplayed, ishilight, prefix, message):
+def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, ishilight, prefix, message):
 
-    acceptedChannels = ["#tests"]
+    # Accepted networks and thus channels
+    acceptedCoffeeNetworks = [
+        {
+            "network": "irc.aarium", 
+            "channels": ["#tests"], 
+        },
+        {
+            "network": "irc.tamperestartuphub",
+            "channels": ["#tests"], 
+        }
+    ]
 
+    #@disabled: check for specific coffee sentences
     #coffeeQuestions = ["Onkohan kahvia", "coffee can I has"]
-    #if message in coffeeQuestions:
-
+    
+    #@enabled: Allowed coffee keywords
     coffeeKeywords = ["kahvia", "kahvii", "kahvi", "coffee"]
-    if any(keyWord in message for keyWord in coffeeKeywords):
-        # Resolve channel
-        chan = (weechat.buffer_get_string(bufferp, "short_name") or weechat.buffer_get_string(bufferp, "name"))
+    
+    # Resolve the accepted network
+    bufferBullName = weechat.buffer_get_string(bufferp, "full_name")
+    acceptedNetwork = False
 
-        if chan in acceptedChannels:
-            askForCoffee()
+    for network in acceptedCoffeeNetworks:
+        networkName = network["network"]
+        if bufferBullName.startswith(networkName+"."):
+            acceptedNetwork = network
+            break
+
+    if acceptedNetwork is not False:
+        
+        # Resolve the networks channel
+        channel = (weechat.buffer_get_string(bufferp, "short_name") or weechat.buffer_get_string(bufferp, "name"))
+        accpetedChannels = acceptedNetwork["channels"]
+        
+        # If in accepted chans, run the coffee asking query
+        if channel in accpetedChannels:
+
+            #@disabled: check for specific sentences
+            #if message in coffeeQuestions:
+
+            #@enabled: check for specific keywords
+            if any(keyWord in message for keyWord in coffeeKeywords):
+                askForCoffee()
 
     return weechat.WEECHAT_RC_OK
 
@@ -49,10 +80,4 @@ def askForCoffee():
     if API_TOKEN != "":
         url = "https://morphotic-cow-5470.dataplicity.io/"
         postdata = urllib.urlencode({'accessKey':API_TOKEN,'version':1})
-        hook1 = weechat.hook_process_hashtable("url:"+url, {"postfields":  postdata}, 6000, "handleAskingResponse", "")
-
-"""
-Asks for coffee
-"""
-def handleAskingResponse(pointer, data, command, returnCode, stdout = None, stderr = None):
-    return weechat.WEECHAT_RC_OK
+        hook1 = weechat.hook_process_hashtable("url:"+url, {"postfields":  postdata}, 6000, "", "")

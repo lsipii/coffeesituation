@@ -4,7 +4,6 @@
 """
 from app.features.CameraShooter import CameraShooter
 from app.hardware.MediaStorage import MediaStorage
-import random
 
 class CoffeeChecker():
 
