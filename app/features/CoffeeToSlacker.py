@@ -10,10 +10,14 @@ class CoffeeToSlacker(Slack):
 	"""
 	Slack messanger, coffee overrides
 
-	@param (dict) config
+	@param (dict) configs
 	"""
-	def __init__(self, config):
-		super().__init__(config)
+	def __init__(self, configs):
+		super().__init__(configs)
+
+		# Some defaults
+		self.defaultChannel = "#tests"
+		self.defaultNetwork = "irc.aarium"
 
 		# Define coffee messages
 		self.coffeeMessages = [
@@ -51,9 +55,25 @@ class CoffeeToSlacker(Slack):
 
 
 	"""
+	Gathers some payload for slack, sends
+	
+	@param (dict) payload, [message]
+	@param (dict) payload, [channel, network]
+	@return (response)
+	"""
+	def notifyCoffeeRequest(self, payload, requestParams):
+		# Force request channel&network
+		if "channel" in requestParams:
+			payload["channel"] = requestParams["channel"]
+		if "network" in requestParams:
+			payload["network"] = requestParams["network"]
+		return self.notify(payload)
+
+	"""
 	Sends the gathered payload to slack
 
-	@param (dict) payload, [message]
+	@param (dict) payload, [message, channel, network]
+	@return (response)
 	"""
 	def notify(self, payload):
 		
@@ -64,10 +84,12 @@ class CoffeeToSlacker(Slack):
 		icon = messageData["icon"]
 		username = messageData["username"]
 		channel = ("channel" in payload) and payload["channel"] or self.defaultChannel
+		network = ("network" in payload) and payload["network"] or self.defaultNetwork
 
 		return super().notify({
 			"message": message,
 			"channel": channel,
+			"network": network,
 			"icon": icon,
 			"username": username
 		})

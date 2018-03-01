@@ -43,12 +43,7 @@ class CoffeesHasWeController(BaseController):
 
 				# If a new image was taken, report to slack channels
 				if coffeeResponse["newObservationFappened"]:
-
-					# Force request channel
-					if "channel" in requestParams:
-						coffeeResponse["channel"] = requestParams["channel"]
-					self.notifier.notify(coffeeResponse)
-
+					self.notifier.notifyCoffeeRequest(coffeeResponse, requestParams)
 				return self.getJsonResponse(coffeeResponse)
 			except Exception as e:
 				if self.accessChecker.debugMode:

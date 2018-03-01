@@ -5,10 +5,12 @@
         }
     },
     "slack": {
-        "accessPoint": "https://hooks.slack.com/services/****..acces point key..****",
-        "defaultChannel": "#tests",
-        "defaultUsername": "Coffee situation badger",
-        "defaultIcon": ":badger:"
+        "irc.****..network..****": {
+            "accessPoint": "https://hooks.slack.com/services/****..acces point key..****",
+            "defaultChannel": "#tests",
+            "defaultUsername": "Coffee situation badger",
+            "defaultIcon": ":badger:"
+        }
     },
     "storage": {
         "driver": "local",

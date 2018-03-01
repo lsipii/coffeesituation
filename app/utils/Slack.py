@@ -17,45 +17,45 @@ class Slack():
 	"""
 	Slack messanger
 
-	@param (dict) config
+	@param (dict) configs
 	"""
-	def __init__(self, config):
-		self.config = config
-		self.accessPoint = self.config["accessPoint"]
-		self.defaultChannel = self.config["defaultChannel"]
-		self.defaultUsername = self.config["defaultUsername"]
-		self.defaultIcon = self.config["defaultIcon"]
+	def __init__(self, configs):
+		self.config = configs
 		self.requestHandler = urlrequest.build_opener(urlrequest.HTTPHandler())
 
 
 	"""
 	Sends the gathered payload to slack
 
-	@param (dict) payload, [message]
+	@param (dict) payload, [message, channel, network]
+	@return (response)
 	"""
 	def notify(self, payload):
 		
 		# Validate the payload
 		if "message" not in payload:
 			raise Exception("Slack.notify payload param must have a message")
+		if "network" not in payload:
+			raise Exception("Slack.notify payload param must have a network to select from configs")
 
 		# Validate and set the channel
-		channel = ("channel" in payload) and payload["channel"] or self.defaultChannel
+		channel = ("channel" in payload) and payload["channel"] or self.configs[payload["network"]]["defaultChannel"]
 		if not channel.startswith("#"):
 			channel = "#"+channel
 
-		self.sendSlackTextPayload({
+		return self.sendSlackTextPayload({
 			"message": payload["message"],
 			"channel": channel,
-			"username": ("username" in payload) and payload["username"] or self.defaultUsername,
-			"icon": ("icon" in payload) and payload["icon"] or self.defaultIcon
+			"username": ("username" in payload) and payload["username"] or self.configs[payload["network"]]["defaultUsername"],
+			"icon": ("icon" in payload) and payload["icon"] or self.configs[payload["network"]]["defaultIcon"],
+			"accessPoint": self.configs[payload["network"]]["accessPoint"]
 		})
 
 
 	"""
 	Sends the text payload to slack
 
-	@param (dict) payload, [message, channel, username, icon]
+	@param (dict) payload, [message, channel, username, icon, accessPoint]
 	@return (response)
 	"""
 	def sendSlackTextPayload(self, payload):
@@ -70,6 +70,6 @@ class Slack():
 		})
 		
 		data = urlencode({"payload": payloadJson})
-		req = urlrequest.Request(self.accessPoint)
+		req = urlrequest.Request(payload["accessPoint"])
 		response = self.requestHandler.open(req, data.encode('utf-8')).read()
 		return response.decode('utf-8') 
