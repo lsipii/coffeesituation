@@ -68,7 +68,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
 
             #@enabled: check for specific keywords
             if any(keyWord in message for keyWord in coffeeKeywords):
-                askForCoffee(channel, acceptedNetwork)
+                askForCoffee(channel, acceptedNetwork["network"])
 
     return weechat.WEECHAT_RC_OK
 
