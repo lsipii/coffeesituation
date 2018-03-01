@@ -1,7 +1,7 @@
 {
     "access": {
         "weechat": {
-            "api_key": "****..apiKey..****"
+            "api_token": "****..apiKey..****"
         }
     },
     "slack": {
