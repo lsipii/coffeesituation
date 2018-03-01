@@ -86,6 +86,8 @@ class CoffeeToSlacker(Slack):
 		channel = ("channel" in payload) and payload["channel"] or self.defaultChannel
 		network = ("network" in payload) and payload["network"] or self.defaultNetwork
 
+		print(network)
+		
 		return super().notify({
 			"message": message,
 			"channel": channel,
