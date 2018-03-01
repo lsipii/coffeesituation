@@ -18,7 +18,8 @@ class CoffeeChecker():
 		self.cameraShooter = CameraShots(self.storage)
 		self.coffeeMessages = [
 			"I a badger. I know not many coffee things.",
-			"For a cup of coffee there I would dans",
+			"For a cup of coffee there I would dans.",
+			"If coffee is could I have as well?"
 		]
 
 	"""
@@ -31,7 +32,7 @@ class CoffeeChecker():
 		if self.shouldWeTakeAPhoto(): 
 			self.cameraShooter.takeAPhoto() 
 			imageUrl = self.cameraShooter.getPhotoStorageUrl()
-			message = random.choise(self.coffeeMessages)
+			message = random.choice(self.coffeeMessages)
 			slackNotice = message+" <"+imageUrl+"|Check the coffee situation here>"
 
 			return {
