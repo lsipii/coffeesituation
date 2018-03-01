@@ -120,5 +120,6 @@ class MediaStorage():
 	"""
 	def clearPreviousMediaFiles(self):
 		files = glob.glob(self.configurations["local"]["mediaDirectory"])
-		for file in files:
-			os.remove(file)
+		for f in files:
+			if os.path.isfile(f):
+				os.unlink(f)
