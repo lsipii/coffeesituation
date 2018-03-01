@@ -1,6 +1,11 @@
 {
+    "access": {
+        "weechat": {
+            "api_key": "****..apiKey..****"
+        }
+    },
     "slack": {
-        "accessPoint": "https://hooks.slack.com/services/XXXX",
+        "accessPoint": "https://hooks.slack.com/services/****..acces point key..****",
         "defaultChannel": "#tests",
         "defaultUsername": "Coffee situation badger",
         "defaultIcon": ":badger:"
@@ -8,6 +13,6 @@
     "storage": {
         "driver": "local",
         "mediaDirectory": "/var/www/html/images/coffee",
-        "mediaHost": "https://xxxxx.dataplicity.io/images/coffee"
+        "mediaHost": "https://****..hosting service address..****.dataplicity.io/images/coffee"
     }
 }

@@ -8,66 +8,45 @@ class AccessChecker():
 
 	"""
 	Module initialization
-	"""
-	def __init__(self, debugMode = False):
+
+	@param (dict) accessConfig
+	@param (bool) debugMode
+	""" 
+	def __init__(self, accessConfig, debugMode = False):
+		self.accessConfig = accessConfig
 		self.debugMode = debugMode
-		self.accessKeyParamKeyName = "accessKey"
-		self.accessKey = "kyllig"
+		self.accessKeyParamKeyName = "api_key"
 
 	"""
 	Checks the request for correct credential details, passed as request params 
-	
+
+	@param (dict) requestParams, [app, api_key]
+	@param (string) requestMethod
 	@return (bool) accessGranted
 	"""
-	def ifAccessGranted(self):
+	def ifAccessGranted(self, requestParams, requestMethod):
 
-		requestAccessKey = None
+		accessGranted = False
 
-		if self.debugMode and self.requestHasAccessKeyByGetRequest():
-			requestAccessKey = self.getAccessKeyFromGetRequest()
-		elif self.requestHasAccessKeyByPostRequest():
-			requestAccessKey = self.getAccessKeyFromPostRequest()
+		if self.accessKeyParamKeyName in requestParams:
+			if "app" in requestParams and requestParams["app"] in self.accessConfig:
+				if self.debugMode and requestMethod == "GET":
+					accessGranted = self.getAccessDetailsFromTheRequest(requestParams)
+				elif requestMethod == "POST":
+					accessGranted = self.getAccessDetailsFromTheRequest(requestParams)
 
-		if requestAccessKey == self.accessKey:
-			return True
-		return False
-
-	"""
-	Checks the request has access params by get method
-	
-	@return (bool) hasCorrectAccessParams
-	"""
-	def requestHasAccessKeyByGetRequest(self):
-		if self.debugMode and request.method == 'GET':
-			param = self.getAccessKeyFromGetRequest()
-			return param is not None
-		return False
+		return accessGranted
 
 	"""
 	Checks the request has access params by get method
 	
+	@param (dict) requestParams, [app, api_key]
 	@return (bool) hasCorrectAccessParams
 	"""
-	def requestHasAccessKeyByPostRequest(self):
-		if request.method == 'POST' and self.accessKeyParamKeyName in request.form:
+	def getAccessDetailsFromTheRequest(self, requestParams):
+		if self.accessConfig[requestParams["app"]][self.accessKeyParamKeyName] == requestParams[self.accessKeyParamKeyName]:
 			return True
 		return False
-
-	"""
-	Gets the access key from a get param
-	
-	@return (string|None) accessKey
-	"""
-	def getAccessKeyFromGetRequest(self):
-		return request.args.get(self.accessKeyParamKeyName)
-
-	"""
-	Gets the access key from a get param
-	
-	@return (string|None) accessKey
-	"""
-	def getAccessKeyFromPostRequest(self):
-		return request.form[self.accessKeyParamKeyName]
 
 	"""
 	Sets debug mode

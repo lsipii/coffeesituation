@@ -20,7 +20,7 @@ class CoffeesHasWeController(BaseController):
 		self.debugMode = debugMode
 
 		self.config = ConfigReader().getConfig()		
-		self.accessChecker = AccessChecker(self.debugMode)
+		self.accessChecker = AccessChecker(self.config["access"], self.debugMode)
 		self.coffeeChecker = CoffeeChecker(self.config["storage"])
 		self.notifier = CoffeeToSlacker(self.config["slack"])
 
@@ -33,7 +33,11 @@ class CoffeesHasWeController(BaseController):
 	@return (BaseController response)
 	"""
 	def getCoffeeResponse(self, path = None):
-		if self.accessChecker.ifAccessGranted():
+
+		requestMethod=self.getRequestMethod()
+		requestParams=self.getRequestParams()
+
+		if self.accessChecker.ifAccessGranted(requestParams, requestMethod):
 			try:
 				coffeeResponse = self.coffeeChecker.hasWeCoffee()
 

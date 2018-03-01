@@ -59,7 +59,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
         # Resolve the networks channel
         channel = (weechat.buffer_get_string(bufferp, "short_name") or weechat.buffer_get_string(bufferp, "name"))
         accpetedChannels = acceptedNetwork["channels"]
-        
+
         # If in accepted chans, run the coffee asking query
         if channel in accpetedChannels:
 
@@ -68,16 +68,18 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
 
             #@enabled: check for specific keywords
             if any(keyWord in message for keyWord in coffeeKeywords):
-                askForCoffee()
+                askForCoffee(channel)
 
     return weechat.WEECHAT_RC_OK
 
 """
 Asks for coffee
+
+@param (string) channel
 """
-def askForCoffee():
+def askForCoffee(channel):
     API_TOKEN = weechat.config_get_plugin("api_token")
     if API_TOKEN != "":
         url = "https://morphotic-cow-5470.dataplicity.io/"
-        postdata = urllib.urlencode({'accessKey':API_TOKEN,'version':1})
+        postdata = urllib.urlencode({'api_token':API_TOKEN, 'channel': channel, 'app':'weechat', 'app_version':1})
         hook1 = weechat.hook_process_hashtable("url:"+url, {"postfields":  postdata}, 6000, "", "")

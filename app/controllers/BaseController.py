@@ -2,6 +2,7 @@
 """
 @author lsipii
 """
+from flask import request
 from flask_responses import json_response
 
 class BaseController():
@@ -135,3 +136,26 @@ class BaseController():
 		if response is None:
 			response = {"message": "Undefined error"}
 		return json_response(response, status_code=responseCode)
+
+
+	"""
+	Gets the request method
+	
+	@return (string) method
+	"""
+	def getRequestMethod(self):
+		return request.method
+
+	"""
+	Gets the request params
+	
+	@return (dict) params
+	"""
+	def getRequestParams(self):
+
+		if self.getRequestMethod() == 'POST':
+			return request.form.to_dict()
+		elif self.getRequestMethod() == 'GET':
+			return request.args.to_dict()
+		else:
+			return {}
