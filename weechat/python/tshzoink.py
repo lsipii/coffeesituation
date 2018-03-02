@@ -50,6 +50,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
         "kahvia", 
         "kahvii", 
         "kahvi", 
+        "kahvetta",
         "coffee", 
         "caffeine", 
         "kofeiini"
