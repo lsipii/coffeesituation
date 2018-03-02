@@ -54,6 +54,11 @@ server {
 	location /images/ {
 		try_files $uri /images/404.jpg;
 	}
+
+	# Zoink stream
+	location /stream/ {
+		proxy_pass http://127.0.0.1:9090;
+	}
 }
 
 
