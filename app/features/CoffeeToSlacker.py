@@ -22,34 +22,54 @@ class CoffeeToSlacker(Slack):
 		# Define coffee messages
 		self.coffeeMessages = [
 			{
-				"username": "Coffee Situation Badger",
+				"username": "Coffee Situation: Badger",
 				"message": "Me a badger. Know not many coffee things until it's too asnake, late.", 
 				"icon": ":badger:",
 			},
 			{
-				"username": "Coffee Situation Moves",
+				"username": "Coffee Situation: Moves",
 				"message": "For a cup of coffee there, Ultimately AI dans.", 
 				"icon": ":awesome_dance:",
 			},
 			{
-				"username": "Coffee Situation Im batman",
+				"username": "Coffee Situation: Im batman",
 				"message": "The coffee is darkest just before the dawn. And I promise you, the dawn is coming", 
 				"icon": ":batsignal:",
 			},
 			{
-				"username": "Coffee Situation Parrot",
-				"message": "Someone mentioned coffee?", 
-				"icon": ":fast_parrot:",
-			},
-			{
-				"username": "Coffee Situation Picard",
+				"username": "Coffee Situation: Picard",
 				"message": "<https://www.youtube.com/watch?v=R2IJdfxWtPM|Tea, Earl Grey, Hot?>..", 
 				"icon": ":picard_facepalm:",
 			},
 			{
-				"username": "Coffee Situation Pepper",
+				"username": "Coffee Situation: Pepper",
 				"message": ":pepperdance: ..?", 
 				"icon": ":hot-coffee:",
+			},
+			{
+				"username": "Coffee Situation: Vader",
+				"message": "Come to the dark side, we have coffee", 
+				"icon": ":darth_vader:",
+			},
+			{
+				"username": "Coffee Situation: Brains",
+				"message": "<https://www.youtube.com/watch?v=Nvipwdh_Naw|Take all my money>",
+				"icon": ":zombie:",
+			},
+			{
+				"username": "Coffee Situation: Parrot, pre-startup",
+				"message": "..., ..., ..., club",
+				"icon": ":parrot_sleep:",
+			},
+			{
+				"username": "Coffee Situation: Parrot, startup",
+				"message": "Someone mentioned a coffee?", 
+				"icon": ":coffee_parrot:",
+			},
+			{
+				"username": "Coffee Situation: Parrot, startup-grad",
+				"message": "Boundless, the slice of black magicka surrounded by a tactical container",
+				"icon": ":gentleman_parrot:",
 			}
 		]
 
