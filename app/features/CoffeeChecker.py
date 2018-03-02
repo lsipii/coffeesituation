@@ -15,33 +15,25 @@ class CoffeeChecker():
 	def __init__(self, configs):
 		self.storage = MediaStorage(configs)
 		self.cameraShooter = CameraShooter(self.storage)
-		self.previousChannel = None
 
 	"""
 	Checks if we have coffe
-	
-	@param (dict) requestParams, [channel]
+
 	@return (dict) {
 		(string) hasCoffee
 		(string) coffeeObservationImageUrl
 		(bool) newObservationFappened
 	}
 	"""
-	def hasWeCoffee(self, requestParams):
+	def hasWeCoffee(self):
 
 		newObservationFappened = False
 		if self.shouldWeTakeAPhoto(): 
 			self.cameraShooter.takeAPhoto() 
 			newObservationFappened = True
-		elif self.observedFromDifferentChannel(requestParams):
-			newObservationFappened = True
 			
 		coffeeObservationImageUrl = self.cameraShooter.getPhotoStorageUrl()
-		
-		# Mark the channel for the next query
-		if newObservationFappened and "channel" in requestParams:
-			self.previousChannel = requestParams["channel"]
-
+			
 		return {
 			"hasCoffee": "dunno",
 			"coffeeObservationImageUrl": coffeeObservationImageUrl,
@@ -58,17 +50,6 @@ class CoffeeChecker():
 	def shouldWeTakeAPhoto(self):
 		howLongAgoLastShoot = self.cameraShooter.howManySecsAgoLastCapturingStarted()
 		if howLongAgoLastShoot == 0 or howLongAgoLastShoot > 60:
-			return True
-		return False
-
-	"""
-	Checks if the previous check was not from the currently requested channel
-	
-	@param (dict) requestParams, [channel]
-	@return (bool) 
-	"""
-	def observedFromDifferentChannel(self, requestParams):
-		if "channel" in requestParams and requestParams["channel"] is not self.previousChannel:
 			return True
 		return False
 

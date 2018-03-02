@@ -40,10 +40,7 @@ class CoffeesHasWeController(BaseController):
 		if self.accessChecker.ifAccessGranted(requestParams, requestMethod):
 			try:
 				coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams)
-
-				# If a new image was taken, report to slack channels
-				if coffeeResponse["newObservationFappened"]:
-					self.notifier.notifyCoffeeRequest(coffeeResponse, requestParams)
+				self.notifier.notifyCoffeeRequest(coffeeResponse, requestParams)
 				return self.getJsonResponse(coffeeResponse)
 			except Exception as e:
 				if self.accessChecker.debugMode:
