@@ -104,6 +104,8 @@ class MediaStorage():
 	def getMediaFilePath(self):
 		if self.driver == "local":
 			return self.configurations["local"]["mediaPath"]
+		else:
+			raise Exception("Storage driver "+self.driver+" not supported")	
 
 	"""
 	Gets the media file url
@@ -113,13 +115,34 @@ class MediaStorage():
 	def getMediaFileUrl(self):
 		if self.driver == "local":
 			return self.configurations["local"]["mediaUrl"]
-		return None
+		else:
+			raise Exception("Storage driver "+self.driver+" not supported")	
 
 	"""
 	Clears media folder from files
 	"""
 	def clearPreviousMediaFiles(self):
-		files = glob.glob(self.configurations["local"]["mediaDirectory"]+"/*")
-		for f in files:
-			if os.path.isfile(f):
-				os.unlink(f)
+		if self.driver == "local":
+			files = glob.glob(self.configurations["local"]["mediaDirectory"]+"/*")
+			for f in files:
+				if os.path.isfile(f):
+					os.unlink(f)
+		else:
+			raise Exception("Storage driver "+self.driver+" not supported")	
+
+	"""
+	Reads taken photo as base64 bin string
+	
+	@return (base64 string) image64
+	"""
+	def readImageAsB64String(self):
+		
+		import base64 
+
+		if self.driver == "local":
+			image = open(self.getMediaFilePath(), 'rb') #open binary file in read mode
+			imageRead = image.read()
+			image64 = base64.encodestring(imageRead)
+			return image64
+		else:
+			raise Exception("Storage driver "+self.driver+" not supported")

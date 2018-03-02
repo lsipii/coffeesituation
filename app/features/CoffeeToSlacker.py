@@ -98,8 +98,11 @@ class CoffeeToSlacker(Slack):
 	def notify(self, payload):
 		
 		messageData = random.choice(self.coffeeMessages)
-		coffeeSituationUrl = payload["coffeeObservationImageUrl"]
+		coffeeSituationUrl = payload["coffeeObservationUrl"]
+
 		coffeeSituationMessage = "Check the current 4th floor coffee situation here"
+		if payload["streaming"]:
+			coffeeSituationMessage = "STREAM: Check the current 4th floor coffee situation here"
 
 		message = messageData["message"] +" <"+coffeeSituationUrl+"|"+coffeeSituationMessage+">"
 		icon = messageData["icon"]

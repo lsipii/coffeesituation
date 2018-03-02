@@ -84,7 +84,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
 
             #@enabled: check for specific keywords
             if any(keyWord in lowerCaseMessage for keyWord in coffeeKeywords):
-                askForCoffee(channel, acceptedNetwork["network"])
+                askForCoffee(channel, acceptedNetwork["network"], prefix, message)
 
     return weechat.WEECHAT_RC_OK
 
@@ -93,8 +93,10 @@ Asks for coffee
 
 @param (string) channel
 @param (string) network
+@param (string) username
+@param (string) message
 """
-def askForCoffee(channel, network):
+def askForCoffee(channel, network, username, message):
     API_TOKEN = weechat.config_get_plugin("api_token")
     if API_TOKEN != "":
         url = "https://morphotic-cow-5470.dataplicity.io/"
@@ -102,6 +104,8 @@ def askForCoffee(channel, network):
             'api_token':API_TOKEN, 
             'channel': channel, 
             'network': network,
+            'message': message,
+            'username': username,
             'app':'weechat', 
             'app_version':1
         })

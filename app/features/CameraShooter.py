@@ -5,7 +5,6 @@
 from app.hardware.Camera import Camera
 
 import sh
-import base64 
 
 class CameraShooter(Camera):
 
@@ -43,15 +42,4 @@ class CameraShooter(Camera):
 	def getPhotoStorageUrl(self):
 		return self.storage.getMediaFileUrl()
 	
-
-	"""
-	Reads taken photo as base64 bin string
-	
-	@return (base64 string) image64
-	"""
-	def readImageAsB64String(self):
-		image = open(self.storage.getMediaFilePath(), 'rb') #open binary file in read mode
-		imageRead = image.read()
-		image64 = base64.encodestring(imageRead)
-		return image64
 		

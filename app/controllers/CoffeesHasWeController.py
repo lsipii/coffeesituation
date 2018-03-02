@@ -39,7 +39,7 @@ class CoffeesHasWeController(BaseController):
 
 		if self.accessChecker.ifAccessGranted(requestParams, requestMethod):
 			try:
-				coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams)
+				coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams) 
 				self.notifier.notifyCoffeeRequest(coffeeResponse, requestParams)
 				return self.getJsonResponse(coffeeResponse)
 			except Exception as e:

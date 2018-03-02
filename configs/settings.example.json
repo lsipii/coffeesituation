@@ -1,4 +1,7 @@
 {
+    "app": {
+        "host": "https://****..hosting service address..****.dataplicity.io"
+    },
     "access": {
         "weechat": {
             "api_token": "****..apiKey..****"
