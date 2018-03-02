@@ -26,6 +26,10 @@ Checks if coffee was asked, fires the asker if so
 """
 def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, ishilight, prefix, message):
 
+    # Validate message sender
+    if prefix is not None and prefix.startswith("Coffee_Situation:"):
+        return weechat.WEECHAT_RC_OK
+
     # Accepted networks and thus channels
     acceptedCoffeeNetworks = [
         {

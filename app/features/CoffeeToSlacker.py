@@ -33,12 +33,12 @@ class CoffeeToSlacker(Slack):
 			},
 			{
 				"username": "Coffee Situation: Im batman",
-				"message": "The coffee is darkest just before the dawn. And I promise you, the dawn is coming", 
+				"message": "The coffee is darkest just before the dawn. And I promise you, the dawn is coming.", 
 				"icon": ":batsignal:",
 			},
 			{
 				"username": "Coffee Situation: Picard",
-				"message": "<https://www.youtube.com/watch?v=R2IJdfxWtPM|Tea, Earl Grey, Hot?>..", 
+				"message": "<https://www.youtube.com/watch?v=R2IJdfxWtPM|Tea, Earl Grey, Hot?>.", 
 				"icon": ":picard_facepalm:",
 			},
 			{
@@ -48,17 +48,17 @@ class CoffeeToSlacker(Slack):
 			},
 			{
 				"username": "Coffee Situation: Vader",
-				"message": "Come to the dark side, we have coffee", 
+				"message": "Come to the dark side, we have coffee.", 
 				"icon": ":darth_vader:",
 			},
 			{
 				"username": "Coffee Situation: Brains",
-				"message": "<https://www.youtube.com/watch?v=Nvipwdh_Naw|Take all my money>",
+				"message": "<https://www.youtube.com/watch?v=Nvipwdh_Naw|Take all my money>.",
 				"icon": ":zombie:",
 			},
 			{
 				"username": "Coffee Situation: Parrot, pre-startup",
-				"message": "..., ..., ..., club",
+				"message": "..., ..., ..., club.",
 				"icon": ":parrot_sleep:",
 			},
 			{
@@ -68,7 +68,7 @@ class CoffeeToSlacker(Slack):
 			},
 			{
 				"username": "Coffee Situation: Parrot, startup-grad",
-				"message": "Boundless, the slice of black magicka surrounded by a tactical container",
+				"message": "Boundless, the slice of black magicka surrounded by a tactical container.",
 				"icon": ":gentleman_parrot:",
 			}
 		]
