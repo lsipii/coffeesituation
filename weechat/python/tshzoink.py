@@ -76,11 +76,14 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
         # If in accepted chans, run the coffee asking query
         if channel in accpetedChannels:
 
+            # Makes the check caseinsensitive
+            lowerCaseMessage = message.lower()
+
             #@disabled: check for specific sentences
             #if message in coffeeQuestions:
 
             #@enabled: check for specific keywords
-            if any(keyWord in message for keyWord in coffeeKeywords):
+            if any(keyWord in lowerCaseMessage for keyWord in coffeeKeywords):
                 askForCoffee(channel, acceptedNetwork["network"])
 
     return weechat.WEECHAT_RC_OK
