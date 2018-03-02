@@ -92,6 +92,4 @@ class CoffeeChecker():
 							self.cameraStreamer.startStreaming()
 					if message.find("kahvibotti, laita streamaus pois päältä") > -1:
 						if message.find("access code whiskey tango foxtrot") > -1:
-						
-
-	
+							self.cameraStreamer.stopStreaming()
