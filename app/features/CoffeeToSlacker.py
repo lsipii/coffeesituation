@@ -38,7 +38,7 @@ class CoffeeToSlacker(Slack):
 			},
 			{
 				"username": "Coffee Situation: Picard",
-				"message": "<https://www.youtube.com/watch?v=R2IJdfxWtPM|Tea, Earl Grey, Hot?>.", 
+				"message": "<https://www.youtube.com/watch?v=R2IJdfxWtPM|Tea, Earl Grey, Hot?>...", 
 				"icon": ":picard_facepalm:",
 			},
 			{
@@ -53,7 +53,7 @@ class CoffeeToSlacker(Slack):
 			},
 			{
 				"username": "Coffee Situation: Brains",
-				"message": "<https://www.youtube.com/watch?v=Nvipwdh_Naw|Take all my money>.",
+				"message": "<https://www.youtube.com/watch?v=Nvipwdh_Naw|Take my money>...",
 				"icon": ":zombie:",
 			},
 			{
@@ -99,8 +99,9 @@ class CoffeeToSlacker(Slack):
 		
 		messageData = random.choice(self.coffeeMessages)
 		coffeeSituationUrl = payload["coffeeObservationImageUrl"]
+		coffeeSituationMessage = "Check the current 4th floor coffee situation here"
 
-		message = messageData["message"] +" <"+coffeeSituationUrl+"|Check the current coffee situation here>"
+		message = messageData["message"] +" <"+coffeeSituationUrl+"|"+coffeeSituationMessage+">"
 		icon = messageData["icon"]
 		username = messageData["username"]
 		channel = ("channel" in payload) and payload["channel"] or self.defaultChannel
