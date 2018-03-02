@@ -14,9 +14,9 @@ class CoffeeChecker():
 	@param (dict) configs [storage]
 	"""
 	def __init__(self, configs):
-		self.storage = MediaStorage(configs)
+		self.storage = MediaStorage(configs["storage"])
 		self.cameraShooter = CameraShooter(self.storage)
-		self.cameraStreamer = CameraStreamer(configs)
+		self.cameraStreamer = CameraStreamer(configs["app"])
 
 	"""
 	Checks if we have coffe

@@ -21,7 +21,7 @@ class CoffeesHasWeController(BaseController):
 
 		self.config = ConfigReader().getConfig()		
 		self.accessChecker = AccessChecker(self.config["access"], self.debugMode)
-		self.coffeeChecker = CoffeeChecker(self.config["storage"])
+		self.coffeeChecker = CoffeeChecker(self.config)
 		self.notifier = CoffeeToSlacker(self.config["slack"])
 
 		self.validateZoinksFunctionality()

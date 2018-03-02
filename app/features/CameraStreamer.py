@@ -18,11 +18,11 @@ class CameraStreamer(Camera):
 	"""
 	Camera shots module initialization
 	
-	@param (dict) configs [app]
+	@param (dict) appConfig [host]
 	"""
-	def __init__(self, configs):
+	def __init__(self, appConfig):
 		super().__init__()
-		self.streamingHost = configs["app"]["host"]
+		self.streamingHost = appConfig["host"]
 		self.weAreCurrentlyStreaming = False
 		
 	"""
