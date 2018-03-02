@@ -33,7 +33,7 @@ class CoffeeChecker():
 		if self.shouldWeTakeAPhoto(): 
 			self.cameraShooter.takeAPhoto() 
 			newObservationFappened = True
-		elif self.observedFromDifferenctChannel(requestParams):
+		elif self.observedFromDifferentChannel(requestParams):
 			newObservationFappened = True
 			
 		coffeeObservationImageUrl = self.cameraShooter.getPhotoStorageUrl()
@@ -67,7 +67,7 @@ class CoffeeChecker():
 	@param (dict) requestParams, [channel]
 	@return (bool) 
 	"""
-	def shouldWeTakeAPhoto(self, requestParams):
+	def observedFromDifferentChannel(self, requestParams):
 		if "channel" in requestParams and requestParams["channel"] is not self.previousChannel:
 			return True
 		return False
