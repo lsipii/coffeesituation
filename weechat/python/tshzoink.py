@@ -46,7 +46,14 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
     #coffeeQuestions = ["Onkohan kahvia", "coffee can I has"]
     
     #@enabled: Allowed coffee keywords
-    coffeeKeywords = ["kahvia", "kahvii", "kahvi", "coffee"]
+    coffeeKeywords = [
+        "kahvia", 
+        "kahvii", 
+        "kahvi", 
+        "coffee", 
+        "caffeine", 
+        "kofeiini"
+    ]
     
     # Resolve the accepted network
     bufferBullName = weechat.buffer_get_string(bufferp, "full_name")

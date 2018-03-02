@@ -68,7 +68,7 @@ class CoffeeToSlacker(Slack):
 			},
 			{
 				"username": "Coffee Situation: Parrot, startup-grad",
-				"message": "Boundless, the slice of black magicka surrounded by a tactical container.",
+				"message": "Still boundless, the slice of black magicka surrounded by a tactical container.",
 				"icon": ":gentleman_parrot:",
 			}
 		]
