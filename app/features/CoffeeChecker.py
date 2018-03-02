@@ -18,14 +18,15 @@ class CoffeeChecker():
 
 	"""
 	Checks if we have coffe
-
+	
+	@param (dict) requestParams = None
 	@return (dict) {
 		(string) hasCoffee
 		(string) coffeeObservationImageUrl
 		(bool) newObservationFappened
 	}
 	"""
-	def hasWeCoffee(self):
+	def hasWeCoffee(self, requestParams = None):
 
 		newObservationFappened = False
 		if self.shouldWeTakeAPhoto(): 
