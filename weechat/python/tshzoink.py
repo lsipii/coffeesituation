@@ -38,7 +38,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
         },
         {
             "network": "irc.tamperestartuphub",
-            "channels": ["#tests"], 
+            "channels": ["#general", "#random"], 
         }
     ]
 
