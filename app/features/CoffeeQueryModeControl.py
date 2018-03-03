@@ -17,7 +17,7 @@ class CoffeeQueryModeControl():
 		self.commandTranslations = {
 			"stream": {
 				"fi": {
-					"command": ["streamaus ", "striimaus ", "stream "],
+					"command": ["streamaus ", "striimaus ", "stream ", "striimi "],
 					"actions": {
 						"ON": " päälle", 
 						"OFF": [" pois", " veke"],
