@@ -5,6 +5,7 @@
 from app.hardware.Camera import Camera
 
 import sh
+import os
 
 class CameraStreamer(Camera):
 
@@ -23,7 +24,7 @@ class CameraStreamer(Camera):
 	def __init__(self, appConfig):
 		super().__init__()
 		self.streamingHost = appConfig["host"]
-		self.weAreCurrentlyStreaming = False
+		self.weAreCurrentlyStreaming = self.checkIfStreamingAppActuallyRunning()
 		
 	"""
 	Starts the stream
@@ -58,4 +59,18 @@ class CameraStreamer(Camera):
 	"""
 	def areWeCurrentlyStreaming(self):
 		return self.weAreCurrentlyStreaming
+
+	"""
+	Checks if the streaming app is currently up
+
+	@return (bool)
+	"""
+	def checkIfStreamingAppActuallyRunning(self):
+		import subprocess
+
+		p = subprocess.Popen(["ps", "-a"], stdout=subprocess.PIPE)
+		out, err = p.communicate()
+		if ('motion' in str(out)):
+			return True
+		return False
 		
