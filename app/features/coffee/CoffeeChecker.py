@@ -2,7 +2,7 @@
 """
 @author lsipii
 """
-from app.features.CoffeeActionAccessChecker import CoffeeActionAccessChecker
+from app.features.coffee.CoffeeActionAccessChecker import CoffeeActionAccessChecker
 from app.features.CameraShooter import CameraShooter
 from app.features.CameraStreamer import CameraStreamer
 from app.hardware.MediaStorage import MediaStorage

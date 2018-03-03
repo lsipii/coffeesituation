@@ -34,7 +34,7 @@ class CoffeeActionAccessChecker():
 		self.accessTranslations = {
 			"fi": {
 				"accessQueryKeywordPrefix": "kahvi",
-				"accessCodePrefix": ["turvasana", "pääsyevättömyyskoodi"]
+				"accessCodePrefix": ["turvasana", "pääsyevättömyyskoodi", "tunnistautumiskoodi"]
 			},
 			"en": {
 				"accessQueryKeywordPrefix": "coffee",

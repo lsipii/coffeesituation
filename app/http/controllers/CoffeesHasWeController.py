@@ -6,8 +6,8 @@ from app.http.controllers.BaseController import BaseController
 from app.http.exceptions.RequestException import RequestException
 from app.ApiAccessChecker import ApiAccessChecker
 from app.ConfigReader import ConfigReader
-from app.features.CoffeeChecker import CoffeeChecker
-from app.features.CoffeeToSlacker import CoffeeToSlacker
+from app.features.coffee.CoffeeChecker import CoffeeChecker
+from app.features.coffee.CoffeeToSlacker import CoffeeToSlacker
 from app.utils.Utils import validateAppRequirements
 
 class CoffeesHasWeController(BaseController):

@@ -19,7 +19,7 @@ LABEL lsipii.tshzoink.release-date="2018-03-02"
 #
 
 RUN apt-get update -yqq && \
-    apt-get install -y --force-yes python3-pip wget
+    apt-get install -y --force-yes python3-pip wget sudo
 
 # Workdir
 WORKDIR /usr/local/src
@@ -99,7 +99,7 @@ RUN sed -i 's/daemon off/daemon on/g' /etc/motion/motion.conf && \
 
 RUN sed -i 's/start_motion_daemon=no/start_motion_daemon=yes/g' /etc/default/motion
 
-# Stops starting at boot, we'll start in scripts
+# Stops starting at boot, we'll start it in the scripts
 RUN systemctl disable motion
 
 #
@@ -117,7 +117,7 @@ ADD ./docker/nginx/404/404.jpg /var/www/html/
 
 #
 #--------------------------------------------------------------------------
-# Install zoinks app
+# Install the zoinks app
 #--------------------------------------------------------------------------
 #
 
@@ -133,7 +133,7 @@ ADD ./zoinks.py zoinks/app/
 ADD ./requirements.txt zoinks/app/
 
 #####################################
-# Install requirements
+# Install the requirements
 #####################################
 RUN pip3 install -r zoinks/app/requirements.txt
 
