@@ -118,12 +118,13 @@ class BaseController():
 	The base 500 response
 	
 	@param (mixed) message
+	@param (int) responseCode
 	@return (json_response)
 	"""
-	def getErrorResponse(self, message = None):
+	def getErrorResponse(self, message = None, responseCode = 500):
 		if message is None:
 			message = "App setup error"
-		return self.getJsonResponse({"message": message}, 500)
+		return self.getJsonResponse({"message": message}, responseCode)
 
 	"""
 	The a json response

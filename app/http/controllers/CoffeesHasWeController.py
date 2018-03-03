@@ -2,9 +2,10 @@
 """
 @author lsipii
 """
+from app.http.controllers.BaseController import BaseController
+from app.http.exceptions.RequestException import RequestException
 from app.AccessChecker import AccessChecker
 from app.ConfigReader import ConfigReader
-from app.controllers.BaseController import BaseController
 from app.features.CoffeeChecker import CoffeeChecker
 from app.features.CoffeeToSlacker import CoffeeToSlacker
 from app.utils.Utils import validateAppRequirements
@@ -23,8 +24,6 @@ class CoffeesHasWeController(BaseController):
 		self.accessChecker = AccessChecker(self.config["access"], self.debugMode)
 		self.coffeeChecker = CoffeeChecker(self.config)
 		self.notifier = CoffeeToSlacker(self.config["slack"])
-
-		self.validateZoinksFunctionality()
 		
 	"""
 	Basic a very much of a intresting response, or maybe something different
@@ -37,18 +36,39 @@ class CoffeesHasWeController(BaseController):
 		requestMethod=self.getRequestMethod()
 		requestParams=self.getRequestParams()
 
-		if self.accessChecker.ifAccessGranted(requestParams, requestMethod):
-			try:
+		try:
+			self.accessChecker.throttleRequest(requestMethod, requestParams) # throws
+			if self.accessChecker.ifAccessGranted(requestParams, requestMethod):
 				coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams) 
 				self.notifier.notifyCoffeeRequest(coffeeResponse, requestParams)
 				return self.getJsonResponse(coffeeResponse)
-			except Exception as e:
-				if self.accessChecker.debugMode:
-					return self.getErrorResponse(str(e))
-				else:
-					return self.getErrorResponse()
-		else:
-			return self.getAccessDeniedResponse()
+			else:
+				return self.getAccessDeniedResponse()
+		except RequestException as e:
+			return self.getErrorResponse(e.message, e.code)
+		except Exception as e:
+			if self.debugMode:
+				return self.getErrorResponse(str(e))
+			else:
+				return self.getErrorResponse()
+
+	"""
+	Basic a very much of a intresting response, or maybe something different
+	
+	@param (string) path = None
+	@return (BaseController response)
+	"""
+	def getSomeResponse(self, path = None):
+
+		requestMethod=self.getRequestMethod()
+		requestParams=self.getRequestParams()
+
+		try:
+			self.accessChecker.throttleRequest(requestMethod, requestParams) # throws
+		except RequestException as e:
+			return self.getErrorResponse(e.message, e.code)
+		return self.getNotFoundResponse()
+				
 
 	"""
 	Zoinks module accepted http methods
@@ -72,8 +92,14 @@ class CoffeesHasWeController(BaseController):
 	"""
 	def validateZoinksFunctionality(self):
 
-		for shellApp in self.coffeeChecker.getRequiredShellApps():
-			validateAppRequirements(shellApp) # Throws
+		try:
+			shellApps = self.coffeeChecker.getRequiredShellApps()
+			for shellApp in shellApps:
+				validateAppRequirements(shellApp) # Throws
 
-		self.coffeeChecker.storage.validateStorageFunctionality() # Throws
-
+			self.coffeeChecker.storage.validateStorageFunctionality() # Throws
+		except Exception as e:
+			if self.debugMode:
+				print(e) # Keep running, accept resulting exceptions
+			else:
+				raise e

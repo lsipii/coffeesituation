@@ -25,7 +25,6 @@ class CoffeeChecker():
 	@return (dict) {
 		(string) hasCoffee
 		(string) coffeeObservationImageUrl
-		(bool) newObservationFappened
 	}
 	"""
 	def hasWeCoffee(self, requestParams = None):
@@ -35,35 +34,16 @@ class CoffeeChecker():
 
 		# Get coffee data from selected service
 		if self.cameraStreamer.areWeCurrentlyStreaming():
-			newObservationFappened = True
 			coffeeObservationUrl = self.cameraStreamer.getStreamUrl()
 		else:
-			newObservationFappened = False
-			if self.shouldWeTakeAPhoto(): 
-				self.cameraShooter.takeAPhoto() 
-				newObservationFappened = True
-				
+			self.cameraShooter.takeAPhoto() 
 			coffeeObservationUrl = self.cameraShooter.getPhotoStorageUrl()
 				
 		return {
 			"hasCoffee": "dunno", # To be implemented, opencv etc
 			"coffeeObservationUrl": coffeeObservationUrl,
-			"newObservationFappened": newObservationFappened,
 			"streaming": self.cameraStreamer.areWeCurrentlyStreaming(),
 		}
-
-	
-	
-	"""
-	Checks if we should take a photo indeed
-	
-	@return (bool) 
-	"""
-	def shouldWeTakeAPhoto(self):
-		howLongAgoLastShoot = self.cameraShooter.howManySecsAgoLastCapturingStarted()
-		if howLongAgoLastShoot == 0 or howLongAgoLastShoot > 60:
-			return True
-		return False
 
 	"""
 	Returns the list of required shell aps
@@ -72,7 +52,8 @@ class CoffeeChecker():
 	"""
 	@staticmethod
 	def getRequiredShellApps():
-		return CameraShooter.shellApplicationRequirements + CameraStreamer.shellApplicationRequirements;
+		apps = CameraShooter.shellApplicationRequirements + CameraStreamer.shellApplicationRequirements
+		return apps;
 
 	"""
 	Checks if we have coffe

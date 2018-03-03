@@ -4,7 +4,7 @@
 """
 import sys, getopt
 from flask import Flask
-from app.controllers.CoffeesHasWeController import CoffeesHasWeController
+from app.http.controllers.CoffeesHasWeController import CoffeesHasWeController
 
 # Creates the flask app
 app = Flask(__name__)
@@ -15,7 +15,10 @@ controller = CoffeesHasWeController()
 @app.route('/', methods=controller.knownHttpMethods)
 @app.route('/<path>', methods=controller.knownHttpMethods)
 def request(path = None):
-	return controller.getCoffeeResponse(path)
+	if path is None:
+		return controller.getCoffeeResponse()
+	else:
+		return controller.getSomeResponse(path)
 
 # App runner
 if __name__ == '__main__':
@@ -47,4 +50,5 @@ if __name__ == '__main__':
 
 	# Run app
 	controller.setDebugMode(debugMode)
+	controller.validateZoinksFunctionality()
 	app.run(debug=debugMode)
