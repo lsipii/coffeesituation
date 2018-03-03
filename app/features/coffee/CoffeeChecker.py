@@ -18,7 +18,7 @@ class CoffeeChecker():
 		self.storage = MediaStorage(configs["storage"])
 		self.cameraShooter = CameraShooter(self.storage)
 		self.cameraStreamer = CameraStreamer(configs["app"])
-		self.coffeeActionAccessChecker = CoffeeActionAccessChecker()
+		self.coffeeActionAccessChecker = CoffeeActionAccessChecker(configs["coffeeAccess"])
 
 	"""
 	Checks if we have coffe

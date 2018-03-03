@@ -21,7 +21,7 @@ class CoffeesHasWeController(BaseController):
 		self.debugMode = debugMode
 
 		self.config = ConfigReader().getConfig()		
-		self.accessChecker = ApiAccessChecker(self.config["access"], self.debugMode)
+		self.accessChecker = ApiAccessChecker(self.config["apiAccess"], self.debugMode)
 		self.coffeeChecker = CoffeeChecker(self.config)
 		self.notifier = CoffeeToSlacker(self.config["slack"])
 		

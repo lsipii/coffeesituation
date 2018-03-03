@@ -6,11 +6,26 @@ class CoffeeActionAccessChecker():
 
 	"""
 	Constructor
+
+	@param (dict) coffeeAccess
 	"""
-	def __init__(self):
+	def __init__(self, coffeeAccess):
+
+		self.accessCodes = coffeeAccess
 
 		self.controlCommandLocale = None
 		self.controlLocales = ["fi", "en"]
+		
+		self.appModeAccessTranslations = {
+			"fi": {
+				"accessQueryKeywordPrefix": "kahvi",
+				"accessCodePrefix": ["turvasana", "pääsyevättömyyskoodi", "tunnistautumiskoodi"]
+			},
+			"en": {
+				"accessQueryKeywordPrefix": "coffee",
+				"accessCodePrefix": "access code"
+			}
+		}
 
 		self.commandTranslations = {
 			"stream": {
@@ -26,30 +41,6 @@ class CoffeeActionAccessChecker():
 					"actions": {
 						"ON": [" on", "enable "], 
 						"OFF": [" off", "disable "],
-					}
-				}
-			}
-		}
-
-		self.accessTranslations = {
-			"fi": {
-				"accessQueryKeywordPrefix": "kahvi",
-				"accessCodePrefix": ["turvasana", "pääsyevättömyyskoodi", "tunnistautumiskoodi"]
-			},
-			"en": {
-				"accessQueryKeywordPrefix": "coffee",
-				"accessCodePrefix": "access code"
-			}
-		}
-
-		self.accessCodes = {
-			"stream": {
-				"actions": {
-					"ON": {
-						"lsipii": "foxtrot tango whiskey"
-					},
-					"OFF": {
-						"lsipii": "whiskey tango foxtrot"
 					}
 				}
 			}
@@ -70,7 +61,7 @@ class CoffeeActionAccessChecker():
 		if command in self.accessCodes:
 
 			# Check that access code is tried
-			accessCodePrefixTranslation = self.accessTranslations[self.controlCommandLocale]["accessCodePrefix"]
+			accessCodePrefixTranslation = self.appModeAccessTranslations[self.controlCommandLocale]["accessCodePrefix"]
 			accessCodePrefixTransData = self.getTranslationIndexData(accessCodePrefixTranslation, message)
 			accessCodePrefixPos = accessCodePrefixTransData["index"]
 			
@@ -133,7 +124,7 @@ class CoffeeActionAccessChecker():
 		# Checks for control works that are prefixes to some other word, 
 		# eg. for a keyword 'kahvi' we're at the point if input is 'kahvimörkö' or 'kahvia', but not when its only 'kahvi' 
 		def controlCommandResolver(locale, message):
-			controlTranslation = self.accessTranslations[locale]["accessQueryKeywordPrefix"]
+			controlTranslation = self.appModeAccessTranslations[locale]["accessQueryKeywordPrefix"]
 			controlIndex = self.getTranslationIndexData(controlTranslation, message)
 			if controlIndex["index"] > -1:
 				if message[controlIndex["index"]+controlIndex["length"]:controlIndex["index"]+controlIndex["length"]+1].isalpha():
