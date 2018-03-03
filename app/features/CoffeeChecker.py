@@ -2,7 +2,7 @@
 """
 @author lsipii
 """
-from app.features.CoffeeQueryModeControl import CoffeeQueryModeControl
+from app.features.CoffeeActionAccessChecker import CoffeeActionAccessChecker
 from app.features.CameraShooter import CameraShooter
 from app.features.CameraStreamer import CameraStreamer
 from app.hardware.MediaStorage import MediaStorage
@@ -18,7 +18,7 @@ class CoffeeChecker():
 		self.storage = MediaStorage(configs["storage"])
 		self.cameraShooter = CameraShooter(self.storage)
 		self.cameraStreamer = CameraStreamer(configs["app"])
-		self.modeControl = CoffeeQueryModeControl(self)
+		self.coffeeActionAccessChecker = CoffeeActionAccessChecker()
 
 	"""
 	Checks if we have coffe
@@ -32,7 +32,7 @@ class CoffeeChecker():
 	def hasWeCoffee(self, requestParams = None):
 
 		# Check for mode change requests
-		self.modeControl.checkForModeChangeRequests(requestParams)
+		self.checkForModeChangeRequests(requestParams)
 
 		# Get coffee data from selected service
 		if self.cameraStreamer.areWeCurrentlyStreaming():
@@ -56,3 +56,19 @@ class CoffeeChecker():
 	def getRequiredShellApps():
 		apps = CameraShooter.shellApplicationRequirements + CameraStreamer.shellApplicationRequirements
 		return apps
+
+	"""
+	Checks if we have a coffee MODE change and executes it
+	
+	@param (dict) requestParams = None
+	@return (dict) accessGrantedToCommandAction, {command, action}
+	"""
+	def checkForModeChangeRequests(self, requestParams = None):
+
+		grantedAction = self.coffeeActionAccessChecker.getRequestedAndAllowedCommandAction(requestParams)
+		if grantedAction["command"] is not None:
+			if grantedAction["command"] == "stream":
+				if grantedAction["action"] == "ON": 
+					self.cameraStreamer.startStreaming()
+				elif grantedAction["action"] == "OFF":
+					self.cameraStreamer.stopStreaming()

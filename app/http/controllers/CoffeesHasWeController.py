@@ -4,7 +4,7 @@
 """
 from app.http.controllers.BaseController import BaseController
 from app.http.exceptions.RequestException import RequestException
-from app.AccessChecker import AccessChecker
+from app.ApiAccessChecker import ApiAccessChecker
 from app.ConfigReader import ConfigReader
 from app.features.CoffeeChecker import CoffeeChecker
 from app.features.CoffeeToSlacker import CoffeeToSlacker
@@ -21,7 +21,7 @@ class CoffeesHasWeController(BaseController):
 		self.debugMode = debugMode
 
 		self.config = ConfigReader().getConfig()		
-		self.accessChecker = AccessChecker(self.config["access"], self.debugMode)
+		self.accessChecker = ApiAccessChecker(self.config["access"], self.debugMode)
 		self.coffeeChecker = CoffeeChecker(self.config)
 		self.notifier = CoffeeToSlacker(self.config["slack"])
 		

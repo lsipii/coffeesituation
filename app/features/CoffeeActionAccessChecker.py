@@ -2,15 +2,12 @@
 """
 @author lsipii
 """
-class CoffeeQueryModeControl():
+class CoffeeActionAccessChecker():
 
 	"""
 	Constructor
-
-	@param (CoffeeChecker) checkerRef
 	"""
-	def __init__(self, checkerRef):
-		self.coffeeChecker = checkerRef
+	def __init__(self):
 
 		self.controlCommandLocale = None
 		self.controlLocales = ["fi", "en"]
@@ -44,13 +41,47 @@ class CoffeeQueryModeControl():
 				"accessCodePrefix": "access code"
 			}
 		}
-		
+	
 	"""
-	Checks if we have coffe MODE change
+	Checks if user can access the given command, action
+	
+	@param (string) username
+	@param (string) message
+	@param (string) command
+	@param (string) action = None
+	@retrun (bool) accessGranted
+	"""
+	def canIHasAccessToAppModeCommand(self, username, message, command, action = None):
+
+		accessGranted = False
+		accessCodePrefixTranslation = self.accessTranslations[self.controlCommandLocale]["accessCodePrefix"]
+		accessCodePrefixTransData = self.getTranslationIndexData(accessCodePrefixTranslation, message)
+		accessCodePrefixPos = accessCodePrefixTransData["index"]
+		
+		if accessCodePrefixPos > -1:
+			if command == "stream" and action is not None:
+				if action == "ON":
+					if username == "lsipii":
+						accessCodePos = message.find("foxtrot tango whiskey")
+						accessGranted = accessCodePos > accessCodePrefixPos
+				elif action == "OFF":
+					if username == "lsipii":
+						accessCodePos = message.find("whiskey tango foxtrot")
+						accessGranted = accessCodePos > accessCodePrefixPos
+		return accessGranted
+
+	"""
+	Checks and gets an coffee action if permitted
 	
 	@param (dict) requestParams = None
+	@return (dict) accessGrantedToCommandAction, {command, action}
 	"""
-	def checkForModeChangeRequests(self, requestParams = None):
+	def getRequestedAndAllowedCommandAction(self, requestParams = None):
+
+		accessGrantedToCommandAction = {
+			"command": None,
+			"action": None,
+		}
 
 		if requestParams is not None:
 			if "message" in requestParams and "username" in requestParams:
@@ -63,11 +94,11 @@ class CoffeeQueryModeControl():
 						if command == "stream":
 							action = self.resolveAppControlCommandAction(command, message)
 							if action is not None and self.canIHasAccessToAppModeCommand(username, message, command, action):
-								if action == "ON": 
-									self.coffeeChecker.cameraStreamer.startStreaming()
-								elif action == "OFF":
-									self.coffeeChecker.cameraStreamer.stopStreaming()
+								accessGrantedToCommandAction["command"] = command
+								accessGrantedToCommandAction["action"] = action
 				self.controlCommandLocale = None
+
+		return accessGrantedToCommandAction
 	
 	"""
 	Checks if we have a coffe MODE change, defines the query locale
@@ -132,34 +163,6 @@ class CoffeeQueryModeControl():
 						action = actionName
 						break
 		return action
-
-	"""
-	Checks if user can access the given command, action
-	
-	@param (string) username
-	@param (string) message
-	@param (string) command
-	@param (string) action = None
-	@retrun (bool) accessGranted
-	"""
-	def canIHasAccessToAppModeCommand(self, username, message, command, action = None):
-
-		accessGranted = False
-		accessCodePrefixTranslation = self.accessTranslations[self.controlCommandLocale]["accessCodePrefix"]
-		accessCodePrefixTransData = self.getTranslationIndexData(accessCodePrefixTranslation, message)
-		accessCodePrefixPos = accessCodePrefixTransData["index"]
-		
-		if accessCodePrefixPos > -1:
-			if command == "stream" and action is not None:
-				if action == "ON":
-					if username == "lsipii":
-						accessCodePos = message.find("foxtrot tango whiskey")
-						accessGranted = accessCodePos > accessCodePrefixPos
-				elif action == "OFF":
-					if username == "lsipii":
-						accessCodePos = message.find("whiskey tango foxtrot")
-						accessGranted = accessCodePos > accessCodePrefixPos
-		return accessGranted
 
 	"""
 	Gets the translations index and length if found from the message

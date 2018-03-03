@@ -6,7 +6,7 @@ from flask import request
 from datetime import datetime
 from app.http.exceptions.RequestException import RequestException
 
-class AccessChecker():
+class ApiAccessChecker():
 
 	"""
 	Module initialization
