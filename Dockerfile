@@ -19,7 +19,7 @@ LABEL lsipii.tshzoink.release-date="2018-03-02"
 #
 
 RUN apt-get update -yqq && \
-    apt-get install -y --force-yes python3-pip wget sudo
+    apt-get install -y python3-pip wget sudo
 
 # Workdir
 WORKDIR /usr/local/src
@@ -39,11 +39,11 @@ ENV OPENCV_VERSION 3.4.1
 #####################################
 
 RUN apt-get update -yqq && \
-    apt-get install -y --force-yes build-essential cmake pkg-config
+    apt-get install -y build-essential cmake pkg-config
 RUN apt-get update -yqq && \
-    apt-get install -y --force-yes libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
+    apt-get install -y libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
 RUN apt-get update -yqq && \
-    apt-get install -y --force-yes libatlas-base-dev gfortran
+    apt-get install -y libatlas-base-dev gfortran
 
 #####################################
 # Install numpy
@@ -51,7 +51,7 @@ RUN apt-get update -yqq && \
 # RUN pip3 install numpy
 
 RUN apt-get update -yqq && \
-    apt-get install -y --force-yes python3-numpy
+    apt-get install -y python3-numpy
 
 #####################################
 # Install opencv
@@ -85,7 +85,7 @@ RUN if [ -f /etc/dphys-swapfile ]; then \
 #--------------------------------------------------------------------------
 #
 RUN apt-get update -yqq && \
-    apt-get install -y --force-yes motion 
+    apt-get install -y motion 
 
 RUN sed -i 's/daemon off/daemon on/g' /etc/motion/motion.conf && \
 	sed -i 's/stream_localhost on/stream_localhost off/g' /etc/motion/motion.conf && \
@@ -110,7 +110,7 @@ RUN systemctl disable motion
 RUN mkdir -p /var/www/html
 
 RUN apt-get update -yqq && \
-    apt-get install -y --force-yes nginx
+    apt-get install -y nginx
 
 ADD ./docker/nginx/sites/default.conf /etc/nginx/sites-available/default.conf
 ADD ./docker/nginx/404/404.jpg /var/www/html/
@@ -122,7 +122,7 @@ ADD ./docker/nginx/404/404.jpg /var/www/html/
 #
 
 #####################################
-# Copy files
+# Copy app files
 #####################################
 RUN mkdir -p zoinks/app
 RUN mkdir -p zoinks/configs
@@ -133,7 +133,7 @@ ADD ./zoinks.py zoinks/app/
 ADD ./requirements.txt zoinks/app/
 
 #####################################
-# Install the requirements
+# Install the app requirements
 #####################################
 RUN pip3 install -r zoinks/app/requirements.txt
 
