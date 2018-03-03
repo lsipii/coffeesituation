@@ -2,6 +2,7 @@
 """
 @author lsipii
 """
+from app.features.CoffeeQueryModeControl import CoffeeQueryModeControl
 from app.features.CameraShooter import CameraShooter
 from app.features.CameraStreamer import CameraStreamer
 from app.hardware.MediaStorage import MediaStorage
@@ -17,6 +18,7 @@ class CoffeeChecker():
 		self.storage = MediaStorage(configs["storage"])
 		self.cameraShooter = CameraShooter(self.storage)
 		self.cameraStreamer = CameraStreamer(configs["app"])
+		self.modeControl = CoffeeQueryModeControl(self)
 
 	"""
 	Checks if we have coffe
@@ -30,7 +32,7 @@ class CoffeeChecker():
 	def hasWeCoffee(self, requestParams = None):
 
 		# Check for mode change requests
-		self.checkForModeChangeRequests(requestParams)
+		self.modeControl.checkForModeChangeRequests(requestParams)
 
 		# Get coffee data from selected service
 		if self.cameraStreamer.areWeCurrentlyStreaming():
@@ -53,24 +55,4 @@ class CoffeeChecker():
 	@staticmethod
 	def getRequiredShellApps():
 		apps = CameraShooter.shellApplicationRequirements + CameraStreamer.shellApplicationRequirements
-		return apps;
-
-	"""
-	Checks if we have coffe
-	
-	@param (dict) requestParams = None
-	"""
-	def checkForModeChangeRequests(self, requestParams = None):
-
-		if requestParams is not None:
-			if "message" in requestParams and "username" in requestParams:
-				username = requestParams["username"]
-				message = requestParams["message"]
-
-				if username == "lsipii":
-					if message.find("kahvibotti, laita streamaus päälle") > -1:
-						if message.find("access code foxtrot tango whiskey") > -1:
-							self.cameraStreamer.startStreaming()
-					if message.find("kahvibotti, laita streamaus pois päältä") > -1:
-						if message.find("access code whiskey tango foxtrot") > -1:
-							self.cameraStreamer.stopStreaming()
+		return apps
