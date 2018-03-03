@@ -15,7 +15,7 @@ class CoffeeActionAccessChecker():
 
 		self.controlCommandLocale = None
 		self.controlLocales = ["fi", "en"]
-		
+
 		self.appModeAccessTranslations = {
 			"fi": {
 				"accessQueryKeywordPrefix": "kahvi",
@@ -32,8 +32,8 @@ class CoffeeActionAccessChecker():
 				"fi": {
 					"command": ["streamaus ", "striimaus ", "stream ", "striimi "],
 					"actions": {
-						"ON": " päälle", 
-						"OFF": [" pois", " veke"],
+						"ON": [" päälle", " piälle", " onnelii", " käyntii"], 
+						"OFF": [" pois", " tysteriin siit", " veke", " offelii"],
 					}
 				},
 				"en": {
