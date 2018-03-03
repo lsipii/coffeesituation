@@ -41,6 +41,19 @@ class CoffeeActionAccessChecker():
 				"accessCodePrefix": "access code"
 			}
 		}
+
+		self.accessCodes = {
+			"stream": {
+				"actions": {
+					"ON": {
+						"lsipii": "foxtrot tango whiskey"
+					},
+					"OFF": {
+						"lsipii": "whiskey tango foxtrot"
+					}
+				}
+			}
+		}
 	
 	"""
 	Checks if user can access the given command, action
@@ -54,19 +67,28 @@ class CoffeeActionAccessChecker():
 	def canIHasAccessToAppModeCommand(self, username, message, command, action = None):
 
 		accessGranted = False
-		accessCodePrefixTranslation = self.accessTranslations[self.controlCommandLocale]["accessCodePrefix"]
-		accessCodePrefixTransData = self.getTranslationIndexData(accessCodePrefixTranslation, message)
-		accessCodePrefixPos = accessCodePrefixTransData["index"]
-		
-		if accessCodePrefixPos > -1:
-			if command == "stream" and action is not None:
-				if action == "ON":
-					if username == "lsipii":
-						accessCodePos = message.find("foxtrot tango whiskey")
-						accessGranted = accessCodePos > accessCodePrefixPos
-				elif action == "OFF":
-					if username == "lsipii":
-						accessCodePos = message.find("whiskey tango foxtrot")
+		if command in self.accessCodes:
+
+			# Check that access code is tried
+			accessCodePrefixTranslation = self.accessTranslations[self.controlCommandLocale]["accessCodePrefix"]
+			accessCodePrefixTransData = self.getTranslationIndexData(accessCodePrefixTranslation, message)
+			accessCodePrefixPos = accessCodePrefixTransData["index"]
+			
+			if accessCodePrefixPos > -1:
+				
+				commandAccessCodeData = self.accessCodes[command]
+				if "actions" in commandAccessCodeData:
+					if action is not None and action in commandAccessCodeData["actions"]:
+						wantsAnAction = commandAccessCodeData["actions"][action]
+						if username in wantsAnAction:
+							accessCodePos = message.find(wantsAnAction[username])
+							accessGranted = accessCodePos > accessCodePrefixPos
+				
+				# For commands that have no actions, also can override the actions access
+				if not accessGranted and "access" in commandAccessCodeData:
+					wantsAnAction = commandAccessCodeData["access"]
+					if username in wantsAnAction:
+						accessCodePos = message.find(wantsAnAction[username])
 						accessGranted = accessCodePos > accessCodePrefixPos
 		return accessGranted
 
