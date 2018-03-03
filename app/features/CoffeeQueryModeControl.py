@@ -13,6 +13,7 @@ class CoffeeQueryModeControl():
 		self.coffeeChecker = checkerRef
 
 		self.controlCommandLocale = None
+		self.controlLocales = ["fi", "en"]
 
 		self.commandTranslations = {
 			"stream": {
@@ -35,9 +36,11 @@ class CoffeeQueryModeControl():
 
 		self.accessTranslations = {
 			"fi": {
-				"accessCodePrefix": "turvasana"
+				"accessQueryKeywordPrefix": "kahvi",
+				"accessCodePrefix": ["turvasana", "pääsyevättömyyskoodi"]
 			},
 			"en": {
+				"accessQueryKeywordPrefix": "coffee",
 				"accessCodePrefix": "access code"
 			}
 		}
@@ -51,8 +54,8 @@ class CoffeeQueryModeControl():
 
 		if requestParams is not None:
 			if "message" in requestParams and "username" in requestParams:
-				username = requestParams["username"]
-				message = requestParams["message"]
+				username = requestParams["username"].lower()
+				message = requestParams["message"].lower()
 
 				if self.checksIfAskingForAppControl(message):
 					command = self.resolveAppControlCommand(message)
@@ -67,22 +70,33 @@ class CoffeeQueryModeControl():
 				self.controlCommandLocale = None
 	
 	"""
-	Checks if we have coffe MODE change
+	Checks if we have a coffe MODE change, defines the query locale
 	
 	@param (string) message
 	@retrun (bool)
 	"""
 	def checksIfAskingForAppControl(self, message):
-		if message.find("kahvi") > -1:
-			self.controlCommandLocale = "fi"
-			return True
-		elif message.find("coffee") > -1:
-			self.controlCommandLocale = "en"
-			return True
+
+		# Checks for control works that are prefixes to some other word, 
+		# eg. for a keyword 'kahvi' we're at the point if input is 'kahvimörkö' or 'kahvia', but not when its only 'kahvi' 
+		def controlCommandResolver(locale, message):
+			controlTranslation = self.accessTranslations[locale]["accessQueryKeywordPrefix"]
+			controlIndex = self.getTranslationIndexData(controlTranslation, message)
+			if controlIndex["index"] > -1:
+				if message[controlIndex["index"]+controlIndex["length"]:controlIndex["index"]+controlIndex["length"]+1].isalpha():
+					self.controlCommandLocale = locale
+					return True
+			return False
+
+		# Loop trough locales, break if a match
+		for locale in self.controlLocales:
+			if controlCommandResolver(locale, message):
+				self.controlCommandLocale = locale
+				return True
 		return False
 
 	"""
-	Checks if we have coffe MODE change
+	Resolves the control command
 	
 	@param (string) message
 	@retrun (string|None) resolvedCommandName
@@ -93,21 +107,14 @@ class CoffeeQueryModeControl():
 			for commandName in self.commandTranslations:
 				if self.controlCommandLocale in self.commandTranslations[commandName]:
 					commandTranslation = self.commandTranslations[commandName][self.controlCommandLocale]["command"]
-					if isinstance(commandTranslation, list):
-						for translationPart in commandTranslation:
-							if message.find(translationPart) > -1:
-								resolvedCommandName = commandName
-								break
-						if resolvedCommandName is not None:
-							break
-					else:
-						if message.find(commandTranslation) > -1:
-							resolvedCommandName = commandName
-							break
+					commandIndex = self.getTranslationIndexData(commandTranslation, message)
+					if commandIndex["index"] > -1:
+						resolvedCommandName = commandName
+						break
 		return resolvedCommandName
 
 	"""
-	Checks if we have coffe MODE change
+	Resolves the control commands action
 	
 	@param (string) commandName
 	@param (string) message
@@ -120,22 +127,14 @@ class CoffeeQueryModeControl():
 			if "actions" in self.commandTranslations[commandName][self.controlCommandLocale]:
 				for actionName in self.commandTranslations[commandName][self.controlCommandLocale]["actions"]:
 					actionTranslation = self.commandTranslations[commandName][self.controlCommandLocale]["actions"][actionName]
-
-					if isinstance(actionTranslation, list):
-						for translationPart in actionTranslation:
-							if message.find(translationPart) > -1:
-								action = actionName
-								break
-						if action is not None:
-							break
-					else:
-						if message.find(actionTranslation) > -1:
-							action = actionName
-							break
+					actionIndex = self.getTranslationIndexData(actionTranslation, message)
+					if actionIndex["index"] > -1:
+						action = actionName
+						break
 		return action
 
 	"""
-	Checks if user can access the given command
+	Checks if user can access the given command, action
 	
 	@param (string) username
 	@param (string) message
@@ -146,16 +145,42 @@ class CoffeeQueryModeControl():
 	def canIHasAccessToAppModeCommand(self, username, message, command, action = None):
 
 		accessGranted = False
-		accessCodePrefix = self.accessTranslations[self.controlCommandLocale]["accessCodePrefix"]
-		accssCodePrefixPos = message.find(accessCodePrefix)
-		if accssCodePrefixPos > -1:
+		accessCodePrefixTranslation = self.accessTranslations[self.controlCommandLocale]["accessCodePrefix"]
+		accessCodePrefixTransData = self.getTranslationIndexData(accessCodePrefixTranslation, message)
+		accessCodePrefixPos = accessCodePrefixTransData["index"]
+		
+		if accessCodePrefixPos > -1:
 			if command == "stream" and action is not None:
 				if action == "ON":
 					if username == "lsipii":
 						accessCodePos = message.find("foxtrot tango whiskey")
-						accessGranted = accessCodePos > accssCodePrefixPos
+						accessGranted = accessCodePos > accessCodePrefixPos
 				elif action == "OFF":
 					if username == "lsipii":
 						accessCodePos = message.find("whiskey tango foxtrot")
-						accessGranted = accessCodePos > accssCodePrefixPos
+						accessGranted = accessCodePos > accessCodePrefixPos
 		return accessGranted
+
+	"""
+	Gets the translations index and length if found from the message
+	
+	@param (string|array) translation
+	@param (string) message
+	@retrun (dict) {index, length}
+	"""
+	def getTranslationIndexData(self, translation, message):
+		translationIndexData = {
+			"index": -1,
+			"length": 0,
+		}
+		if isinstance(translation, list):
+			for translationPart in translation:
+				partIndex = message.find(translationPart)
+				if partIndex > -1:
+					translationIndexData["index"] = partIndex
+					translationIndexData["length"] = len(translationPart)
+					break
+		else:
+			translationIndexData["index"] = message.find(translation)
+			translationIndexData["length"] = len(translation)
+		return translationIndexData
