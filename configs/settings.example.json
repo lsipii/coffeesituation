@@ -1,6 +1,9 @@
 {
     "app": {
-        "host": "https://****..hosting service address..****.dataplicity.io"
+        "host": "https://****..hosting service address..****.dataplicity.io",
+        "settings": {
+            "CoffeeSituationResolverEnabled": false
+        }
     },
     "apiAccess": {
         "weechat": {

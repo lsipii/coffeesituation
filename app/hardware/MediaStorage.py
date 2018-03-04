@@ -140,9 +140,22 @@ class MediaStorage():
 		import base64 
 
 		if self.driver == "local":
-			image = open(self.getMediaFilePath(), 'rb') #open binary file in read mode
-			imageRead = image.read()
+			imageRead = self.readImageAsBinary()
 			image64 = base64.encodestring(imageRead)
 			return image64
+		else:
+			raise Exception("Storage driver "+self.driver+" not supported")
+
+	"""
+	Reads taken photo as base64 bin string
+	
+	@return (bin string) imageRead
+	"""
+	def readImageAsBinary(self):
+		
+		if self.driver == "local":
+			image = open(self.getMediaFilePath(), 'rb') #open binary file in read mode
+			imageRead = image.read()
+			return imageRead
 		else:
 			raise Exception("Storage driver "+self.driver+" not supported")

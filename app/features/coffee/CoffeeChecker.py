@@ -3,6 +3,7 @@
 @author lsipii
 """
 from app.features.coffee.CoffeeActionAccessChecker import CoffeeActionAccessChecker
+from app.features.coffee.CoffeeSituationResolver import CoffeeSituationResolver
 from app.features.CameraShooter import CameraShooter
 from app.features.CameraStreamer import CameraStreamer
 from app.hardware.MediaStorage import MediaStorage
@@ -19,6 +20,7 @@ class CoffeeChecker():
 		self.cameraShooter = CameraShooter(self.storage)
 		self.cameraStreamer = CameraStreamer(configs["app"])
 		self.coffeeActionAccessChecker = CoffeeActionAccessChecker(configs["coffeeAccess"])
+		self.coffeeSituationResolver = CoffeeSituationResolver(configs["app"]["settings"])
 
 	"""
 	Checks if we have coffe
@@ -37,12 +39,19 @@ class CoffeeChecker():
 		# Get coffee data from selected service
 		if self.cameraStreamer.areWeCurrentlyStreaming():
 			coffeeObservationUrl = self.cameraStreamer.getStreamUrl()
+			if self.coffeeSituationResolver.isEnabled():
+				self.coffeeSituationResolver.setImageData()
 		else:
-			self.cameraShooter.takeAPhoto() 
+			self.cameraShooter.takeAPhoto()  
 			coffeeObservationUrl = self.cameraShooter.getPhotoStorageUrl()
-				
+			if self.coffeeSituationResolver.isEnabled():
+				self.coffeeSituationResolver.setImageData(self.storage.readImageAsBinary())
+		
+		# Coffee situation message
+		hasCoffeeMsg = self.coffeeSituationResolver.getCanWeHasCoffeeMsg()
+
 		return {
-			"hasCoffee": "dunno", # To be implemented, opencv etc
+			"hasCoffeeMsg": hasCoffeeMsg,
 			"coffeeObservationUrl": coffeeObservationUrl,
 			"streaming": self.cameraStreamer.areWeCurrentlyStreaming(),
 		}
