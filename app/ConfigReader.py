@@ -14,7 +14,7 @@ class ConfigReader:
 
 	def __init__(self):
 		# From the app root, where the config files resides
-		self.configurationFilesFolder = "configs";
+		self.configurationFilesFolder = "settings";
 		self.config = None
 
 	"""
@@ -28,7 +28,7 @@ class ConfigReader:
 		return self.config
 
 	"""
-	Read secrets from a configs/secretsFileName 
+	Read secrets from a settings/secretsFileName 
 	"""
 	def readConfigFile(self, secretsFileName, secretsFolder = None):
 

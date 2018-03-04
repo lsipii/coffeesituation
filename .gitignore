@@ -1,6 +1,6 @@
 *.pyc
 .pyc
 *.sublime-workspace
-configs/*
-!configs/.gitkeep
-!configs/settings.example.json
+settings/*
+!settings/.gitkeep
+!settings/settings.example.json
