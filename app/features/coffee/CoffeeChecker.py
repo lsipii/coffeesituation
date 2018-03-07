@@ -45,7 +45,7 @@ class CoffeeChecker():
 				self.coffeeSituationResolver.setImageData()
 		else:
 			self.cameraShooter.takeAPhoto()  
-			self.facesBlurrer.blurFacesFromPicture(self.cameraShooter.getMediaFilePath())
+			self.facesBlurrer.blurFacesFromPicture(self.storage.getMediaFilePath())
 			coffeeObservationUrl = self.cameraShooter.getPhotoStorageUrl()
 			if self.coffeeSituationResolver.isEnabled():
 				self.coffeeSituationResolver.setImageData(self.storage.readImageAsBinary())
