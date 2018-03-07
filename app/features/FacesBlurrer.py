@@ -35,7 +35,7 @@ class FacesBlurrer():
 			scaleFactor=1.1, 
 			minNeighbors=5,
 			minSize=(30, 30),
-			flags = cv2.cv.CV_HAAR_SCALE_IMAGE
+			flags = cv2.CASCADE_SCALE_IMAGE
 		)
 
 		# Find out if there is faces, in the faces picture

@@ -44,6 +44,11 @@ RUN apt-get update -yqq && \
     apt-get install -y libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
 RUN apt-get update -yqq && \
     apt-get install -y libatlas-base-dev gfortran
+RUN apt-get update -yqq && \
+    apt-get install -y libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+RUN apt-get update -yqq && \
+    apt-get install -y libxvidcore-dev libx264-dev
+
 
 #####################################
 # Install numpy
@@ -51,7 +56,7 @@ RUN apt-get update -yqq && \
 # RUN pip3 install numpy
 
 RUN apt-get update -yqq && \
-    apt-get install -y python3-numpy
+    apt-get install -y python3-numpy python-opencv
 
 #####################################
 # Install opencv
@@ -73,6 +78,10 @@ RUN cd opencv-${OPENCV_VERSION} && \
 	    -D CMAKE_INSTALL_PREFIX=/usr/local \
 	    -D INSTALL_PYTHON_EXAMPLES=ON \
 	    -D BUILD_EXAMPLES=ON ..
+
+RUN make -j4
+RUN make install
+RUN ldconfig
 
 # Revert the optimizations
 RUN if [ -f /etc/dphys-swapfile ]; then \
