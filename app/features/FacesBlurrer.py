@@ -17,7 +17,7 @@ class FacesBlurrer():
 	@param (dict) settings  = None
 	"""
 	def __init__(self, settings = None):
-		self.faceCascade = cv2.CascadeClassifier('app/data/haarcascades/haarcascade_profileface.xml')
+		self.faceCascade = cv2.CascadeClassifier('app/data/haarcascades/haarcascade_frontalface_default.xml')
 	
 	"""
 	Blurs the faces from image
@@ -28,19 +28,26 @@ class FacesBlurrer():
 
 		# Create opencv image, and a copy
 		cvImage = cv2.imread(imagePath)
-		resultingImage = cvImage.copy()
-
+	
 		# Detect faces
 		cvImageGray = cv2.cvtColor(cvImage, cv2.COLOR_BGR2GRAY)
-		faces = self.faceCascade.detectMultiScale(cvImageGray, 1.3, 5)
+		faces = self.faceCascade.detectMultiScale(cvImageGray, 
+			scaleFactor=1.1, 
+			minNeighbors=5,
+			minSize=(30, 30),
+			flags = cv2.cv.CV_HAAR_SCALE_IMAGE
+		)
 
 		# Find out if there is faces, in the faces picture
-		for (x,y,w,h) in faces:
+		if len(faces) > 0:
 
-			# Blur the face area
-			facesArea = cvImage[y:y+h,x:x+w]
-			facesArea = cv2.GaussianBlur(facesArea, (23, 23), 30)
-			resultingImage[y:y+facesArea.shape[0], x:x+facesArea.shape[1]] = facesArea
+			# Blur faces
+			for (x,y,w,h) in faces:
+				
+				# Blur the face area
+				facesArea = cvImage[y:y+h,x:x+w]
+				facesArea = cv2.GaussianBlur(facesArea, (23, 23), 30)
+				cvImage[y:y+facesArea.shape[0], x:x+facesArea.shape[1]] = facesArea
 
-		# Write resulting image
-		cv2.imwrite(imagePath, resultingImage)
+			# Write resulting image
+			cv2.imwrite(imagePath, cvImage)
