@@ -6,6 +6,7 @@ from app.features.coffee.CoffeeActionAccessChecker import CoffeeActionAccessChec
 from app.features.coffee.CoffeeSituationResolver import CoffeeSituationResolver
 from app.features.CameraShooter import CameraShooter
 from app.features.CameraStreamer import CameraStreamer
+from app.features.FacesBlurrer import FacesBlurrer
 from app.hardware.MediaStorage import MediaStorage
 
 class CoffeeChecker():
@@ -21,6 +22,7 @@ class CoffeeChecker():
 		self.cameraStreamer = CameraStreamer(configs["app"])
 		self.coffeeActionAccessChecker = CoffeeActionAccessChecker(configs["coffeeAccess"])
 		self.coffeeSituationResolver = CoffeeSituationResolver(configs["app"]["settings"])
+		self.facesBlurrer = FacesBlurrer()
 
 	"""
 	Checks if we have coffe
@@ -43,6 +45,7 @@ class CoffeeChecker():
 				self.coffeeSituationResolver.setImageData()
 		else:
 			self.cameraShooter.takeAPhoto()  
+			self.facesBlurrer.blurFacesFromPicture(self.cameraShooter.getMediaFilePath())
 			coffeeObservationUrl = self.cameraShooter.getPhotoStorageUrl()
 			if self.coffeeSituationResolver.isEnabled():
 				self.coffeeSituationResolver.setImageData(self.storage.readImageAsBinary())
