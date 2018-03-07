@@ -38,7 +38,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
         },
         {
             "network": "irc.tamperestartuphub",
-            "channels": ["#general", "#random"], 
+            "channels": ["#random"], 
         }
     ]
 
@@ -47,14 +47,16 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
     
     #@enabled: Allowed coffee keywords
     coffeeKeywords = [
-        "kahvia", 
-        "kahvii", 
         "kahvi", 
+        "kahvii", 
         "kahvetta",
         "kohvetta",
+        "kahavia",
+        "sumppia",
+        "sumpit",
+        "caffe",
         "coffee", 
-        "caffeine", 
-        "kofeiini"
+        "kofeiini",
     ]
     
     # Resolve the accepted network
