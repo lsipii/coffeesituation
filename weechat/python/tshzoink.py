@@ -52,7 +52,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
         "kahvetta",
         "kohvetta",
         "kahavia",
-        "sumppia",
+        "sumppi",
         "sumpetta",
         "sumpit",
         "caffe",
