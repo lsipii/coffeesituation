@@ -6,7 +6,7 @@ from app.features.coffee.CoffeeActionAccessChecker import CoffeeActionAccessChec
 from app.features.coffee.CoffeeSituationResolver import CoffeeSituationResolver
 from app.features.CameraShooter import CameraShooter
 from app.features.CameraStreamer import CameraStreamer
-from app.hardware.MediaStorage import MediaStorage
+from app.hardware.storage.MediaStorageFactory import MediaStorageFactory
 
 class CoffeeChecker():
 
@@ -16,7 +16,7 @@ class CoffeeChecker():
 	@param (dict) configs [storage]
 	"""
 	def __init__(self, configs):
-		self.storage = MediaStorage(configs["storage"])
+		self.storage = MediaStorageFactory.getInstance(configs["storage"])
 		self.cameraShooter = CameraShooter(self.storage)
 		self.cameraStreamer = CameraStreamer(configs["app"])
 		self.coffeeActionAccessChecker = CoffeeActionAccessChecker(configs["coffeeAccess"])
