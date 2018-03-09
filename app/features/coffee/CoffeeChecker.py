@@ -6,7 +6,6 @@ from app.features.coffee.CoffeeActionAccessChecker import CoffeeActionAccessChec
 from app.features.coffee.CoffeeSituationResolver import CoffeeSituationResolver
 from app.features.CameraShooter import CameraShooter
 from app.features.CameraStreamer import CameraStreamer
-from app.features.FacesBlurrer import FacesBlurrer
 from app.hardware.MediaStorage import MediaStorage
 
 class CoffeeChecker():
@@ -22,7 +21,24 @@ class CoffeeChecker():
 		self.cameraStreamer = CameraStreamer(configs["app"])
 		self.coffeeActionAccessChecker = CoffeeActionAccessChecker(configs["coffeeAccess"])
 		self.coffeeSituationResolver = CoffeeSituationResolver(configs["app"]["settings"])
-		self.facesBlurrer = FacesBlurrer()
+		self.initImageBlurrer(configs["app"]["settings"])
+
+
+	"""
+	Setups the image blurrer
+
+	@param (dict) appSettings
+	"""
+	def initImageBlurrer(self, appSettings):
+		
+		self.imageBlurrer = None
+
+		if "imageBlurrerFilter" in appSettings:
+			blurrerName = "app.utils.images.filters."+appSettings['imageBlurrerFilter']
+			
+			from app.utils.Utils import getModulePathInstance
+			self.imageBlurrer = getModulePathInstance(blurrerName)
+			
 
 	"""
 	Checks if we have coffe
@@ -44,8 +60,12 @@ class CoffeeChecker():
 			if self.coffeeSituationResolver.isEnabled():
 				self.coffeeSituationResolver.setImageData()
 		else:
-			self.cameraShooter.takeAPhoto()  
-			self.facesBlurrer.blurFacesFromPicture(self.storage.getMediaFilePath())
+			self.cameraShooter.takeAPhoto() 
+			
+			# Blur the photo, if the feat enabled
+			if self.weHaveAnImageBlurrer(): 
+				self.imageBlurrer.blurImage(self.storage.getMediaFilePath())
+
 			coffeeObservationUrl = self.cameraShooter.getPhotoStorageUrl()
 			if self.coffeeSituationResolver.isEnabled():
 				self.coffeeSituationResolver.setImageData(self.storage.readImageAsBinary())
@@ -84,3 +104,11 @@ class CoffeeChecker():
 					self.cameraStreamer.startStreaming()
 				elif grantedAction["action"] == "OFF":
 					self.cameraStreamer.stopStreaming()
+
+	"""
+	Checks if the image blurrer has been initialized
+
+	@return bool
+	"""
+	def weHaveAnImageBlurrer(self):
+		return self.imageBlurrer is not None
