@@ -1,11 +1,11 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """
 @author lsipii
 """
-from app.features.FacesBlurrer import FacesBlurrer
+from app.utils.images.filters.AreaBlurrer import AreaBlurrer
 
-imageName = "abba.png"
+imageName = "mismoro.png"
 imagePath = "app/data/testimages/"+imageName
 
-facesBlurrer = FacesBlurrer()
-facesBlurrer.blurFacesFromPicture(imagePath)
+areaBlurrer = AreaBlurrer()
+areaBlurrer.blurImage(imagePath)

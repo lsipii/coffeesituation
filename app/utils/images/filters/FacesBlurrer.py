@@ -3,13 +3,14 @@
 @author lsipii
 """
 import cv2
+from app.utils.images.filters.ImageBlurrer import ImageBlurrer
 
 """
 Blurs faces
 
 @see: http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_objdetect/py_face_detection/py_face_detection.html
 """
-class FacesBlurrer():
+class FacesBlurrer(ImageBlurrer):
 
 	"""
 	Constructor
@@ -24,9 +25,9 @@ class FacesBlurrer():
 
 	@param (string) imagePath
 	"""
-	def blurFacesFromPicture(self, imagePath):
+	def blurImage(self, imagePath):
 
-		# Create opencv image, and a copy
+		# Readn and transform imagePath file to an opencv image matrix
 		cvImage = cv2.imread(imagePath)
 	
 		# Detect faces

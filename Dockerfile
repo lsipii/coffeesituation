@@ -51,9 +51,12 @@ RUN apt-get update -yqq && \
 
 
 #####################################
-# Install numpy
+# Install numpy and python opencv bindings
 #####################################
+# ALT install method:
+#
 # RUN pip3 install numpy
+# RUN pip3 install python-opencv
 
 RUN apt-get update -yqq && \
     apt-get install -y python3-numpy python-opencv
