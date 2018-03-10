@@ -12,14 +12,14 @@ class MediaStorageFactory():
 	"""
 	@staticmethod
 	def getInstance(configs):
-		if "driver" in configs:
-			if configs["driver"] == "local":
+		if "storage_driver" in configs["app"]:
+			if configs["app"]["storage_driver"] == "local":
 				from app.hardware.storage.LocalStorage import LocalStorage
-				return LocalStorage(configs)
-			elif configs["driver"] == "s3":
+				return LocalStorage(configs["storage"]["local"])
+			elif configs["app"]["storage_driver"] == "S3":
 				from app.hardware.storage.S3Storage import S3Storage
-				return S3Storage(configs)
+				return S3Storage(configs["storage"]["S3"])
 			else:
-				raise Exception("Storage driver "+configs["driver"]+" not found")
+				raise Exception("Storage driver "+configs["app"]["storage_driver"]+" not found")
 		else:
 			raise Exception("Storage driver must be configured")

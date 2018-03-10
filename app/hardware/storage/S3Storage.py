@@ -22,7 +22,7 @@ class S3Storage(MediaStorage):
 	"""
 	def setupDriverConfigurations(self, configs):
 
-		self.driver = self.driver
+		self.driver = "S3"
 
 		self.configurations[self.driver] = {
 			"bucket": None,

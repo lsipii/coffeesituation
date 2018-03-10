@@ -23,7 +23,7 @@ class LocalStorage(MediaStorage):
 	"""
 	def setupDriverConfigurations(self, configs):
 
-		self.driver = "S3"
+		self.driver = "local"
 		
 		self.configurations[self.driver] = {
 			"mediaDirectory": None,
@@ -68,6 +68,6 @@ class LocalStorage(MediaStorage):
 	"""
 	def clearPreviousMediaFiles(self):
 		files = glob.glob(self.configurations[self.driver]["mediaDirectory"]+"/*")
-			for f in files:
-				if os.path.isfile(f):
-					os.unlink(f)
+		for f in files:
+			if os.path.isfile(f):
+				os.unlink(f)

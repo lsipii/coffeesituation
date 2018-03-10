@@ -16,7 +16,7 @@ class CoffeeChecker():
 	@param (dict) configs [storage]
 	"""
 	def __init__(self, configs):
-		self.storage = MediaStorageFactory.getInstance(configs["storage"])
+		self.storage = MediaStorageFactory.getInstance(configs)
 		self.cameraShooter = CameraShooter(self.storage)
 		self.cameraStreamer = CameraStreamer(configs["app"])
 		self.coffeeActionAccessChecker = CoffeeActionAccessChecker(configs["coffeeAccess"])

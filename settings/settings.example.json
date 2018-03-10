@@ -1,10 +1,11 @@
 {
     "app": {
-        "host": "https://****..hosting service address..****.dataplicity.io",
+        "host": "https://****..hosting address..****.dataplicity.io",
         "settings": {
             "CoffeeSituationResolverEnabled": false,
             "imageBlurrerFilter": false
-        }
+        },
+        "storage_driver": "local"
     },
     "apiAccess": {
         "weechat": {
@@ -32,8 +33,15 @@
         }
     },
     "storage": {
-        "driver": "local",
-        "mediaDirectory": "/var/www/html/images/coffee",
-        "mediaHost": "https://****..hosting service address..****.dataplicity.io/images/coffee"
+        "local": {
+            "mediaDirectory": "/var/www/html/images/coffee",
+            "mediaHost": "https://://****..hosting address..****.dataplicity.io/images/coffee"
+        },
+        "S3": {
+            "AWS_S3_BUCKET": "****bucket****",
+            "AWS_S3_ACCESS_KEY_ID": "****access key id****",
+            "AWS_S3_SECRET_KEY": "****access key ****",
+            "mediaHost": "https://****bucket**host****"
+        }
     }
 }
