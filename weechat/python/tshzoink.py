@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 @author lsipii
 # Derived from: irssinotifier
@@ -51,13 +52,15 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
         "kahvii", 
         "kahvetta",
         "kohvetta",
+        "kaffe",
         "kahavia",
         "sumppi",
         "sumpetta",
         "sumpit",
         "caffe",
         "coffee",
-        "cafe", 
+        "cafe",
+        "café", 
         "kofeiini",
     ]
     
