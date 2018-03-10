@@ -49,7 +49,6 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
     #@enabled: Allowed coffee keywords
     coffeeKeywords = [
         "kahvi", 
-        "kahvii", 
         "kahvetta",
         "kohvetta",
         "kaffe",
