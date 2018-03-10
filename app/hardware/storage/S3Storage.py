@@ -3,6 +3,7 @@
 @author lsipii
 """
 import boto3
+
 from app.hardware.storage.MediaStorage import MediaStorage
 
 class S3Storage(MediaStorage):
@@ -21,10 +22,9 @@ class S3Storage(MediaStorage):
 	"""
 	def setupDriverConfigurations(self, configs):
 
-		# Create an S3 client
-		self.s3client = boto3.client('s3')
+		self.driver = self.driver
 
-		self.configurations["S3"] = {
+		self.configurations[self.driver] = {
 			"bucket": None,
 			"mediaDirectory": "/",
 			"mediaFilename": None,
@@ -33,13 +33,26 @@ class S3Storage(MediaStorage):
 			"mediaUrl": None,
 		}
 
-		if "bucket" in configs:
-			self.configurations["S3"]["bucket"] = configs["bucket"]
-		if "mediaDirectory" in configs:
-			self.configurations["S3"]["mediaDirectory"] = configs["mediaDirectory"]
-		if "mediaHost" in configs:
-			self.configurations["S3"]["mediaHost"] = configs["mediaHost"]
+		if "AWS_S3_BUCKET" not in configs:
+			raise Exception("Invalid S3 configurations")
+		if "AWS_S3_ACCESS_KEY_ID" not in configs:
+			raise Exception("Invalid S3 configurations")
+		if "AWS_S3_SECRET_KEY" not in configs:
+			raise Exception("Invalid S3 configurations")
 
+		# Create an S3 client
+		self.configurations[self.driver]["bucket"] = configs["AWS_S3_BUCKET"]	
+		self.s3client = boto3.client('s3',
+			aws_access_key_id=configs["AWS_S3_ACCESS_KEY_ID"],
+			aws_secret_access_key=configs["AWS_S3_SECRET_KEY"],
+		)
+
+		if "mediaDirectory" in configs:
+			self.configurations[self.driver]["mediaDirectory"] = configs["mediaDirectory"]
+		if "mediaHost" in configs:
+			self.configurations[self.driver]["mediaHost"] = configs["mediaHost"]
+		
+		# Setups the first pics name
 		self.setupMediaFilename()
 
 	
@@ -47,26 +60,32 @@ class S3Storage(MediaStorage):
 	Validates we'r good to go
 	"""
 	def validateStorageFunctionality(self):
-		if self.configurations["S3"]["bucket"] is None:
+		if self.configurations[self.driver]["bucket"] is None:
 			raise Exception("S3 bucket not initialized")
-		if self.configurations["S3"]["mediaHost"] is None:
+		if self.configurations[self.driver]["mediaHost"] is None:
 			raise Exception("S3 mediaHost not initialized")
 		
 	"""
 	Clears media folder from files
 	"""
 	def clearPreviousMediaFiles(self):
-		files = glob.glob(self.configurations["S3"]["mediaDirectory"]+"/*")
-			for f in files:
-				if os.path.isfile(f):
-					os.unlink(f)	
+		for bucketKeyObj in self.s3client.list_objects(Bucket=self.configurations[self.driver]["bucket"])['Contents']:
+			if bucketKeyObj["Key"] != "404.jpg":
+				self.s3client.delete_object(
+					Bucket=self.configurations[self.driver]["bucket"],
+					Key=bucketKeyObj["Key"]
+				)
+		return True
 
 	"""
-	Reads taken photo as base64 bin string
-	
-	@return (bin string) imageRead
+	Saves the image file
 	"""
-	def readImageAsBinary(self):
-		image = open(self.getMediaFilePath(), 'rb') #open binary file in read mode
-		imageRead = image.read()
-		return imageRead
+	def saveImageFile(self):
+		self.s3client.upload_fileobj(
+			self.getImageFileObj(),
+			self.configurations[self.driver]["bucket"],
+			self.getMediaFilename(),
+			ExtraArgs={
+				"ContentType": "image/jpeg"
+			}
+		)

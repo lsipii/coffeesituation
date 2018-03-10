@@ -21,16 +21,9 @@ class CoffeeSituationResolver():
 	def __init__(self, settings):
 		self.coffeePotCascade = cv2.CascadeClassifier('app/data/haarcascades/coffeePots.xml')
 		self.liquidAreaCascade = cv2.CascadeClassifier('app/data/haarcascades/liquids.xml')
-		self.imageDataBin = None
+		self.imagePath = None
 		self.coffeeSituationResolverEnabled = settings["CoffeeSituationResolverEnabled"]
-
-	"""
-	Sets the imageDataBin
-
-	@param (bin) imageDataBin = None
-	"""
-	def setImageData(self, imageDataBin = None):
-		self.imageDataBin = imageDataBin
+		self.coffeeAwarenessMsg = "no data"
 
 	"""
 	Checks if the feat is enabled
@@ -46,16 +39,20 @@ class CoffeeSituationResolver():
 	@return (string) coffeeAwarenessMsg = not recognized
 	"""
 	def getCanWeHasCoffeeMsg(self):
+		return self.coffeeAwarenessMsg
 
-		if self.imageDataBin is None:
-			return "No data"
+	"""
+	Resolves the coffee situation message
 
-		# Default situation
-		coffeeAwarenessMsg = "Not recognized"
+	@param (string) imagePath
+	"""
+	def resolveCoffeeSituation(self, imagePath):
 		
-		# Create opencv image
-		numpyBuffer = numpy.fromstring(self.imageDataBin, dtype=numpy.uint8)
-		cvImage = cv2.imdecode(numpyBuffer, 1)
+		# Default situation
+		self.coffeeAwarenessMsg = "Not recognized"
+		
+		# Read and transform imagePath file to an opencv image matrix
+		cvImage = cv2.imread(imagePath)
 		cvImageGray = cv2.cvtColor(cvImage, cv2.COLOR_BGR2GRAY)
 
 		# Detect coffee pots
@@ -79,6 +76,6 @@ class CoffeeSituationResolver():
 
 			# If dark enough, we should have coffee
 			if rgbMean > 0 and rgbMean < 100:
-				coffeeAwarenessMsg = "We might have coffee"
+				self.coffeeAwarenessMsg = "We might have coffee"
 
-		return coffeeAwarenessMsg
+		return self.coffeeAwarenessMsg

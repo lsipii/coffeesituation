@@ -23,7 +23,9 @@ class LocalStorage(MediaStorage):
 	"""
 	def setupDriverConfigurations(self, configs):
 
-		self.configurations["local"] = {
+		self.driver = "S3"
+		
+		self.configurations[self.driver] = {
 			"mediaDirectory": None,
 			"mediaFilename": None,
 			"mediaPath": None,
@@ -32,11 +34,11 @@ class LocalStorage(MediaStorage):
 		}
 
 		if "mediaDirectory" in configs:
-			self.configurations["local"]["mediaDirectory"] = configs["mediaDirectory"]
+			self.configurations[self.driver]["mediaDirectory"] = configs["mediaDirectory"]
 		if "mediaFilename" in configs:
-			self.configurations["local"]["mediaFilename"] = configs["mediaFilename"]
+			self.configurations[self.driver]["mediaFilename"] = configs["mediaFilename"]
 		if "mediaHost" in configs:
-			self.configurations["local"]["mediaHost"] = configs["mediaHost"]
+			self.configurations[self.driver]["mediaHost"] = configs["mediaHost"]
 
 		self.setupMediaFilename()
 
@@ -46,29 +48,26 @@ class LocalStorage(MediaStorage):
 	"""
 	def validateStorageFunctionality(self):
 
-		if self.configurations["local"]["mediaPath"] is None:
+		if self.configurations[self.driver]["mediaPath"] is None:
 			raise Exception("Media path not initialized")
-		if not os.access(self.configurations["local"]["mediaDirectory"], os.W_OK):
-			raise Exception("No writing access to "+self.configurations["local"]["mediaDirectory"])
+		if not os.access(self.configurations[self.driver]["mediaDirectory"], os.W_OK):
+			raise Exception("No writing access to "+self.configurations[self.driver]["mediaDirectory"])
 
 		# Ensure dir
-		sh.mkdir("-p", self.configurations["local"]["mediaDirectory"])	
+		sh.mkdir("-p", self.configurations[self.driver]["mediaDirectory"])	
 		
+	
+	"""
+	Saves the image file
+	"""
+	def saveImageFile(self):
+		sh.mv(self.getTemprorayMediaFilePath(), self.getMediaFilePath())
+
 	"""
 	Clears media folder from files
 	"""
 	def clearPreviousMediaFiles(self):
-		files = glob.glob(self.configurations["local"]["mediaDirectory"]+"/*")
+		files = glob.glob(self.configurations[self.driver]["mediaDirectory"]+"/*")
 			for f in files:
 				if os.path.isfile(f):
-					os.unlink(f)	
-
-	"""
-	Reads taken photo as base64 bin string
-	
-	@return (bin string) imageRead
-	"""
-	def readImageAsBinary(self):
-		image = open(self.getMediaFilePath(), 'rb') #open binary file in read mode
-		imageRead = image.read()
-		return imageRead
+					os.unlink(f)

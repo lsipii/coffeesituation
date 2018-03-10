@@ -31,7 +31,8 @@ class CameraShooter(Camera):
 		super().captureStart()
 		self.storage.clearPreviousMediaFiles()
 		self.storage.setupMediaFilename()
-		sh.raspistill('-w', '640', '-h', '480', '-o', self.storage.getMediaFilePath())
+		sh.raspistill('-w', '640', '-h', '480', '-o', self.storage.getTemprorayMediaFilePath())
+		#sh.cp("/home/lsipii/Projects/tshzoinks/app/data/testimages/5aa2867e.jpg", self.storage.getTemprorayMediaFilePath())
 		super().captureStop()
 
 	"""

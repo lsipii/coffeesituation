@@ -25,21 +25,7 @@ class MediaStorage():
 		self.imageExtension = "jpg"
 
 		if configs is not None:
-			self.setupStorage(configs)
-
-	"""
-	Storage setup
-
-	@param (dict) configs
-	"""
-	def setupStorage(self, configs):
-		if "driver" in configs:
-			self.driver = configs["driver"]
-
-		if self.driver is None:
-			raise Exception("Storage driver must be configured")
-
-		self.setupDriverConfigurations(configs)
+			self.setupDriverConfigurations(configs)
 
 	"""
 	Storage setup for local driver
@@ -63,6 +49,12 @@ class MediaStorage():
 			self.configurations[self.driver]["mediaUrl"] = self.configurations[self.driver]["mediaHost"]+"/"+self.configurations[self.driver]["mediaFilename"]
 
 	"""
+	Saves the image file
+	"""
+	def saveImageFile(self):
+		raise Exception("Must be implemented")
+
+	"""
 	Validates we'r good to go
 	"""
 	def validateStorageFunctionality(self):
@@ -77,12 +69,44 @@ class MediaStorage():
 		return self.configurations[self.driver]["mediaPath"]
 
 	"""
+	Gets the media file obj
+
+	@return (FileObj) fileObj
+	"""
+	def getTemprorayMediaFileObj(self):
+		return self.configurations[self.driver]["mediaPath"]
+
+	"""
 	Gets the media file url
 
 	@return (string) mediaUrl
 	"""
 	def getMediaFileUrl(self):
 		return self.configurations[self.driver]["mediaUrl"]	
+
+	"""
+	Gets the media filename
+
+	@return (string) mediaUrl
+	"""
+	def getMediaFilename(self):
+		return self.configurations[self.driver]["mediaFilename"]
+
+	"""
+	Temporary storage filepath
+
+	@return (string) filepath
+	"""
+	def getTemprorayMediaFilePath(self):
+		return self.getTemprorayMediaFolderPath()+"/"+self.getMediaFilename()
+	
+	"""
+	Temporary storage path
+
+	@return (string) dirpath
+	"""
+	def getTemprorayMediaFolderPath(self):
+		return "/tmp"
 
 	"""
 	Clears media folder from files
@@ -108,4 +132,13 @@ class MediaStorage():
 	@return (bin string) imageRead
 	"""
 	def readImageAsBinary(self):
-		raise Exception("Must be implemented")
+		image = self.getImageFileObj()
+		imageRead = image.read()
+		return imageRead
+
+
+	"""
+	@return (fileObj)
+	"""
+	def getImageFileObj(self):
+		return open(self.getTemprorayMediaFilePath(), 'rb') #open binary file in read mode

@@ -33,7 +33,7 @@ class CoffeeChecker():
 		
 		self.imageBlurrer = None
 
-		if "imageBlurrerFilter" in appSettings:
+		if "imageBlurrerFilter" in appSettings and appSettings['imageBlurrerFilter']:
 			blurrerName = "app.utils.images.filters."+appSettings['imageBlurrerFilter']
 			
 			from app.utils.Utils import getModulePathInstance
@@ -57,24 +57,28 @@ class CoffeeChecker():
 		# Get coffee data from selected service
 		if self.cameraStreamer.areWeCurrentlyStreaming():
 			coffeeObservationUrl = self.cameraStreamer.getStreamUrl()
-			if self.coffeeSituationResolver.isEnabled():
-				self.coffeeSituationResolver.setImageData()
 		else:
+			# Take the photo
 			self.cameraShooter.takeAPhoto() 
 			
 			# Blur the photo, if the feat enabled
 			if self.weHaveAnImageBlurrer(): 
-				self.imageBlurrer.blurImage(self.storage.getMediaFilePath())
+				self.imageBlurrer.blurImage(self.storage.getTemprorayMediaFilePath())
 
-			coffeeObservationUrl = self.cameraShooter.getPhotoStorageUrl()
+			# Resolve the situation if resolving enabled
 			if self.coffeeSituationResolver.isEnabled():
-				self.coffeeSituationResolver.setImageData(self.storage.readImageAsBinary())
-		
+				self.coffeeSituationResolver.resolveCoffeeSituation(self.storage.getTemprorayMediaFilePath())
+			
+			# Store the photo
+			self.storage.saveImageFile()
+
+			# Grap the photo url
+			coffeeObservationUrl = self.cameraShooter.getPhotoStorageUrl()
+
 		# Coffee situation message
-		hasCoffeeMsg = self.coffeeSituationResolver.getCanWeHasCoffeeMsg()
 
 		return {
-			"hasCoffeeMsg": hasCoffeeMsg,
+			"hasCoffeeMsg": self.coffeeSituationResolver.getCanWeHasCoffeeMsg(),
 			"coffeeObservationUrl": coffeeObservationUrl,
 			"streaming": self.cameraStreamer.areWeCurrentlyStreaming(),
 		}
