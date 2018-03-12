@@ -39,8 +39,11 @@ class CoffeesHasWeController(BaseController):
 		try:
 			self.accessChecker.throttleRequest(requestMethod, requestParams) # throws
 			if self.accessChecker.ifAccessGranted(requestParams, requestMethod):
-				coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams) 
-				#self.notifier.notifyCoffeeRequest(coffeeResponse, requestParams)
+				coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams)
+
+				if self.config["app"]["settings"]["sendSlackNotifications"]: 
+					self.notifier.notifyCoffeeRequest(coffeeResponse, requestParams)
+					
 				return self.getJsonResponse(coffeeResponse)
 			else:
 				return self.getAccessDeniedResponse()

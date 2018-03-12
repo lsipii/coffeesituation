@@ -3,7 +3,8 @@
         "host": "https://****..hosting address..****.dataplicity.io",
         "settings": {
             "CoffeeSituationResolverEnabled": false,
-            "imageBlurrerFilter": false
+            "imageBlurrerFilter": false,
+            "sendSlackNotifications": true
         },
         "storage_driver": "local"
     },
