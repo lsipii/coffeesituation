@@ -60,7 +60,6 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
         "caffe",
         "coffee",
         "cafe",
-        "café", 
         "kofeiini",
     ]
     
@@ -85,7 +84,8 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
 
             # Makes the check caseinsensitive
             lowerCaseMessage = message.lower()
-
+            lowerCaseMessage = message.replace('é', 'e')
+            
             #@disabled: check for specific sentences
             #if message in coffeeQuestions:
 
