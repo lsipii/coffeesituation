@@ -3,14 +3,32 @@
 @author lsipii
 """
 from datetime import datetime
+import sh
 
 class Camera():
+
+	"""
+	List of shell apps that we require
+
+	@var (array) shellApplicationRequirements
+	"""
+	shellApplicationRequirements = []
+
+	"""
+	Flags that app requirements are met
+
+	@var (bool) shellApplicationRequirementsMet
+	"""
+	shellApplicationRequirementsMet = False
 
 	"""
 	Camera module initialization
 
 	"""
-	def __init__(self):
+	def __init__(self, debugMode = False):
+
+		# Debug mode setting
+		self.debugMode = debugMode
 
 		# Times, good times
 		self.times = {
@@ -19,6 +37,22 @@ class Camera():
 			"captureTotalTime": None, # timedelta
 			"captureTimesResetTime": None, # timedate
 		}
+
+	"""
+	Takes a photo
+
+	@param (string) savePath
+	"""
+	def takeAPhoto(self, savePath):
+		raise Exception("Camera.takeAPhoto(savePath): Must be implemented")
+
+	"""
+	Fakes a photoshoot
+
+	@param (string) savePath
+	"""
+	def takeADebugPhoto(self, savePath):
+		sh.cp("./app/data/testimages/5aa2867e.jpg", savePath)
 
 	"""
 	Start shooting
@@ -91,5 +125,12 @@ class Camera():
 			raise Exception("No timeObjName "+timeObjName+" defined in Camera.times dict")
 		return self.times[timeObjName]
 
+	"""
+	Sets debug mode
+	
+	@param (bool) debugMode
+	"""
+	def setDebugMode(self, debugMode):
+		self.debugMode = debugMode
 	
 

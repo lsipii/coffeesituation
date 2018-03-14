@@ -22,7 +22,7 @@ class CoffeesHasWeController(BaseController):
 
 		self.config = ConfigReader().getConfig()		
 		self.accessChecker = ApiAccessChecker(self.config["apiAccess"], self.debugMode)
-		self.coffeeChecker = CoffeeChecker(self.config)
+		self.coffeeChecker = CoffeeChecker(self.config, self.debugMode)
 		self.notifier = CoffeeToSlacker(self.config["slack"])
 		
 	"""
@@ -40,13 +40,19 @@ class CoffeesHasWeController(BaseController):
 			self.accessChecker.throttleRequest(requestMethod, requestParams) # throws
 			if self.accessChecker.ifAccessGranted(requestParams, requestMethod):
 				coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams)
+				notifyResponse = self.notifier.generateResponsePayload(coffeeResponse, requestParams)
 
 				if self.config["app"]["settings"]["sendSlackNotifications"]: 
-					self.notifier.notifyCoffeeRequest(coffeeResponse, requestParams)
-					
-				return self.getJsonResponse(coffeeResponse)
+					self.notifier.notify(notifyResponse)
+
+				return self.getJsonResponse({
+					"coffee": coffeeResponse,
+					"notify": notifyResponse
+				})
+
 			else:
 				return self.getAccessDeniedResponse()
+				
 		except RequestException as e:
 			return self.getErrorResponse(e.message, e.code)
 		except Exception as e:
@@ -89,20 +95,28 @@ class CoffeesHasWeController(BaseController):
 	def setDebugMode(self, debugMode):
 		self.debugMode = debugMode
 		self.accessChecker.setDebugMode(self.debugMode)
+		self.coffeeChecker.setDebugMode(self.debugMode)
 
 	"""
 	Validate app runtime
 	"""
 	def validateZoinksFunctionality(self):
 
-		try:
-			shellApps = self.coffeeChecker.getRequiredShellApps()
-			for shellApp in shellApps:
-				validateAppRequirements(shellApp) # Throws
+		shellApps = self.coffeeChecker.getRequiredShellApps()
+		for shellApp in shellApps:
+			try:
+				validateAppRequirements(shellApp.shellApplicationRequirements) # Throws
+			except Exception as e:
+				if self.debugMode:
+					shellApp.shellApplicationRequirementsMet = False
+					print(e) # Keep running, accept resulting exceptions
+				else:
+					raise e
 
+		try:
 			self.coffeeChecker.storage.validateStorageFunctionality() # Throws
 		except Exception as e:
-			if self.debugMode:
-				print(e) # Keep running, accept resulting exceptions
-			else:
-				raise e
+				if self.debugMode:
+					print(e) # Keep running, accept resulting exceptions
+				else:
+					raise e

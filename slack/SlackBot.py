@@ -11,6 +11,8 @@ class SlackBot():
 
     """
     Initializes the slack client
+
+    @param (dict) config
     """
     def __init__(self, config):
         self.config = config
@@ -26,7 +28,10 @@ class SlackBot():
         self.slack = SlackClient(self.config["SLACK_BOT_TOKEN"])
         self.slackBotUser = None
         self.slackRTMReadDelay = 1 # 1 sec read delay
+        
+        # Internal flags
         self.debugMode = False
+        self.commandInProgress = False
 
         # Coffee keywords
         self.coffeeKeywords = [
@@ -57,14 +62,18 @@ class SlackBot():
             
             # Validates the connection
             if not self.slackBotUser["ok"]:
-                raise Exception("Slackbot authentication error")
+                self.printDebugMessage("Slackbot authentication error", 1, True)
 
+            self.printDebugMessage("Slack connection successful")
+            self.printDebugMessage("Listening..")
+            
             # The primary loop
             while True:
-                self.resolveAndFireCommand(self.slack.rtm_read())                    
+                if not self.commandInProgress:
+                    self.resolveAndFireCommand(self.slack.rtm_read())            
                 time.sleep(self.slackRTMReadDelay)
         else:
-            raise Exception("Slackbot connection failed")
+            self.printDebugMessage("Slackbot connection failed", 1, True)
 
     """
     Parses the slack events for commands to fire, fires commands 
@@ -124,14 +133,24 @@ class SlackBot():
         message = event["text"].lower()
         channel = event["channel"]
 
-        if message.find("help") > -1 or message.find("ohje") > -1:
-            self.sendBotHelp(channel)
-        elif message.find("list") > -1 or message.find("listaa") > -1:
-           self.sendBotCoffeeKeywords(channel)
-        elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
-            self.fireAskForCoffeeEvent(event)
-        else:
-            self.sendSlackBotResponse(channel, "Sorry, coffee-bot command not recognized")
+        # Flags as in progress
+        self.commandInProgress = True
+
+        try:
+            if message.find("help") > -1 or message.find("ohje") > -1:
+                self.sendBotHelp(channel)
+            elif message.find("list") > -1 or message.find("listaa") > -1:
+               self.sendBotCoffeeKeywords(channel)
+            elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
+                self.fireAskForCoffeeEvent(event)
+            else:
+                self.sendBotHelp(channel, "Sorry, the command not recognized")
+        except Exception as e:
+            self.printDebugMessage("fireBotControlCommand exception: "+str(e))
+            self.sendBotDefaultErrorMsg(channel)
+
+        # Flags as not in progress
+        self.commandInProgress = False
 
 
     """
@@ -165,61 +184,125 @@ class SlackBot():
         return weShouldIndeed
 
     """
-    Sends bot help text to a channel
-    """
-    def sendBotHelp(self, channel):
-        helpTextLines = [
-            "Commands:",
-            "Help|Ohje: Prints this usage text",
-            "List|Listaa: Prints accepted coffee related keywords",
-        ]
-        helpText = "\n".join(helpTextLines)
-        self.sendSlackBotResponse(channel, helpText)
-
-    """
-    Sends bot help text to a channel
-    """
-    def sendBotCoffeeKeywords(self, channel):
-        helpText = "Coffee keywords: "+self.coffeeKeywords.join(", ")
-        self.sendSlackBotResponse(channel, helpText)
-
-    """
-    Sends a bot response
-    """
-    def sendSlackBotResponse(self, channel, responseText):
-        # Sends the response back to the channel
-        self.slack.api_call(
-            "chat.postMessage",
-            channel=channel,
-            text=responseText
-        )
-
-    """
     Asks for coffee
 
     @param (SlackEvent dict) event
     """
     def fireAskForCoffeeEvent(event):
 
-        data = parse.urlencode({
-            'api_token':self.config["COFFEE_BOT_TOKEN"], 
-            'channel': event["channel"], 
-            'network': self.slackBotUser["team"],
-            'message': event["text"],
-            'username': event["user"],
-            'app':'slackbot', 
-            'app_version':1
-        }).encode()
+        # Flags as in progress
+        self.commandInProgress = True
 
-        req =  request.Request(self.config["COFFEE_BOT_URL"], data=data)
-        resp = request.urlopen(req)
+        try:
+            # Arrange request data
+            data = parse.urlencode({
+                'api_token': self.config["COFFEE_BOT_TOKEN"], 
+                'channel': event["channel"], 
+                'network': self.slackBotUser["team"],
+                'message': event["text"],
+                'username': event["user"],
+                'app':'tshCoffeeSlackbot', 
+                'app_version':1
+            }).encode()
 
+            # Make the request
+            req =  request.Request(self.config["COFFEE_BOT_URL"], data=data)
+            resp = request.urlopen(req)
+
+            # Expects a notify container with a message in the response
+            if "notify" in resp and "message" in resp["notify"]:
+                self.sendSlackBotResponse(channel, resp["notify"]["message"], resp["notify"])
+            else:
+                self.sendBotDefaultErrorMsg(channel)
+        except Exception as e:
+            self.printDebugMessage("fireAskForCoffeeEvent exception: "+str(e))
+            self.sendBotDefaultErrorMsg(channel)
+
+        # Flags as in progress
+        self.commandInProgress = False
+
+    """
+    Sends bot help text to a channel
+
+    @param (string) channel
+    @param (string) errorMsg = None
+    """
+    def sendBotHelp(self, channel, errorMsg = None):
+        helpTextLines = [
+            "Usage:",
+            "Help: Prints this usage text",
+            "List: Prints accepted coffee related keywords",
+        ]
+
+        if errorMsg is not None:
+            helpTextLines.insert(0, errorMsg)
+
+        helpText = "\n".join(helpTextLines)
+        self.sendSlackBotResponse(channel, helpText)
+
+    """
+    Sends bot help text to a channel
+
+    @param (string) channel
+    """
+    def sendBotCoffeeKeywords(self, channel):
+        helpText = "Coffee keywords: "
+        keywords = ", ".join(self.coffeeKeywords)
+        helpText += keywords
+        self.sendSlackBotResponse(channel, helpText)
+
+    """
+    Sets the bot in debugmode
+
+    @param (bool) debugMode
+    """
+    def sendBotDefaultErrorMsg(self, channel):
+        helpText = "Sorry, the bot is busy solving a random encounter"
+        self.sendSlackBotResponse(channel, helpText)
+
+    """
+    Sends a bot response back to the channel
+
+    @param (string) channel
+    @param (string) responseText
+    @param (dict) slackResponseData = None, {icon_emoji|icon_url, username, unfurl_media, unfurl_links}
+    """
+    def sendSlackBotResponse(self, channel, responseText, slackResponseData = None):
+
+        newLinesList = responseText.split('\n')
+        responseTextFallback = ', '.join(newLinesList)
+        responseTextFallback = responseTextFallback.replace(':, ', ': ')
+
+        postArgs = {
+            "channel": channel,
+            "attachments": [{
+                "text": responseText,
+                "fallback": responseTextFallback,
+                "color": "#120800",
+            }],
+            "unfurl_media": False,
+            "unfurl_links": False,
+        }
+
+        if slackResponseData is not None:
+            if "icon_emoji" in slackResponseData:
+                postArgs["icon_emoji"] = slackResponseData["icon_emoji"]
+            elif "icon_url" in slackResponseData:
+                postArgs["icon_url"] = slackResponseData["icon_url"]
+            if "username" in slackResponseData:
+                postArgs["username"] = slackResponseData["username"]
+            if "unfurl_media" in slackResponseData:
+                postArgs["unfurl_media"] = slackResponseData["unfurl_media"]
+            if "unfurl_links" in slackResponseData:
+                postArgs["unfurl_links"] = slackResponseData["unfurl_links"]
+
+        self.slack.api_call("chat.postMessage", **postArgs)
 
     """
     Gets slack user info by ID
 
     @param (string) slackUserId
-    @return (dict) user
+    @return (SlackUser dict|bool) user
     """
     def getSlackUser(self, slackUserId):
         resp = self.slack.api_call(
@@ -246,6 +329,7 @@ class SlackBot():
             "channels.info",
             channel=event["channel"]
         )
+
         if "ok" in resp and not resp["ok"]:
             return True
         return False
@@ -257,3 +341,19 @@ class SlackBot():
     """
     def setDebugMode(self, debugMode):
         self.debugMode = debugMode
+
+    """
+    Prints a debug message in the runner console
+    
+    @param (string) message
+    @param (int) exitCode = None, exits in debug mode if set
+    @param (bool) exitAnyHow = False, disregards the debug mode
+    """
+    def printDebugMessage(self, message, exitCode = None, exitAnyHow = False):
+        if self.debugMode:
+            print(message)
+            if exitCode is not None:
+                exit(exitCode)
+        elif exitAnyHow and exitCode is not None:
+            print(message)
+            exit(exitCode)

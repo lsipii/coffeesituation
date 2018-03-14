@@ -2,26 +2,19 @@
 """
 @author lsipii
 """
-from app.hardware.Camera import Camera
+from app.hardware.RaspiCamera import RaspiCamera
 
-import sh
 
-class CameraShooter(Camera):
-
-	"""
-	List of shell apps that we require
-
-	@var (array) shellApplicationRequirements
-	"""
-	shellApplicationRequirements = ["raspistill"]
+class CameraShooter(RaspiCamera):
 
 	"""
 	Camera shots module initialization
 
 	@param (MediaStorage) storage
+	@param (bool) debugMode
 	"""
-	def __init__(self, storage):
-		super().__init__()
+	def __init__(self, storage, debugMode = False):
+		super().__init__(debugMode)
 		self.storage = storage
 		
 	"""
@@ -31,8 +24,7 @@ class CameraShooter(Camera):
 		super().captureStart()
 		self.storage.clearPreviousMediaFiles()
 		self.storage.setupMediaFilename()
-		sh.raspistill('-w', '640', '-h', '480', '-o', self.storage.getTemprorayMediaFilePath())
-		#sh.cp("/home/lsipii/Projects/tshzoinks/app/data/testimages/5aa2867e.jpg", self.storage.getTemprorayMediaFilePath())
+		super().takeAPhoto(self.storage.getTemprorayMediaFilePath())
 		super().captureStop()
 
 	"""

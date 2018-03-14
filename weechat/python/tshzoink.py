@@ -35,7 +35,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
     acceptedCoffeeNetworks = [
         {
             "network": "irc.aarium", 
-            "channels": ["#tests","#tests2"], 
+            "channels": ["#tests"], 
         },
         {
             "network": "irc.tamperestartuphub",

@@ -3,4 +3,4 @@
 *.sublime-workspace
 settings/*
 !settings/.gitkeep
-!settings/settings.example.json
+!settings/*.example.json

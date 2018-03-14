@@ -13,11 +13,12 @@ class CoffeeChecker():
 	"""
 	Module initialization
 
-	@param (dict) configs [storage]
+	@param (dict) configs
+	@param (bool) debugMode
 	"""
-	def __init__(self, configs):
+	def __init__(self, configs, debugMode = False):
 		self.storage = MediaStorageFactory.getInstance(configs)
-		self.cameraShooter = CameraShooter(self.storage)
+		self.cameraShooter = CameraShooter(self.storage, debugMode)
 		self.cameraStreamer = CameraStreamer(configs["app"])
 		self.coffeeActionAccessChecker = CoffeeActionAccessChecker(configs["coffeeAccess"])
 		self.coffeeSituationResolver = CoffeeSituationResolver(configs["app"]["settings"])
@@ -60,7 +61,7 @@ class CoffeeChecker():
 		else:
 			# Take the photo
 			self.cameraShooter.takeAPhoto() 
-			
+
 			# Blur the photo, if the feat enabled
 			if self.weHaveAnImageBlurrer(): 
 				self.imageBlurrer.blurImage(self.storage.getTemprorayMediaFilePath())
@@ -86,12 +87,11 @@ class CoffeeChecker():
 	"""
 	Returns the list of required shell aps
 	
-	@return (array) 
+	@return (array) {app}
 	"""
 	@staticmethod
 	def getRequiredShellApps():
-		apps = CameraShooter.shellApplicationRequirements + CameraStreamer.shellApplicationRequirements
-		return apps
+		return [CameraShooter, CameraStreamer]
 
 	"""
 	Checks if we have a coffee MODE change and executes it
@@ -116,3 +116,12 @@ class CoffeeChecker():
 	"""
 	def weHaveAnImageBlurrer(self):
 		return self.imageBlurrer is not None
+
+	"""
+	Sets debug mode
+	
+	@param (bool) debugMode
+	"""
+	def setDebugMode(self, debugMode):
+		self.debugMode = debugMode
+		self.cameraShooter.setDebugMode(self.debugMode)
