@@ -49,18 +49,19 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
     #@enabled: Allowed coffee keywords
     coffeeKeywords = [
         "kahvi", 
-        "kahvetta",
-        "kahveli",
-        "kohvetta",
+        "kahve",
+        "kohve",
         "kaffe",
-        "kahavia",
+        "kahavi",
         "sumppi",
-        "sumpetta",
+        "suppii",
+        "sumpe",
         "sumpit",
         "caffe",
         "coffee",
         "cafe",
-        "kofeiini",
+        "kofe",
+        "cofe",
     ]
     
     # Resolve the accepted network
