@@ -11,6 +11,9 @@
     "apiAccess": {
         "weechat": {
             "api_token": "****..apiKey..****"
+        },
+        "tshCoffeeSlackBot": {
+            "api_token": "****..apiKey..****"
         }
     },
     "coffeeAccess": {

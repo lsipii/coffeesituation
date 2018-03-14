@@ -104,9 +104,11 @@ class SlackBot():
                 if self.checkForDirectBotCommand(event):
                     self.fireBotControlCommand(event)
                     break
-                elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
-                    self.fireAskForCoffeeEvent(event)
-                    break
+                else:
+                    shouldAskForCoffee=self.checkIfShouldAskForACoffee(event["user"], event["text"])
+                    if shouldAskForCoffee:
+                        self.fireAskForCoffeeEvent(event)
+                        break
 
 
     """
@@ -167,7 +169,7 @@ class SlackBot():
 
         # Sanitize the message
         lowerCaseMessage = message.lower()
-        lowerCaseMessage = message.replace('é', 'e')
+        lowerCaseMessage = lowerCaseMessage.replace('é', 'e')
 
         # Check for any matches
         if any(keyWord in lowerCaseMessage for keyWord in self.coffeeKeywords):
@@ -188,7 +190,7 @@ class SlackBot():
 
     @param (SlackEvent dict) event
     """
-    def fireAskForCoffeeEvent(event):
+    def fireAskForCoffeeEvent(self, event):
 
         # Flags as in progress
         self.commandInProgress = True
@@ -211,12 +213,12 @@ class SlackBot():
 
             # Expects a notify container with a message in the response
             if "notify" in resp and "message" in resp["notify"]:
-                self.sendSlackBotResponse(channel, resp["notify"]["message"], resp["notify"])
+                self.sendSlackBotResponse(event["channel"], resp["notify"]["message"], resp["notify"])
             else:
-                self.sendBotDefaultErrorMsg(channel)
+                self.sendBotDefaultErrorMsg(event["channel"])
         except Exception as e:
             self.printDebugMessage("fireAskForCoffeeEvent exception: "+str(e))
-            self.sendBotDefaultErrorMsg(channel)
+            self.sendBotDefaultErrorMsg(event["channel"])
 
         # Flags as in progress
         self.commandInProgress = False
@@ -229,9 +231,10 @@ class SlackBot():
     """
     def sendBotHelp(self, channel, errorMsg = None):
         helpTextLines = [
-            "Usage:",
-            "Help: Prints this usage text",
-            "List: Prints accepted coffee related keywords",
+            "*Usage:*",
+            "> Help: Prints this usage text",
+            "> \"Coffee keyword\": Takes a photo if the current coffee situation",
+            "> List: Prints accepted coffee related keywords",
         ]
 
         if errorMsg is not None:
@@ -246,7 +249,7 @@ class SlackBot():
     @param (string) channel
     """
     def sendBotCoffeeKeywords(self, channel):
-        helpText = "Coffee keywords: "
+        helpText = "*Coffee keywords:*\n> "
         keywords = ", ".join(self.coffeeKeywords)
         helpText += keywords
         self.sendSlackBotResponse(channel, helpText)
@@ -278,7 +281,7 @@ class SlackBot():
             "attachments": [{
                 "text": responseText,
                 "fallback": responseTextFallback,
-                "color": "#120800",
+                "color": "#452d19",
             }],
             "unfurl_media": False,
             "unfurl_links": False,

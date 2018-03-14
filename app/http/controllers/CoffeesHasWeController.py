@@ -49,7 +49,6 @@ class CoffeesHasWeController(BaseController):
 					"coffee": coffeeResponse,
 					"notify": notifyResponse
 				})
-
 			else:
 				return self.getAccessDeniedResponse()
 				

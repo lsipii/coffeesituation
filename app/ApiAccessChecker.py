@@ -34,15 +34,24 @@ class ApiAccessChecker():
 	"""
 	def ifAccessGranted(self, requestParams, requestMethod):
 
-		accessGranted = False
-		print(requestParams)
+		accessGranted = False	
 		
+		if self.debugMode:
+			print("Request:")
+			print(requestMethod, requestParams)
+
 		if self.accessKeyParamKeyName in requestParams:
 			if "app" in requestParams and requestParams["app"] in self.accessConfig:
 				if self.debugMode and requestMethod == "GET":
 					accessGranted = self.getAccessDetailsFromTheRequest(requestParams)
 				elif requestMethod == "POST":
 					accessGranted = self.getAccessDetailsFromTheRequest(requestParams)
+
+		if self.debugMode:
+			if accessGranted:
+				print("Access granted")
+			else:
+				print("Access denied")
 
 		return accessGranted
 
@@ -53,7 +62,6 @@ class ApiAccessChecker():
 	@return (bool) hasCorrectAccessParams
 	"""
 	def getAccessDetailsFromTheRequest(self, requestParams):
-		print(self.accessConfig[requestParams["app"]][self.accessKeyParamKeyName], requestParams[self.accessKeyParamKeyName])
 		if self.accessConfig[requestParams["app"]][self.accessKeyParamKeyName] == requestParams[self.accessKeyParamKeyName]:
 			return True
 		return False

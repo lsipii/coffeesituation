@@ -20,7 +20,7 @@ class CameraShooter(RaspiCamera):
 	"""
 	Takes a photo
 	"""
-	def takeAPhoto(self):
+	def takeAPhoto(self, mediaPath = None):
 		super().captureStart()
 		self.storage.clearPreviousMediaFiles()
 		self.storage.setupMediaFilename()

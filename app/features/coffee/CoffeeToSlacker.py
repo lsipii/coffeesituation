@@ -23,7 +23,7 @@ class CoffeeToSlacker(Slack):
 		self.coffeeMessages = [
 			{
 				"username": "Coffee Situation: Badger",
-				"message": "Me a badger. Know not many coffee things until it's too asnake, late.", 
+				"message": "Badger Badger Badger Snake Coffee Badger Badger Badger.", 
 				"icon_emoji": ":badger:",
 			},
 			{
@@ -35,11 +35,6 @@ class CoffeeToSlacker(Slack):
 				"username": "Coffee Situation: Im batman",
 				"message": "The coffee is darkest just before the dawn. And I promise you, the dawn is coming.", 
 				"icon_emoji": ":batsignal:",
-			},
-			{
-				"username": "Coffee Situation: Picard",
-				"message": "<https://www.youtube.com/watch?v=R2IJdfxWtPM|Tea, Earl Grey, Hot?>...", 
-				"icon_emoji": ":picard_facepalm:",
 			},
 			{
 				"username": "Coffee Situation: Pepper",
@@ -71,6 +66,36 @@ class CoffeeToSlacker(Slack):
 				"message": "Still boundless, the slice of black magicka surrounded by a tactical container.",
 				"icon_emoji": ":gentleman_parrot:",
 			}
+			{
+				"username": "Coffee Situation: Turtle",
+				"message": "Static, but random. Like a turt <https://www.youtube.com/watch?v=vM9zKZXorI8|link>.", 
+				"icon_emoji": ":turtle:",
+			},
+			{
+				"username": "Coffee Situation: Turtle",
+				"message": "Static, but random. Like a turt <https://www.youtube.com/watch?v=J4juWTKDhNQ|link>.", 
+				"icon_emoji": ":turtle:",
+			},
+			{
+				"username": "Coffee Situation: Turtle",
+				"message": "Static, but random. Like a turt <https://imgur.com/r/turtle/|link>.", 
+				"icon_emoji": ":turtle:",
+			},
+			{
+				"username": "Coffee Situation: Turtle",
+				"message": "Static, but random. Like a turt <http://interactivepython.org/courselib/static/thinkcspy/MoreAboutIteration/RandomlyWalkingTurtles.html|link>.", 
+				"icon_emoji": ":turtle:",
+			},
+			{
+				"username": "Coffee Situation: Turtle",
+				"message": "Static, but random. Like a turt <https://www.youtube.com/watch?v=dV9KuETVF8I|link>.", 
+				"icon_emoji": ":turtle:",
+			},
+			{
+				"username": "Coffee Situation: Turtle",
+				"message": "Static, but random. Like a turt <https://imgur.com/gallery/98otF|link>.", 
+				"icon_emoji": ":turtle:",
+			},
 		]
 
 	"""
