@@ -65,7 +65,7 @@ class CoffeeToSlacker(Slack):
 				"username": "Coffee Situation: Parrot, startup-grad",
 				"message": "Still boundless, the slice of black magicka surrounded by a tactical container.",
 				"icon_emoji": ":gentleman_parrot:",
-			}
+			},
 			{
 				"username": "Coffee Situation: Turtle",
 				"message": "Static, but random. Like a turt <https://www.youtube.com/watch?v=vM9zKZXorI8|link>.", 
