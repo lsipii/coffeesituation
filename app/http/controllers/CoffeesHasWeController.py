@@ -43,6 +43,8 @@ class CoffeesHasWeController(BaseController):
 				notifyResponse = self.notifier.generateResponsePayload(coffeeResponse, requestParams)
 
 				if self.config["app"]["settings"]["sendSlackNotifications"]: 
+					if self.debugMode:
+						print("Sending slack notification..")
 					self.notifier.notify(notifyResponse)
 
 				return self.getJsonResponse({
