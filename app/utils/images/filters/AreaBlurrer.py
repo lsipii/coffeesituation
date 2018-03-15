@@ -5,6 +5,7 @@
 import cv2
 import numpy as np
 
+from app.utils.Utils import getProjectRootPath
 from app.utils.images.filters.ImageBlurrer import ImageBlurrer
 
 """
@@ -16,6 +17,13 @@ Blurs an area
 class AreaBlurrer(ImageBlurrer):
 
 	"""
+	Initialization
+	"""
+	def __init__(self):
+		super().__init__()
+		self.spaceImagePath = getProjectRootPath()+"/app/data/images/space.jpg"
+
+	"""
 	Blurs the faces from image
 
 	@param (string) imagePath
@@ -25,21 +33,34 @@ class AreaBlurrer(ImageBlurrer):
 		try:
 			
 			# Create opencv image
+			spaceImage = cv2.imread(self.spaceImagePath)
 			cvImage = cv2.imread(imagePath)
-		
-			# check dimensions of the image
+
+			# Dimensions
 			height = np.size(cvImage, 0)
 			width = np.size(cvImage, 1)
 
 			# For now, use static points for blurring
-			blurredAreaPoints = np.array([
-				[(10,10), 
-				(300,300), 
-				(10,300)]
-			], dtype=np.int32)
+			blurAreaPoints = [
+				[0,0], 
+				[0,284], 
+				[67,217], 
+				[100,144], 
+				[178,128], 
+				[250,133], 
+				[331,124],
+				[400,87],
+				[480,110],
+				[572,112],
+				[width,163],
+				[width,0],
+			]
+			blurredAreaPoints = np.array(blurAreaPoints, dtype=np.int32)
 
-			# Create a black area mask the size of orig image
-			srcMask = np.zeros(cvImage.shape, dtype = "uint8")
+			#create a mask template
+			srcMask = spaceImage.copy()
+			srcMask = cv2.cvtColor(srcMask, cv2.COLOR_BGR2GRAY)
+			srcMask.fill(0)
 
 			# White polyfill the mask by blur points
 			cv2.fillPoly(srcMask, [blurredAreaPoints], 255)
@@ -47,18 +68,20 @@ class AreaBlurrer(ImageBlurrer):
 			# Create region of intrest, of the image, of the blur points
 			roi = cvImage[np.min(blurredAreaPoints[:,1]):np.max(blurredAreaPoints[:,1]),np.min(blurredAreaPoints[:,0]):np.max(blurredAreaPoints[:,0])]
 			mask = srcMask[np.min(blurredAreaPoints[:,1]):np.max(blurredAreaPoints[:,1]),np.min(blurredAreaPoints[:,0]):np.max(blurredAreaPoints[:,0])]
-			"""
-			# What is this
-			invertedMask = cv2.bitwise_not(mask)
-			background = cv2.bitwise_and(roi, roi, mask = invertedMask)
-			sourceImageCuttedPart = cvImage[]
-			src1_cut = src1[np.min(poly[:,1]):np.max(poly[:,1]),np.min(poly[:,0]):np.max(poly[:,0])]
-			img2_fg = cv2.bitwise_and(src1_cut,src1_cut,mask = mask)
-			"""
 
-			
-			# Write resulting image
-			cv2.imwrite(imagePath, cvImage)
+			# Cut and paste and combine
+			invertedMask = cv2.bitwise_not(mask)
+			spaceImageBackground = cv2.bitwise_and(roi, roi, mask = invertedMask)
+			spaceImageCuttedPart = spaceImage[np.min(blurredAreaPoints[:,1]):np.max(blurredAreaPoints[:,1]),np.min(blurredAreaPoints[:,0]):np.max(blurredAreaPoints[:,0])]
+			foregroundPart = cv2.bitwise_and(spaceImageCuttedPart, spaceImageCuttedPart, mask = mask)
+
+			# Combine space triangle part and wanted coffee part, save as a final master piece
+			destination = cv2.add(spaceImageBackground, foregroundPart)
+			cvImageFinal = cvImage.copy()
+			cvImageFinal[np.min(blurredAreaPoints[:,1]):np.max(blurredAreaPoints[:,1]),np.min(blurredAreaPoints[:,0]):np.max(blurredAreaPoints[:,0])] = destination
+
+			# Write resulting images
+			cv2.imwrite(imagePath, cvImageFinal)
 
 		except Exception as e:
 			print(e)

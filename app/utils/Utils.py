@@ -35,3 +35,14 @@ def getModulePathInstance(modulePath, *args):
 	executorModule = importlib.import_module(modulePath)
 	executorClass = getattr(executorModule, className)
 	return executorClass(*args)
+
+"""
+Gets absolute project root path
+
+@return (string)
+"""
+def getProjectRootPath():
+	import os
+
+	dir = os.path.dirname(__file__)
+	return os.path.join(dir, '..', '..')
