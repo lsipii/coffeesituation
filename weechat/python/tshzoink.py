@@ -34,11 +34,13 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
     # Accepted networks and thus channels
     acceptedCoffeeNetworks = [
         {
-            "network": "irc.aarium", 
+            "network": "irc.aarium",
+            "basename": "fokua",  
             "channels": ["#tests"], 
         },
         {
             "network": "irc.tamperestartuphub",
+            "basename": "tamperestartuphub",
             "channels": ["#random"], 
         }
     ]
@@ -92,7 +94,7 @@ def checkIfShouldAskForACoffee(data, bufferp, uber_empty, tagsn, isdisplayed, is
 
             #@enabled: check for specific keywords
             if any(keyWord in lowerCaseMessage for keyWord in coffeeKeywords):
-                askForCoffee(channel, acceptedNetwork["network"], prefix, message)
+                askForCoffee(channel, acceptedNetwork["basename"], prefix, message)
 
     return weechat.WEECHAT_RC_OK
 

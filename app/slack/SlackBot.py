@@ -197,11 +197,14 @@ class SlackBot():
         self.commandInProgress = True
 
         try:
+
+            network = self.slackBotUser["url"].replace("https://", "").replace(".slack.com/", "")
+
             # Arrange request data
             data = urllib.parse.urlencode({
                 'api_token': self.config["COFFEE_BOT_TOKEN"], 
                 'channel': event["channel"], 
-                'network': self.slackBotUser["team"],
+                'network': netwrok,
                 'message': event["text"],
                 'username': event["user"],
                 'app':'tshCoffeeSlackbot', 
