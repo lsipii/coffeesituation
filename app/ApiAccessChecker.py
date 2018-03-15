@@ -37,8 +37,7 @@ class ApiAccessChecker():
 		accessGranted = False	
 		
 		if self.debugMode:
-			print("ifAccessGranted request:")
-			print(requestMethod, requestParams)
+			print("ifAccessGranted request:", requestMethod)
 
 		if self.accessKeyParamKeyName in requestParams:
 			if "app" in requestParams and requestParams["app"] in self.accessConfig:
