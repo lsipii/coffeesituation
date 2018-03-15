@@ -38,7 +38,6 @@ class SlackPostWebhook():
 		if "network" not in payload:
 			raise Exception("Slack.notify payload param must have a network to select from configs")
 		if payload["network"] not in self.configs or "accessPoint" not in self.configs[payload["network"]]:
-			print("Nooouu")
 			raise Exception("Slack.notify the "+payload["network"]+" network must have an accessPoint configured")
 
 		# Validate and set the channel
@@ -62,7 +61,6 @@ class SlackPostWebhook():
 	@return (response)
 	"""
 	def sendSlackTextPayload(self, payload):
-
 		payloadJson = json.dumps({
 			"text": payload["message"],
 			"channel": payload["channel"], 
@@ -73,8 +71,7 @@ class SlackPostWebhook():
 		})
 		
 		data = urlencode({"payload": payloadJson})
-		print(data, payload["accessPoint"])
-
 		req = urlrequest.Request(payload["accessPoint"])
 		response = self.requestHandler.open(req, data.encode('utf-8')).read()
 		return response.decode('utf-8') 
+		

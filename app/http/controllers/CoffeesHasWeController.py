@@ -45,7 +45,11 @@ class CoffeesHasWeController(BaseController):
 				if self.config["app"]["settings"]["sendSlackNotifications"]: 
 					if self.debugMode:
 						print("Sending slack notification..")
-					self.notifier.notify(notifyResponse)
+					try:
+						self.notifier.notify(notifyResponse)
+						notifyResponse["sent"] = True
+					except Exception as e:
+						notifyResponse["sent"] = False
 
 				return self.getJsonResponse({
 					"coffee": coffeeResponse,
