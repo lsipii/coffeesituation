@@ -3,7 +3,6 @@
 @author lsipii
 """
 import boto3
-
 from app.hardware.storage.MediaStorage import MediaStorage
 
 class S3Storage(MediaStorage):
@@ -26,7 +25,7 @@ class S3Storage(MediaStorage):
 
 		self.configurations[self.driver] = {
 			"bucket": None,
-			"mediaDirectory": "/",
+			"mediaDirectory": "/coffee",
 			"mediaFilename": None,
 			"mediaPath": None,
 			"mediaHost": None,	
@@ -40,17 +39,17 @@ class S3Storage(MediaStorage):
 		if "AWS_S3_SECRET_KEY" not in configs:
 			raise Exception("Invalid S3 configurations")
 
+		if "mediaDirectory" in configs:
+			self.configurations[self.driver]["mediaDirectory"] = configs["mediaDirectory"]
+		if "mediaHost" in configs:
+			self.configurations[self.driver]["mediaHost"] = configs["mediaHost"]
+
 		# Create an S3 client
 		self.configurations[self.driver]["bucket"] = configs["AWS_S3_BUCKET"]	
 		self.s3client = boto3.client('s3',
 			aws_access_key_id=configs["AWS_S3_ACCESS_KEY_ID"],
 			aws_secret_access_key=configs["AWS_S3_SECRET_KEY"],
 		)
-
-		if "mediaDirectory" in configs:
-			self.configurations[self.driver]["mediaDirectory"] = configs["mediaDirectory"]
-		if "mediaHost" in configs:
-			self.configurations[self.driver]["mediaHost"] = configs["mediaHost"]
 		
 		# Setups the first pics name
 		self.setupMediaFilename()
@@ -69,13 +68,39 @@ class S3Storage(MediaStorage):
 	Clears media folder from files
 	"""
 	def clearPreviousMediaFiles(self):
+		"""
+		Disabled because GC happens with cron runs
+
 		for bucketKeyObj in self.s3client.list_objects(Bucket=self.configurations[self.driver]["bucket"])['Contents']:
 			if bucketKeyObj["Key"] != "404.jpg":
 				self.s3client.delete_object(
 					Bucket=self.configurations[self.driver]["bucket"],
 					Key=bucketKeyObj["Key"]
 				)
+		"""
 		return True
+
+	"""
+	Clears old media folder from files
+	"""
+	def clearTooOldMediaFiles(self):
+
+		from datetime import datetime, timezone
+
+		nowTime = datetime.now(timezone.utc)
+
+		# How many seconds the pics are allowed to stand by
+		picturesPersistanceInSeconds = 3600
+
+		for bucketKeyObj in self.s3client.list_objects(Bucket=self.configurations[self.driver]["bucket"])['Contents']:
+			if bucketKeyObj["Key"] != "404.jpg":
+				dateTimeThen = bucketKeyObj["LastModified"]
+				datediff = nowTime - dateTimeThen
+				if datediff.total_seconds() > picturesPersistanceInSeconds:
+					self.s3client.delete_object(
+						Bucket=self.configurations[self.driver]["bucket"],
+						Key=bucketKeyObj["Key"]
+					)
 
 	"""
 	Saves the image file
