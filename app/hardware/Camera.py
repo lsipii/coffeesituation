@@ -19,7 +19,7 @@ class Camera():
 
 	@var (bool) shellApplicationRequirementsMet
 	"""
-	shellApplicationRequirementsMet = False
+	shellApplicationRequirementsMet = True
 
 	"""
 	Camera module initialization
