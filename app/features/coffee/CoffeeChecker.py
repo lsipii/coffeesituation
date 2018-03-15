@@ -35,11 +35,13 @@ class CoffeeChecker():
 		self.imageBlurrer = None
 
 		if "imageBlurrerFilter" in appSettings and appSettings['imageBlurrerFilter']:
-			blurrerName = "app.utils.images.filters."+appSettings['imageBlurrerFilter']
+			try:
+				blurrerName = "app.utils.images.filters."+appSettings['imageBlurrerFilter']
 			
-			from app.utils.Utils import getModulePathInstance
-			self.imageBlurrer = getModulePathInstance(blurrerName)
-			
+				from app.utils.Utils import getModulePathInstance
+				self.imageBlurrer = getModulePathInstance(blurrerName)
+			except Exception as e:
+				print("Failed to load image blurrer module")
 
 	"""
 	Checks if we have coffe

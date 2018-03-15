@@ -19,11 +19,16 @@ class CoffeeSituationResolver():
 	@param (dict) settings, {CoffeeSituationResolverEnabled}
 	"""
 	def __init__(self, settings):
-		self.coffeePotCascade = cv2.CascadeClassifier('app/data/haarcascades/coffeePots.xml')
-		self.liquidAreaCascade = cv2.CascadeClassifier('app/data/haarcascades/liquids.xml')
 		self.imagePath = None
 		self.coffeeSituationResolverEnabled = settings["CoffeeSituationResolverEnabled"]
 		self.coffeeAwarenessMsg = "no data"
+
+		self.coffeePotCascade = None
+		self.liquidAreaCascade = None
+		
+		if self.coffeeSituationResolverEnabled:
+			self.coffeePotCascade = cv2.CascadeClassifier('app/data/haarcascades/coffeePots.xml')
+			self.liquidAreaCascade = cv2.CascadeClassifier('app/data/haarcascades/liquids.xml')
 
 	"""
 	Checks if the feat is enabled
