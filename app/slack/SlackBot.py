@@ -241,8 +241,10 @@ class SlackBot():
         helpTextLines = [
             "*Usage:*",
             "> Help: Prints this usage text",
-            "> \"Coffee keyword\": Takes a photo if the current coffee situation, image url last max 2h",
+            "> \"Coffee keyword\": Takes a photo of the current coffee situation ",
             "> List: Prints accepted coffee related keywords, keyword matching is not strict",
+            "> ",
+            "> `Note: image url lasts max 2h, parts of the image are blurred`"
         ]
 
         if errorMsg is not None:
