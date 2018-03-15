@@ -37,8 +37,8 @@ class AreaBlurrer(ImageBlurrer):
 			cvImage = cv2.imread(imagePath)
 
 			# Dimensions
-			height = np.size(cvImage, 0)
-			width = np.size(cvImage, 1)
+			#height = np.size(cvImage, 0)
+			#width = np.size(cvImage, 1)
 
 			# For now, use static points for blurring
 			blurAreaPoints = [
@@ -47,13 +47,9 @@ class AreaBlurrer(ImageBlurrer):
 				[67,217], 
 				[100,144], 
 				[178,128], 
-				[250,133], 
-				[331,124],
-				[400,87],
-				[480,110],
-				[572,112],
-				[width,163],
-				[width,0],
+				[240,40], 
+				[336,28],
+				[418,0],
 			]
 			blurredAreaPoints = np.array(blurAreaPoints, dtype=np.int32)
 
