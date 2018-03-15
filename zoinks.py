@@ -4,6 +4,7 @@
 """
 import sys, getopt
 from flask import Flask
+from app.AppInfo import AppInfo
 from app.http.controllers.CoffeesHasWeController import CoffeesHasWeController
 
 # Creates the flask app
@@ -43,7 +44,7 @@ if __name__ == '__main__':
 		if opt in ("-h", "--help"):
 			printHelp()
 		if opt in ("-v", "--version"):
-			print("v1")
+			print(AppInfo.getAppVersion())
 			exit()
 		if opt in ("-p", "--production"):
 			debugMode = False

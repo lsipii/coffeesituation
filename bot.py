@@ -3,6 +3,7 @@
 @author lsipii
 """
 import sys, getopt
+from app.AppInfo import AppInfo
 from app.ConfigReader import ConfigReader
 from app.slack.SlackBot import SlackBot
 
@@ -16,11 +17,11 @@ if __name__ == '__main__':
 
 	# Help texts
 	def printHelp():
-		print("Usage: bot.py --help|--version") 
+		print("Usage: bot.py --help|--version|--production") 
 		exit()
 		
 	try:
-		opts, args = getopt.getopt(argv, "hvp", ["help", "version"])
+		opts, args = getopt.getopt(argv, "hvp", ["help", "version", "production"])
 	except getopt.GetoptError:
 		printHelp()
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
 		if opt in ("-h", "--help"):
 			printHelp()
 		if opt in ("-v", "--version"):
-			print("v1")
+			print(AppInfo.getAppVersion())
 			exit()
 		if opt in ("-p", "--production"):
 			debugMode = False
