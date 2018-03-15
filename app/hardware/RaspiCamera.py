@@ -23,7 +23,7 @@ class RaspiCamera(Camera):
 	"""
 	def takeAPhoto(self, savePath):
 		if self.shellApplicationRequirementsMet:
-			self.debugMode:
+			if self.debugMode:
 				print("Taking a real photo")
 			sh.raspistill('-w', '640', '-h', '480', '-o', savePath)
 		elif self.debugMode:
