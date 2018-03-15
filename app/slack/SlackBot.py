@@ -204,7 +204,7 @@ class SlackBot():
             data = urllib.parse.urlencode({
                 'api_token': self.config["COFFEE_BOT_TOKEN"], 
                 'channel': event["channel"], 
-                'network': netwrok,
+                'network': network,
                 'message': event["text"],
                 'username': event["user"],
                 'app':'tshCoffeeSlackbot', 
