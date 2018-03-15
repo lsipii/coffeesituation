@@ -3,9 +3,9 @@
 @author lsipii
 """
 import random
-from app.utils.Slack import Slack
+from app.slack.SlackPostWebhook import SlackPostWebhook
 
-class CoffeeToSlacker(Slack):
+class CoffeeToSlacker(SlackPostWebhook):
 
 	"""
 	Slack messanger, coffee overrides

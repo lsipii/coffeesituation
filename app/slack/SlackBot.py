@@ -4,7 +4,8 @@
 @see https://www.fullstackpython.com/blog/build-first-slack-bot-python.html
 """
 from slackclient import SlackClient
-from urllib import request, parse
+import urllib
+import json
 import time
 
 class SlackBot():
@@ -197,7 +198,7 @@ class SlackBot():
 
         try:
             # Arrange request data
-            data = parse.urlencode({
+            data = urllib.parse.urlencode({
                 'api_token': self.config["COFFEE_BOT_TOKEN"], 
                 'channel': event["channel"], 
                 'network': self.slackBotUser["team"],
@@ -208,13 +209,17 @@ class SlackBot():
             }).encode()
 
             # Make the request
-            req =  request.Request(self.config["COFFEE_BOT_URL"], data=data)
-            resp = request.urlopen(req)
+            req =  urllib.request.Request(self.config["COFFEE_BOT_URL"], data=data)
+            resp = urllib.request.urlopen(req).read()
+            # Parsing the response
+            responseData = json.loads(resp.decode('utf-8'))
 
             # Expects a notify container with a message in the response
-            if "notify" in resp and "message" in resp["notify"]:
-                self.sendSlackBotResponse(event["channel"], resp["notify"]["message"], resp["notify"])
+            if "notify" in responseData and "message" in responseData["notify"]:
+                self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
             else:
+                self.printDebugMessage("fireAskForCoffeeEvent response:")
+                self.printDebugMessage(responseData)
                 self.sendBotDefaultErrorMsg(event["channel"])
         except Exception as e:
             self.printDebugMessage("fireAskForCoffeeEvent exception: "+str(e))

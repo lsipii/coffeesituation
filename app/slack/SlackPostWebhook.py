@@ -12,10 +12,10 @@ except ImportError:
 	import urllib2 as urlrequest
 import json
 
-class Slack():
+class SlackPostWebhook():
 
 	"""
-	Slack messanger
+	Slack post webhook messanger
 
 	@param (dict) configs
 	"""

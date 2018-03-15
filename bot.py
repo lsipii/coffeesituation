@@ -4,7 +4,7 @@
 """
 import sys, getopt
 from app.ConfigReader import ConfigReader
-from slack.SlackBot import SlackBot
+from app.slack.SlackBot import SlackBot
 
 # App runner
 if __name__ == '__main__':
