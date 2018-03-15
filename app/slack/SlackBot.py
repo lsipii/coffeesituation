@@ -240,9 +240,9 @@ class SlackBot():
     def sendBotHelp(self, channel, errorMsg = None):
         helpTextLines = [
             "*Usage:*",
-            "> Help: Prints this usage text",
-            "> \"Coffee keyword\": Takes a photo of the current coffee situation ",
-            "> List: Prints accepted coffee related keywords, keyword matching is not strict",
+            "> - Help: Prints this usage text",
+            "> - List: Prints accepted coffee related keywords, keyword matching is not strict",
+            "> - _Coffee keyword_: Takes a photo of the current coffee situation",
             "> ",
             "> `Note: image url lasts max 2h, parts of the image are blurred`"
         ]
