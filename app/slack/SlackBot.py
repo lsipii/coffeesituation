@@ -242,9 +242,9 @@ class SlackBot():
             "*Usage:*",
             "> - Help: Prints this usage text",
             "> - List: Prints accepted coffee related keywords, keyword matching is not strict",
-            "> - _Coffee keyword_: Takes a photo of the current coffee situation",
+            "> - `Coffee keyword`: Takes a photo of the current coffee situation",
             "> ",
-            "> `Note: image url lasts max 2h, parts of the image are blurred`"
+            "> _Note: image url lasts max 2h, parts of the image are blurred_"
         ]
 
         if errorMsg is not None:
