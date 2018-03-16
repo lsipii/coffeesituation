@@ -142,10 +142,10 @@ class SlackBot():
         try:
             if message.find("help") > -1 or message.find("ohje") > -1:
                 self.sendBotHelp(channel)
-            elif message.find("list"):
+            elif message.find("list") > -1:
                self.sendBotCoffeeKeywords(channel)
             elif message.find("status") > -1 or message.find("tila") > -1:
-               self.fireCoffeeCheckStatusQuery(event)
+               self.fireCoffeeSituationAppCheckStatusQuery(event)
             elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
                 self.fireAskForCoffeeEvent(event)
             else:
@@ -201,7 +201,7 @@ class SlackBot():
 
     @param (SlackEvent dict) event
     """
-    def fireCoffeeCheckStatusQuery(self, event):
+    def fireCoffeeSituationAppCheckStatusQuery(self, event):
         
         """
         Handles the response
