@@ -15,9 +15,10 @@ class SlackBot():
     
     @param (AppInfo) app
     @param (dict) config
-    @param (string) appVersion
     """
     def __init__(self, app, config):
+        
+        # References the app and configs
         self.app = app
         self.config = config
 
@@ -201,7 +202,7 @@ class SlackBot():
                 'network': network,
                 'message': event["text"],
                 'username': event["user"],
-                'app':'tshCoffeeSlackbot', 
+                'app': self.app.getAppName(), 
                 'app_version': self.app.getAppVersion()
             }).encode()
 
