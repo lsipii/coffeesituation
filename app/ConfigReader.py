@@ -10,6 +10,12 @@ except ImportError:
 """Json configs reading helper"""
 class ConfigReader:
 
+	"""
+	Creates a config reader
+
+	@param (string) secretsFileName = "settings"
+	@param (string) secretsFolder = "settings"
+	"""
 	def __init__(self, secretsFileName = "settings", secretsFolder = "settings"):
 		# From the app root, where the config files resides
 		self.configurationFilesFolder = secretsFolder;
@@ -30,6 +36,9 @@ class ConfigReader:
 
 	"""
 	Read secrets from a settings/secretsFileName 
+
+	@param (string) secretsFileName
+	@param (string) secretsFolder = None
 	"""
 	def readConfigFile(self, secretsFileName, secretsFolder = None):
 
