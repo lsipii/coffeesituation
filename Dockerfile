@@ -137,10 +137,10 @@ ADD ./docker/nginx/404/404.jpg /var/www/html/
 # Copy app files
 #####################################
 RUN mkdir -p zoinks/app
-RUN mkdir -p zoinks/configs
+RUN mkdir -p zoinks/settings
 
 ADD ./app/ zoinks/app/
-ADD ./configs zoinks/configs/
+ADD ./settings zoinks/settings/
 ADD ./zoinks.py zoinks/app/
 ADD ./requirements.txt zoinks/app/
 

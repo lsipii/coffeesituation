@@ -3,7 +3,7 @@
 @author lsipii
 """
 import random
-from app.slack.SlackPostWebhook import SlackPostWebhook
+from app.utils.slack.SlackPostWebhook import SlackPostWebhook
 
 class CoffeeToSlacker(SlackPostWebhook):
 
