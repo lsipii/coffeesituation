@@ -280,6 +280,7 @@ class SlackBot():
         helpTextLines = [
             "*Usage:*",
             "> - Help: Prints this usage text",
+            "> - Status: Checks if the coffee situation monitoring device is online",
             "> - List: Prints accepted coffee related keywords, keyword matching is not strict",
             "> - `Coffee keyword`: Takes a photo of the current coffee situation",
             "> ",
