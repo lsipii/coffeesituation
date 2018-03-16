@@ -142,8 +142,10 @@ class SlackBot():
         try:
             if message.find("help") > -1 or message.find("ohje") > -1:
                 self.sendBotHelp(channel)
-            elif message.find("list") > -1 or message.find("listaa") > -1:
+            elif message.find("list"):
                self.sendBotCoffeeKeywords(channel)
+            elif message.find("status") > -1 or message.find("tila") > -1:
+               self.fireCoffeeCheckStatusQuery(event)
             elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
                 self.fireAskForCoffeeEvent(event)
             else:
@@ -192,7 +194,40 @@ class SlackBot():
     @param (SlackEvent dict) event
     """
     def fireAskForCoffeeEvent(self, event):
+        self.fireCoffeeCherkerAppQuery(event, self.config["COFFEE_BOT_URL"])
 
+    """
+    Asks for coffee app status
+
+    @param (SlackEvent dict) event
+    """
+    def fireCoffeeCheckStatusQuery(self, event):
+        
+        """
+        Handles the response
+
+        @param (Response dict) responseData
+        """
+        def responseHandler(responseData):
+            if "status" in responseData:
+                if responseData["status"] == "OK":
+                    self.sendSlackBotResponse(event["channel"], "Camera app is running")
+                else:
+                    self.sendSlackBotResponse(event["channel"], "Camera app returned response status: "+responseData["status"])
+            else:
+                self.sendSlackBotResponse(event["channel"], "Camera app did not respond")
+
+        # Fires the query
+        self.fireCoffeeCherkerAppQuery(event, self.config["COFFEE_BOT_URL"]+"/status", responseHandler)
+
+    """
+    Asks the coffee checking camera app a something
+    
+    @param (SlackEvent dict) event
+    @param (string) apiEndPointAddr
+    @param (callable) callback = None
+    """
+    def fireCoffeeCherkerAppQuery(self, even, apiEndPointAddr, callback = None):
         # Flags as in progress
         self.commandInProgress = True
 
@@ -212,18 +247,22 @@ class SlackBot():
             }).encode()
 
             # Make the request
-            req =  urllib.request.Request(self.config["COFFEE_BOT_URL"], data=data)
+            req =  urllib.request.Request(apiEndPointAddr, data=data)
             resp = urllib.request.urlopen(req).read()
             # Parsing the response
             responseData = json.loads(resp.decode('utf-8'))
 
-            # Expects a notify container with a message in the response
-            if "notify" in responseData and "message" in responseData["notify"]:
-                self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
+            if callback is None:
+                # Expects a notify container with a message in the response
+                if "notify" in responseData and "message" in responseData["notify"]:
+                    self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
+                else:
+                    self.printDebugMessage("fireCoffeeCherkerAppQuery response:")
+                    self.printDebugMessage(responseData)
+                    self.sendBotDefaultErrorMsg(event["channel"])
             else:
-                self.printDebugMessage("fireAskForCoffeeEvent response:")
-                self.printDebugMessage(responseData)
-                self.sendBotDefaultErrorMsg(event["channel"])
+                callback(responseData)
+
         except Exception as e:
             self.printDebugMessage("fireAskForCoffeeEvent exception: "+str(e))
             self.sendBotDefaultErrorMsg(event["channel"])

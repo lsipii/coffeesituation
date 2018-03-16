@@ -39,22 +39,18 @@ class CoffeesHasWeController(BaseController):
 		try:
 			self.accessChecker.throttleRequest(requestMethod, requestParams) # throws
 			if self.accessChecker.ifAccessGranted(requestParams, requestMethod):
-				coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams)
-				notifyResponse = self.notifier.generateResponsePayload(coffeeResponse, requestParams)
+				if self.debugMode:
+					if path is None:
+						print("Accessing a root path")
+					else:
+						print("Accessing a path: "+path)
 
-				if self.config["app"]["settings"]["sendSlackNotifications"]: 
-					if self.debugMode:
-						print("Sending slack notification..")
-					try:
-						self.notifier.notify(notifyResponse)
-						notifyResponse["sent"] = True
-					except Exception as e:
-						notifyResponse["sent"] = False
-
-				return self.getJsonResponse({
-					"coffee": coffeeResponse,
-					"notify": notifyResponse
-				})
+				if path is None:
+					return self.getCoffeeSituationResponse(requestMethod, requestParams)
+				elif path == "status":
+					return self.getCoffeeAppStatusReponse()
+				else:
+					return self.getNotFoundResponse()
 			else:
 				return self.getAccessDeniedResponse()
 				
@@ -65,6 +61,44 @@ class CoffeesHasWeController(BaseController):
 				return self.getErrorResponse(str(e))
 			else:
 				return self.getErrorResponse()
+
+
+	"""
+	Basic a very much of a intresting response, or maybe something different
+	
+	@param (string) path = None
+	@return (BaseController response) {coffee, notify}
+	"""
+	def getCoffeeSituationResponse(self, requestMethod, requestParams):
+
+		coffeeResponse = self.coffeeChecker.hasWeCoffee(requestParams)
+		notifyResponse = self.notifier.generateResponsePayload(coffeeResponse, requestParams)
+
+		if self.config["app"]["settings"]["sendSlackNotifications"]: 
+			if self.debugMode:
+				print("Sending slack notification..")
+			try:
+				self.notifier.notify(notifyResponse)
+				notifyResponse["sent"] = True
+			except Exception as e:
+				notifyResponse["sent"] = False
+
+		return self.getJsonResponse({
+			"coffee": coffeeResponse,
+			"notify": notifyResponse
+		})
+
+	"""
+	Basic a very much of a intresting response, or maybe something different
+	
+	@param (string) path = None
+	@return (BaseController response) {status, streaming}
+	"""
+	def getCoffeeAppStatusReponse(self):
+		return self.getJsonResponse({
+			"status": "OK",
+			"streaming": self.coffeeChecker.areWeCurrentlyStreaming()
+		})
 
 	"""
 	Basic a very much of a intresting response, or maybe something different

@@ -58,7 +58,7 @@ class CoffeeChecker():
 		self.checkForModeChangeRequests(requestParams)
 
 		# Get coffee data from selected service
-		if self.cameraStreamer.areWeCurrentlyStreaming():
+		if self.areWeCurrentlyStreaming():
 			coffeeObservationUrl = self.cameraStreamer.getStreamUrl()
 		else:
 			# Take the photo
@@ -83,7 +83,7 @@ class CoffeeChecker():
 		return {
 			"hasCoffeeMsg": self.coffeeSituationResolver.getCanWeHasCoffeeMsg(),
 			"coffeeObservationUrl": coffeeObservationUrl,
-			"streaming": self.cameraStreamer.areWeCurrentlyStreaming(),
+			"streaming": self.areWeCurrentlyStreaming(),
 		}
 
 	"""
@@ -114,10 +114,18 @@ class CoffeeChecker():
 	"""
 	Checks if the image blurrer has been initialized
 
-	@return bool
+	@return (bool)
 	"""
 	def weHaveAnImageBlurrer(self):
 		return self.imageBlurrer is not None
+
+	"""
+	Checks if the image blurrer has been initialized
+
+	@return (bool)
+	"""
+	def areWeCurrentlyStreaming(self):
+		return self.cameraStreamer.areWeCurrentlyStreaming()
 
 	"""
 	Sets debug mode

@@ -16,10 +16,7 @@ controller = CoffeesHasWeController()
 @app.route('/', methods=controller.knownHttpMethods)
 @app.route('/<path>', methods=controller.knownHttpMethods)
 def request(path = None):
-	if path is None:
-		return controller.getCoffeeResponse()
-	else:
-		return controller.getSomeResponse(path)
+	return controller.getCoffeeResponse(path)
 
 # App runner
 if __name__ == '__main__':
