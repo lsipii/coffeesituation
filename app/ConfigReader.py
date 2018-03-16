@@ -1,7 +1,6 @@
 """
 @author lsipii
 """
-
 import os
 try:
     import json
