@@ -113,7 +113,7 @@ class CoffeeToSlacker(SlackPostWebhook):
 		if payload["streaming"]:
 			coffeeSituationMessage = "STREAM: Check the current 4th floor coffee situation here"
 
-		messageData["message"] += " <"+payload["coffeeObservationUrl"]+"|"+coffeeSituationMessage+">"
+		messageData["message"] += "\n> <"+payload["coffeeObservationUrl"]+"|"+coffeeSituationMessage+">"
 		
 		# Force request channel&network
 		messageData["channel"] = ("channel" in requestParams) and requestParams["channel"] or self.defaultChannel
