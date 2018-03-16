@@ -18,7 +18,7 @@ class FacesBlurrer(ImageBlurrer):
 	@param (dict) settings  = None
 	"""
 	def __init__(self, settings = None):
-		self.faceCascade = cv2.CascadeClassifier(getProjectRootPath()+'/app/data/haarcascades/haarcascade_frontalface_default.xml')
+		self.faceCascade = cv2.CascadeClassifier(getProjectRootPath()+'/device/data/haarcascades/haarcascade_frontalface_default.xml')
 	
 	"""
 	Blurs the faces from image

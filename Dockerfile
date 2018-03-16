@@ -139,7 +139,7 @@ ADD ./docker/nginx/404/404.jpg /var/www/html/
 RUN mkdir -p zoinks/app
 RUN mkdir -p zoinks/settings
 
-ADD ./app/ zoinks/app/
+ADD ./device/ zoinks/app/
 ADD ./settings zoinks/settings/
 ADD ./zoinks.py zoinks/app/
 ADD ./requirements.txt zoinks/app/

@@ -52,7 +52,7 @@ class Camera():
 	@param (string) savePath
 	"""
 	def takeADebugPhoto(self, savePath):
-		sh.cp("./app/data/testimages/5aa2867e.jpg", savePath)
+		sh.cp("./device/data/testimages/5aa2867e.jpg", savePath)
 
 	"""
 	Start shooting

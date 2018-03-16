@@ -27,8 +27,8 @@ class CoffeeSituationResolver():
 		self.liquidAreaCascade = None
 		
 		if self.coffeeSituationResolverEnabled:
-			self.coffeePotCascade = cv2.CascadeClassifier('app/data/haarcascades/coffeePots.xml')
-			self.liquidAreaCascade = cv2.CascadeClassifier('app/data/haarcascades/liquids.xml')
+			self.coffeePotCascade = cv2.CascadeClassifier('device/data/haarcascades/coffeePots.xml')
+			self.liquidAreaCascade = cv2.CascadeClassifier('device/data/haarcascades/liquids.xml')
 
 	"""
 	Checks if the feat is enabled

@@ -21,7 +21,7 @@ class AreaBlurrer(ImageBlurrer):
 	"""
 	def __init__(self):
 		super().__init__()
-		self.spaceImagePath = getProjectRootPath()+"/app/data/images/space.jpg"
+		self.spaceImagePath = getProjectRootPath()+"/device/data/images/space.jpg"
 
 	"""
 	Blurs the faces from image
