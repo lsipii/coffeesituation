@@ -14,13 +14,12 @@ class SlackBot():
     Initializes the slack client
     
     @param (AppInfo) app
-    @param (dict) config
     """
-    def __init__(self, app, config):
+    def __init__(self, app):
         
         # References the app and configs
         self.app = app
-        self.config = config
+        self.config = app.config
 
         # Validate config
         if "SLACK_BOT_TOKEN" not in self.config:
