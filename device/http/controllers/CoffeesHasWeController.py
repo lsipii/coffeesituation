@@ -2,12 +2,11 @@
 """
 @author lsipii
 """
-from app.http.controllers.BaseController import BaseController
-from app.http.exceptions.RequestException import RequestException
-from app.ApiAccessChecker import ApiAccessChecker
-from app.ConfigReader import ConfigReader
-from app.features.coffee.CoffeeChecker import CoffeeChecker
-from app.features.coffee.CoffeeToSlacker import CoffeeToSlacker
+from device.http.controllers.BaseController import BaseController
+from device.http.exceptions.RequestException import RequestException
+from device.ApiAccessChecker import ApiAccessChecker
+from device.features.coffee.CoffeeChecker import CoffeeChecker
+from device.features.coffee.CoffeeToSlacker import CoffeeToSlacker
 from app.utils.Utils import validateAppRequirements
 
 class CoffeesHasWeController(BaseController):
@@ -15,15 +14,19 @@ class CoffeesHasWeController(BaseController):
 	"""
 	Zoinks module initialization
 	
-	@param (bool) debugMode
+	@param (AppInfo) app
 	"""
-	def __init__(self, debugMode = False):
-		self.debugMode = debugMode
-
-		self.config = ConfigReader().getConfig()		
-		self.accessChecker = ApiAccessChecker(self.config["apiAccess"], self.debugMode)
-		self.coffeeChecker = CoffeeChecker(self.config, self.debugMode)
+	def __init__(self, app):
+		
+		# References
+		self.app = app
+		self.config = self.app.config		
+		self.accessChecker = ApiAccessChecker(self.config["apiAccess"])
+		self.coffeeChecker = CoffeeChecker(self.config)
 		self.notifier = CoffeeToSlacker(self.config["slack"])
+
+		# Internal states
+		self.debugMode = False
 		
 	"""
 	Basic a very much of a intresting response, or maybe something different

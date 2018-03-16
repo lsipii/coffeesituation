@@ -4,17 +4,19 @@
 """
 import sys, getopt
 from flask import Flask
-from app.AppInfo import AppInfo
-from app.http.controllers.CoffeesHasWeController import CoffeesHasWeController
+from device.DeviceApp import DeviceApp
+from device.http.controllers.CoffeesHasWeController import CoffeesHasWeController
 
-# Creates the flask app
-app = Flask(__name__)
-# App controller
-controller = CoffeesHasWeController()
+# Creates the device app
+app = DeviceApp()
+# Creates the flask router app
+routerApp = Flask(__name__)
+# The app controller
+controller = CoffeesHasWeController(app)
 
 # Defines the app routes
-@app.route('/', methods=controller.knownHttpMethods)
-@app.route('/<path>', methods=controller.knownHttpMethods)
+@routerApp.route('/', methods=controller.knownHttpMethods)
+@routerApp.route('/<path>', methods=controller.knownHttpMethods)
 def request(path = None):
 	return controller.getCoffeeResponse(path)
 
@@ -28,6 +30,8 @@ if __name__ == '__main__':
 
 	# Help texts
 	def printHelp():
+		print(app.getFullAppName())
+		print("Mission statement: "+ app.getAppMissionStatement(), "\n")
 		print("Usage: zoinks.py --help|--version|--production") 
 		exit()
 		
@@ -41,7 +45,7 @@ if __name__ == '__main__':
 		if opt in ("-h", "--help"):
 			printHelp()
 		if opt in ("-v", "--version"):
-			print(AppInfo.getAppVersion())
+			print(app.getFullAppName())
 			exit()
 		if opt in ("-p", "--production"):
 			debugMode = False
@@ -49,4 +53,4 @@ if __name__ == '__main__':
 	# Run app
 	controller.setDebugMode(debugMode)
 	controller.validateZoinksFunctionality()
-	app.run(debug=debugMode)
+	routerApp.run(debug=debugMode)

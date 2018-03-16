@@ -2,11 +2,11 @@
 """
 @author lsipii
 """
-from app.features.coffee.CoffeeActionAccessChecker import CoffeeActionAccessChecker
-from app.features.coffee.CoffeeSituationResolver import CoffeeSituationResolver
-from app.features.CameraShooter import CameraShooter
-from app.features.CameraStreamer import CameraStreamer
-from app.hardware.storage.MediaStorageFactory import MediaStorageFactory
+from device.features.coffee.CoffeeActionAccessChecker import CoffeeActionAccessChecker
+from device.features.coffee.CoffeeSituationResolver import CoffeeSituationResolver
+from device.features.CameraShooter import CameraShooter
+from device.features.CameraStreamer import CameraStreamer
+from device.hardware.storage.MediaStorageFactory import MediaStorageFactory
 
 class CoffeeChecker():
 

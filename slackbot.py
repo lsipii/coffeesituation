@@ -3,8 +3,7 @@
 @author lsipii
 """
 import sys, getopt
-from app.AppInfo import AppInfo
-from app.ConfigReader import ConfigReader
+from slackbot.BotApp import BotApp
 from slackbot.SlackBot import SlackBot
 
 # App runner
@@ -15,9 +14,14 @@ if __name__ == '__main__':
 	# Sets the app debug mode
 	debugMode = True
 
+	# Bot app infos
+	app = BotApp()
+	
 	# Help texts
 	def printHelp():
-		print("Usage: bot.py --help|--version|--production") 
+		print(app.getFullAppName())
+		print("Mission statement: "+ app.getAppMissionStatement(), "\n")
+		print("Usage: slackbot.py --help|--version|--production") 
 		exit()
 		
 	try:
@@ -30,13 +34,12 @@ if __name__ == '__main__':
 		if opt in ("-h", "--help"):
 			printHelp()
 		if opt in ("-v", "--version"):
-			print(AppInfo.getAppVersion())
+			print(app.getFullAppName())
 			exit()
 		if opt in ("-p", "--production"):
 			debugMode = False
 
 	# Run the bot
-	config = ConfigReader("slackbot").getConfig()
-	bot = SlackBot(config)
+	bot = SlackBot(app)
 	bot.setDebugMode(debugMode)
 	bot.engage()

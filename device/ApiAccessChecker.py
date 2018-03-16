@@ -4,7 +4,7 @@
 """
 from flask import request
 from datetime import datetime
-from app.http.exceptions.RequestException import RequestException
+from device.http.exceptions.RequestException import RequestException
 
 class ApiAccessChecker():
 

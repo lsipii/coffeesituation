@@ -5,7 +5,7 @@
 import os
 import sh
 import glob
-from app.hardware.storage.MediaStorage import MediaStorage
+from device.hardware.storage.MediaStorage import MediaStorage
 
 class LocalStorage(MediaStorage):
 

@@ -5,7 +5,7 @@
 import sys, getopt
 from app.AppInfo import AppInfo
 from app.ConfigReader import ConfigReader
-from app.hardware.storage.MediaStorageFactory import MediaStorageFactory
+from device.hardware.storage.MediaStorageFactory import MediaStorageFactory
 
 # App runner
 if __name__ == '__main__':

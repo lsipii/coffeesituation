@@ -2,7 +2,7 @@
 """
 @author lsipii
 """
-from app.hardware.Camera import Camera
+from device.hardware.Camera import Camera
 
 import sh
 import os

@@ -12,10 +12,13 @@ class SlackBot():
 
     """
     Initializes the slack client
-
+    
+    @param (AppInfo) app
     @param (dict) config
+    @param (string) appVersion
     """
-    def __init__(self, config):
+    def __init__(self, app, config):
+        self.app = app
         self.config = config
 
         # Validate config
@@ -26,6 +29,7 @@ class SlackBot():
         if "COFFEE_BOT_URL" not in self.config:
             raise Exception("COFFEE_BOT_URL not in slackbot config")
 
+        # Slack variables
         self.slack = SlackClient(self.config["SLACK_BOT_TOKEN"])
         self.slackBotUser = None
         self.slackRTMReadDelay = 1 # 1 sec read delay
@@ -53,7 +57,7 @@ class SlackBot():
         ]
 
     """
-    Engages the client
+    Engages the client using Slacks Real Time Messaging websocket API
     """
     def engage(self):
         if self.slack.rtm_connect(with_team_state=False):
@@ -111,22 +115,6 @@ class SlackBot():
                         self.fireAskForCoffeeEvent(event)
                         break
 
-
-    """
-    Checks for bot control commands
-
-    @param (SlackEvent dict) event
-    @return (bool) weShouldIndeed
-    """    
-    def checkForDirectBotCommand(self, event):
-        if event["user"] != self.slackBotUser["user_id"]:
-            if self.checkIfDirectBotMessageEvent(event):
-                return True
-            else:
-                return event["text"].find("<@"+self.slackBotUser["user_id"]+">") > -1
-        return False
-
-
     """
     Resolves and fires slack bot control command
 
@@ -141,15 +129,17 @@ class SlackBot():
 
         try:
             if message.find("help") > -1 or message.find("ohje") > -1:
-                self.sendBotHelp(channel)
+                self.sendBotHelpResponse(channel)
             elif message.find("list") > -1:
-               self.sendBotCoffeeKeywords(channel)
+               self.sendBotCoffeeKeywordsResponse(channel)
             elif message.find("status") > -1 or message.find("tila") > -1:
-               self.fireCoffeeSituationAppCheckStatusQuery(event)
+               self.fireCoffeeSituationAppStatusQueryResponse(event)
+            elif message.find("joke") > -1 or message.find("vitsi") > -1:
+               self.sendPyJokesResponse(channel)
             elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
-                self.fireAskForCoffeeEvent(event)
+                self.fireAskForCoffeeEventResponse(event)
             else:
-                self.sendBotHelp(channel, "Sorry, the command not recognized")
+                self.sendBotHelpResponse(channel, "Sorry, the command not recognized")
         except Exception as e:
             self.printDebugMessage("fireBotControlCommand exception: "+str(e))
             self.sendBotDefaultErrorMsg(channel)
@@ -157,43 +147,12 @@ class SlackBot():
         # Flags as not in progress
         self.commandInProgress = False
 
-
-    """
-    Checks if coffee was asked, fires the asker if so
-
-    @param (string) slackUserId
-    @param (string) message
-    @return (bool) weShouldIndeed
-    """
-    def checkIfShouldAskForACoffee(self, slackUserId, message):
-
-        # we should indeed
-        weShouldIndeed = False
-
-        # Sanitize the message
-        lowerCaseMessage = message.lower()
-        lowerCaseMessage = lowerCaseMessage.replace('é', 'e')
-
-        # Check for any matches
-        if any(keyWord in lowerCaseMessage for keyWord in self.coffeeKeywords):
-            weShouldIndeed = True
-
-        # If a match, validate the user
-        if weShouldIndeed:
-            user = self.getSlackUser(slackUserId)
-            if user is False:
-                return False
-            elif user["name"].startswith("Coffee_Situation:"): 
-                return False
-
-        return weShouldIndeed
-
     """
     Asks for coffee
 
     @param (SlackEvent dict) event
     """
-    def fireAskForCoffeeEvent(self, event):
+    def fireAskForCoffeeEventResponse(self, event):
         self.fireCoffeeCherkerAppQuery(event, self.config["COFFEE_BOT_URL"])
 
     """
@@ -201,7 +160,7 @@ class SlackBot():
 
     @param (SlackEvent dict) event
     """
-    def fireCoffeeSituationAppCheckStatusQuery(self, event):
+    def fireCoffeeSituationAppStatusQueryResponse(self, event):
         
         """
         Handles the response
@@ -243,7 +202,7 @@ class SlackBot():
                 'message': event["text"],
                 'username': event["user"],
                 'app':'tshCoffeeSlackbot', 
-                'app_version':1
+                'app_version': self.app.getAppVersion()
             }).encode()
 
             # Make the request
@@ -276,15 +235,17 @@ class SlackBot():
     @param (string) channel
     @param (string) errorMsg = None
     """
-    def sendBotHelp(self, channel, errorMsg = None):
+    def sendBotHelpResponse(self, channel, errorMsg = None):
         helpTextLines = [
             "*Usage:*",
             "> - Help: Prints this usage text",
             "> - Status: Checks if the coffee situation monitoring device is online",
-            "> - List: Prints accepted coffee related keywords, keyword matching is not strict",
+            "> - Joke: Well, why not?",
+            "> - List: Prints accepted coffee related keywords",
             "> - `Coffee keyword`: Takes a photo of the current coffee situation",
             "> ",
-            "> _Note: image url lasts max 2h, parts of the image are blurred_"
+            "> _Note: image url lasts max 2h, parts of the image are blurred_",
+            "> _Maintenance: @lsipii_"
         ]
 
         if errorMsg is not None:
@@ -298,11 +259,26 @@ class SlackBot():
 
     @param (string) channel
     """
-    def sendBotCoffeeKeywords(self, channel):
+    def sendBotCoffeeKeywordsResponse(self, channel):
         helpText = "*Coffee keywords:*\n> "
         keywords = ", ".join(self.coffeeKeywords)
         helpText += keywords
+        helpText += "\n> _Keyword matching is not strict_"
         self.sendSlackBotResponse(channel, helpText)
+
+
+    """
+    Sends a pyjokes joke as a response
+
+    @param (string) channel
+    """
+    def sendPyJokesResponse(self, channel):
+        try:
+            import pyjokes
+            helpText = pyjokes.get_joke()
+            self.sendSlackBotResponse(channel, helpText)
+        except Exception as e:
+            self.sendSlackBotResponse(channel, "jokes lib not installed, out of jokes haha")
 
     """
     Sets the bot in debugmode
@@ -352,19 +328,49 @@ class SlackBot():
         self.slack.api_call("chat.postMessage", **postArgs)
 
     """
-    Gets slack user info by ID
+    Checks for bot control commands
+
+    @param (SlackEvent dict) event
+    @return (bool) weShouldIndeed
+    """    
+    def checkForDirectBotCommand(self, event):
+        if event["user"] != self.slackBotUser["user_id"]:
+            if self.checkIfDirectBotMessageEvent(event):
+                return True
+            else:
+                return event["text"].find("<@"+self.slackBotUser["user_id"]+">") > -1
+        return False
+
+    """
+    Checks if coffee was asked, fires the asker if so
 
     @param (string) slackUserId
-    @return (SlackUser dict|bool) user
+    @param (string) message
+    @return (bool) weShouldIndeed
     """
-    def getSlackUser(self, slackUserId):
-        resp = self.slack.api_call(
-            "users.info",
-            user=slackUserId
-        )
-        if "ok" in resp and resp["ok"]:
-            return resp["user"]
-        return False
+    def checkIfShouldAskForACoffee(self, slackUserId, message):
+
+        # we should indeed
+        weShouldIndeed = False
+
+        # Sanitize the message
+        lowerCaseMessage = message.lower()
+        lowerCaseMessage = lowerCaseMessage.replace('é', 'e')
+
+        # Check for any matches
+        if any(keyWord in lowerCaseMessage for keyWord in self.coffeeKeywords):
+            weShouldIndeed = True
+
+        # If a match, validate the user
+        if weShouldIndeed:
+            user = self.getSlackUser(slackUserId)
+            if user is False:
+                return False
+            elif user["name"].startswith("Coffee_Situation:"): 
+                return False
+
+        return weShouldIndeed
+
 
     """
     Checks if the message was sent to an public channel
@@ -385,6 +391,21 @@ class SlackBot():
 
         if "ok" in resp and not resp["ok"]:
             return True
+        return False
+
+    """
+    Gets slack user info by ID
+
+    @param (string) slackUserId
+    @return (SlackUser dict|bool) user
+    """
+    def getSlackUser(self, slackUserId):
+        resp = self.slack.api_call(
+            "users.info",
+            user=slackUserId
+        )
+        if "ok" in resp and resp["ok"]:
+            return resp["user"]
         return False
 
     """

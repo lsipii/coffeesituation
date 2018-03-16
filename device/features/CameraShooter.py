@@ -2,7 +2,7 @@
 """
 @author lsipii
 """
-from app.hardware.RaspiCamera import RaspiCamera
+from device.hardware.RaspiCamera import RaspiCamera
 
 
 class CameraShooter(RaspiCamera):

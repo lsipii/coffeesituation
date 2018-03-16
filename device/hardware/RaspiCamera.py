@@ -5,7 +5,7 @@
 
 import sh
 
-from app.hardware.Camera import Camera
+from device.hardware.Camera import Camera
 
 class RaspiCamera(Camera):
 

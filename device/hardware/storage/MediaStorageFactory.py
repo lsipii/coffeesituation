@@ -21,10 +21,10 @@ class MediaStorageFactory():
 				storageDriver = wantsToHaveThisDriver
 
 			if storageDriver == "local":
-				from app.hardware.storage.LocalStorage import LocalStorage
+				from device.hardware.storage.LocalStorage import LocalStorage
 				return LocalStorage(configs["storage"]["local"])
 			elif storageDriver == "S3":
-				from app.hardware.storage.S3Storage import S3Storage
+				from device.hardware.storage.S3Storage import S3Storage
 				return S3Storage(configs["storage"]["S3"])
 			else:
 				raise Exception("Storage driver "+storageDriver+" not found")

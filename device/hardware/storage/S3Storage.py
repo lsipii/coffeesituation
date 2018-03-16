@@ -3,7 +3,7 @@
 @author lsipii
 """
 import boto3
-from app.hardware.storage.MediaStorage import MediaStorage
+from device.hardware.storage.MediaStorage import MediaStorage
 
 class S3Storage(MediaStorage):
 
