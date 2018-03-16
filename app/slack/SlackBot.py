@@ -227,7 +227,7 @@ class SlackBot():
     @param (string) apiEndPointAddr
     @param (callable) callback = None
     """
-    def fireCoffeeCherkerAppQuery(self, even, apiEndPointAddr, callback = None):
+    def fireCoffeeCherkerAppQuery(self, event, apiEndPointAddr, callback = None):
         # Flags as in progress
         self.commandInProgress = True
 
