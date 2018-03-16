@@ -165,17 +165,23 @@ class SlackBot():
         """
         Handles the response
 
-        @param (Response dict) responseData
+        @param (Response) resp
         """
-        def responseHandler(responseData):
-            if "status" in responseData:
-                if responseData["status"] == "OK":
-                    self.sendSlackBotResponse(event["channel"], "The monitoring app is running")
-                else:
-                    self.sendSlackBotResponse(event["channel"], "The monitoring app returned response status: "+responseData["status"])
-            else:
-                self.sendSlackBotResponse(event["channel"], "The monitoring app did not respond")
+        def responseHandler(resp):
+            try:
+                # Parsing the response
+                responseData = json.loads(resp.decode('utf-8'))
 
+                if "status" in responseData:
+                    if responseData["status"] == "OK":
+                        self.sendSlackBotResponse(event["channel"], "The monitoring app is running")
+                    else:
+                        self.sendSlackBotResponse(event["channel"], "The monitoring app returned response status: "+responseData["status"])
+                else:
+                    self.sendSlackBotResponse(event["channel"], "The monitoring app did not respond")
+            except Exception as e:
+                self.sendSlackBotResponse(event["channel"], "The monitoring app did not respond")
+             
         # Fires the query
         self.fireCoffeeCherkerAppQuery(event, self.config["COFFEE_BOT_URL"]+"/status", responseHandler)
 
@@ -208,10 +214,12 @@ class SlackBot():
             # Make the request
             req =  urllib.request.Request(apiEndPointAddr, data=data)
             resp = urllib.request.urlopen(req).read()
-            # Parsing the response
-            responseData = json.loads(resp.decode('utf-8'))
-
+        
             if callback is None:
+
+                # Parsing the response
+                responseData = json.loads(resp.decode('utf-8'))
+
                 # Expects a notify container with a message in the response
                 if "notify" in responseData and "message" in responseData["notify"]:
                     self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
@@ -220,7 +228,7 @@ class SlackBot():
                     self.printDebugMessage(responseData)
                     self.sendBotDefaultErrorMsg(event["channel"])
             else:
-                callback(responseData)
+                callback(resp)
 
         except Exception as e:
             self.printDebugMessage("fireAskForCoffeeEvent exception: "+str(e))
