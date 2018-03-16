@@ -1,8 +1,8 @@
 """
 @author lsipii
 """
-from app.AppInfo import AppInfo
 from app.ConfigReader import ConfigReader
+from app.AppInfo import AppInfo
 
 """App details container"""
 class SlackBotApp(AppInfo):
