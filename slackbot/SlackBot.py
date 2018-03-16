@@ -271,7 +271,7 @@ class SlackBot():
         helpText = "*Coffee keywords:*\n> "
         keywords = ", ".join(self.coffeeKeywords)
         helpText += keywords
-        helpText += "\n> _Keyword matching is not strict_"
+        helpText += "\n> _Note: Keyword matching is not strict_"
         self.sendSlackBotResponse(channel, helpText)
 
 
