@@ -211,11 +211,11 @@ class SlackBot():
         def responseHandler(responseData):
             if "status" in responseData:
                 if responseData["status"] == "OK":
-                    self.sendSlackBotResponse(event["channel"], "Camera app is running")
+                    self.sendSlackBotResponse(event["channel"], "The monitoring app is running")
                 else:
-                    self.sendSlackBotResponse(event["channel"], "Camera app returned response status: "+responseData["status"])
+                    self.sendSlackBotResponse(event["channel"], "The monitoring app returned response status: "+responseData["status"])
             else:
-                self.sendSlackBotResponse(event["channel"], "Camera app did not respond")
+                self.sendSlackBotResponse(event["channel"], "The monitoring app did not respond")
 
         # Fires the query
         self.fireCoffeeCherkerAppQuery(event, self.config["COFFEE_BOT_URL"]+"/status", responseHandler)
