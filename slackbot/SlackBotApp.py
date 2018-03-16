@@ -1,7 +1,6 @@
 """
 @author lsipii
 """
-
 from app.AppInfo import AppInfo
 from app.ConfigReader import ConfigReader
 

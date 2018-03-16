@@ -3,21 +3,21 @@
 """
 
 """App details container abstraction"""
-class AppInfo:
+class AppInfo():
 
 	"""
 	The base app name
 
 	@var (string)
 	"""
-	baseAppName =  "TSH Coffee Situation"
+	baseAppName = "TSH Coffee Situation"
 
 	"""
 	The base app version
 
 	@var (string)
 	"""
-	baseAppVersion =  "v1.1"
+	baseAppVersion = "v1.1"
 
 	"""
 	Gets the app version
