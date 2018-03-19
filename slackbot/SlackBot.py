@@ -105,16 +105,18 @@ class SlackBot():
             return isValidEvent
 
         # Loop through the events, fire!
-        for event in slackEvents:
-            if validateEvent(event):
-                if self.checkForDirectBotCommand(event):
-                    self.fireBotControlCommand(event)
-                    break
-                else:
-                    shouldAskForCoffee=self.checkIfShouldAskForACoffee(event["user"], event["text"])
-                    if shouldAskForCoffee:
+        try:
+            for event in slackEvents:
+                if validateEvent(event):
+                    if self.checkForDirectBotCommand(event):
+                        self.fireBotControlCommand(event)
+                        break
+                    elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
                         self.fireAskForCoffeeEvent(event)
                         break
+        except Exception as e:
+            self.printDebugMessage("resolveAndFireCommand exception: "+str(e))
+            self.sendBotDefaultErrorMsg(channel)
 
     """
     Resolves and fires slack bot control command
