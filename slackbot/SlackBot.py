@@ -136,7 +136,7 @@ class SlackBot():
                 self.sendBotHelpResponse(channel)
             elif message.find("list") > -1:
                self.sendBotCoffeeKeywordsResponse(channel)
-            elif message.find("status") > -1 or message.find("tila") > -1:
+            elif message.find("status") > -1:
                self.fireCoffeeSituationAppStatusQueryResponse(event)
             elif message.find("joke") > -1 or message.find("vitsi") > -1:
                self.sendPyJokesResponse(channel)
@@ -288,7 +288,7 @@ class SlackBot():
         try:
             import pyjokes
             helpText = pyjokes.get_joke()
-            self.sendSlackBotResponse(channel, helpText)
+            self.sendSlackBotResponse(channel, helpText, {"icon_emoji":":markusman2:", "username":"Höhöhö Situation"})
         except Exception as e:
             self.sendSlackBotResponse(channel, "jokes lib not installed, out of jokes haha")
 
