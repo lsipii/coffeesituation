@@ -287,7 +287,7 @@ class SlackBot():
     def sendPyJokesResponse(self, channel):
         try:
             import pyjokes
-            helpText = pyjokes.get_joke()
+            helpText = pyjokes.get_joke(category="chuck")
             self.sendSlackBotResponse(channel, helpText, {"icon_emoji":":markusman2:", "username":"Höhöhö Situation"})
         except Exception as e:
             self.sendSlackBotResponse(channel, "jokes lib not installed, out of jokes haha")
