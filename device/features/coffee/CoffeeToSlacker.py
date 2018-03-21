@@ -107,7 +107,8 @@ class CoffeeToSlacker(SlackPostWebhook):
 	def generateResponsePayload(self, payload, requestParams):
 		
 		# Generate a slack response payload
-		messageData = random.choice(self.coffeeMessages)
+		coffeeMessage = random.choice(self.coffeeMessages)
+		messageData = coffeeMessage.copy()
 
 		coffeeSituationMessage = "Check the current 4th floor coffee situation here"
 		if payload["streaming"]:
