@@ -68,33 +68,58 @@ class CoffeeToSlacker(SlackPostWebhook):
 			},
 			{
 				"username": "Coffee Situation: Turtle",
-				"message": "Static, but random. Like a turt <https://www.youtube.com/watch?v=vM9zKZXorI8|link>.", 
+				"message": "Static, but random. Like a random turtle <https://www.youtube.com/watch?v=vM9zKZXorI8|link>.", 
 				"icon_emoji": ":turtle:",
 			},
 			{
 				"username": "Coffee Situation: Turtle",
-				"message": "Static, but random. Like a turt <https://www.youtube.com/watch?v=J4juWTKDhNQ|link>.", 
+				"message": "Static, but random. Like a random turtle <https://www.youtube.com/watch?v=J4juWTKDhNQ|link>.", 
 				"icon_emoji": ":turtle:",
 			},
 			{
 				"username": "Coffee Situation: Turtle",
-				"message": "Static, but random. Like a turt <https://imgur.com/r/turtle/|link>.", 
+				"message": "Static, but random. Like a random turtle <https://imgur.com/r/turtle/|link>.", 
 				"icon_emoji": ":turtle:",
 			},
 			{
 				"username": "Coffee Situation: Turtle",
-				"message": "Static, but random. Like a turt <http://interactivepython.org/courselib/static/thinkcspy/MoreAboutIteration/RandomlyWalkingTurtles.html|link>.", 
+				"message": "Static, but random. Like a random turtle <http://interactivepython.org/courselib/static/thinkcspy/MoreAboutIteration/RandomlyWalkingTurtles.html|link>.", 
 				"icon_emoji": ":turtle:",
 			},
 			{
 				"username": "Coffee Situation: Turtle",
-				"message": "Static, but random. Like a turt <https://www.youtube.com/watch?v=dV9KuETVF8I|link>.", 
+				"message": "Static, but random. Like a random turtle <https://www.youtube.com/watch?v=dV9KuETVF8I|link>.", 
 				"icon_emoji": ":turtle:",
 			},
 			{
 				"username": "Coffee Situation: Turtle",
-				"message": "Static, but random. Like a turt <https://imgur.com/gallery/98otF|link>.", 
+				"message": "Static, but random. Like a random turtle <https://imgur.com/gallery/98otF|link>.", 
 				"icon_emoji": ":turtle:",
+			},
+			{
+				"username": "Coffee Situation: Coffee",
+				"message": "Here's a nice little boredpanda article regarding <https://www.boredpanda.com/i-draw-coffee-monsters-from-random-coffee-stains/|coffee stain monsters>.", 
+				"icon_emoji": ":coffee:",
+			},
+			{
+				"username": "Coffee Situation: Coffee",
+				"message": "Here's a nice little Oxford dictionarries blog regarding <https://blog.oxforddictionaries.com/2014/09/28/coffee-list/|coffee words>.", 
+				"icon_emoji": ":coffee:",
+			},
+			{
+				"username": "Coffee Situation: Youtube links",
+				"message": "Time for a <https://www.youtube.com/watch?v=rGS0OWPE7IQ|Random German Coffee Ad>.", 
+				"icon_emoji": ":youtube:",
+			},
+			{
+				"username": "Coffee Situation: Youtube links",
+				"message": "Time for a <https://www.youtube.com/watch?v=auK3t0MSsCA|Parks and Recreation - Ron Swanson and the Coffee Maker>.", 
+				"icon_emoji": ":youtube:",
+			},
+			{
+				"username": "Coffee Situation: Youtube links",
+				"message": "Time for a <https://www.youtube.com/watch?v=s3n3goJ2z8M|Coffee Physics>.", 
+				"icon_emoji": ":youtube:",
 			},
 		]
 
