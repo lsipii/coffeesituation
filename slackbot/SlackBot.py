@@ -28,12 +28,15 @@ class SlackBot():
             raise Exception("COFFEE_BOT_TOKEN not in slackbot config")
         if "COFFEE_BOT_URL" not in self.config:
             raise Exception("COFFEE_BOT_URL not in slackbot config")
+        if "SLACK_BOT_MAINTAINER" not in self.config:
+            raise Exception("SLACK_BOT_MAINTAINER not in slackbot config")
 
         # Slack variables
         self.slack = SlackClient(self.config["SLACK_BOT_TOKEN"])
         self.slackBotUser = None
         self.slackRTMReadDelay = 1 # 1 sec read delay
-        
+        self.slackbotMaintainerIdentifier = self.config["SLACK_BOT_MAINTAINER"]
+
         # Internal flags
         self.debugMode = False
         self.commandInProgress = False
@@ -257,7 +260,7 @@ class SlackBot():
             "> - `Coffee keyword`: Takes a photo of the current coffee situation",
             "> ",
             "> _Note: image url lasts max 2h, parts of the image are blurred_",
-            "> _Maintenance: @lsipii_"
+            "> _Maintenance: <@"+self.slackbotMaintainerIdentifier+">_"
         ]
 
         if errorMsg is not None:
@@ -369,7 +372,7 @@ class SlackBot():
         lowerCaseMessage = message.lower()
         lowerCaseMessage = lowerCaseMessage.replace('é', 'e')
         lowerCaseMessageParts = lowerCaseMessage.split(" ")
-        
+
         # Check for any matches
         for keyWord in lowerCaseMessageParts:
             # Skip keywords starting with # or @
