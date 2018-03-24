@@ -370,8 +370,15 @@ class SlackBot():
         lowerCaseMessage = lowerCaseMessage.replace('é', 'e')
 
         # Check for any matches
-        if any(keyWord in lowerCaseMessage for keyWord in self.coffeeKeywords):
-            weShouldIndeed = True
+        for keyWord in lowerCaseMessage:
+            # Skip keywords starting with # or @
+            if not ketWord.startswith("#") and not ketWord.startswith("@"):
+                for coffeeKeyword in self.coffeeKeywords:
+                    if coffeeKeyword in keyWord:
+                        weShouldIndeed = True
+                        break
+            if weShouldIndeed:
+                break
 
         # If a match, validate the user
         if weShouldIndeed:
