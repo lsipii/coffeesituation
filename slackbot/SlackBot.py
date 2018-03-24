@@ -368,11 +368,12 @@ class SlackBot():
         # Sanitize the message
         lowerCaseMessage = message.lower()
         lowerCaseMessage = lowerCaseMessage.replace('é', 'e')
-
+        lowerCaseMessageParts = lowerCaseMessage.split(" ")
+        
         # Check for any matches
-        for keyWord in lowerCaseMessage:
+        for keyWord in lowerCaseMessageParts:
             # Skip keywords starting with # or @
-            if not keyWord.startswith("#") and not keyWord.startswith("@"):
+            if not keyWord.startswith("#coffeesituation") and not keyWord.startswith("@Coffee"):
                 for coffeeKeyword in self.coffeeKeywords:
                     if coffeeKeyword in keyWord:
                         weShouldIndeed = True
