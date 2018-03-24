@@ -372,7 +372,7 @@ class SlackBot():
         # Check for any matches
         for keyWord in lowerCaseMessage:
             # Skip keywords starting with # or @
-            if not ketWord.startswith("#") and not ketWord.startswith("@"):
+            if not keyWord.startswith("#") and not keyWord.startswith("@"):
                 for coffeeKeyword in self.coffeeKeywords:
                     if coffeeKeyword in keyWord:
                         weShouldIndeed = True
