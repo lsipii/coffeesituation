@@ -9,9 +9,18 @@ DRAFT
 
 ### How do I get set up? ###
 
-* Summary of set up
+#### Summary of set 
 
 The app consists of a rasperry pi device taking pictures and a slackbot app reporting the results. Thus there are two different setups and configurations.  
+
+##### Slackbot
+
+* Configurations
+* Dependencies
+* Deployment instructions
+
+
+##### The Rasperry Pi Observation device
 
 * Configurations
 * Dependencies
