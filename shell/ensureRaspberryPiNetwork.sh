@@ -5,9 +5,8 @@
 # 10 * * * * ensureRaspberryPiNetwork.sh
 
 # Ping google, restart interfaces on a connection error
-ping -c2 google.com > /dev/null
+ping -c2 8.8.8.8 > /dev/null
 if [ $? != 0 ]; then
-	echo "Restarting network connection.."
-	sudo ifdown wlan0
-	sudo ifup wlan0
+	echo "Restarting network connection.. by rebooting!"
+	sudo reboot
 fi
