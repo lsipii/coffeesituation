@@ -97,6 +97,11 @@ class CoffeeToSlacker(SlackPostWebhook):
 				"icon_emoji": ":turtle:",
 			},
 			{
+				"username": "Coffee Situation: Turtle",
+				"message": "Static, but random. Like a random turtle <https://www.hs.fi/nyt/art-2000005638640.html|link>.", 
+				"icon_emoji": ":turtle:",
+			},
+			{
 				"username": "Coffee Situation: Coffee",
 				"message": "Here's a nice little boredpanda article regarding <https://www.boredpanda.com/i-draw-coffee-monsters-from-random-coffee-stains/|coffee stain monsters>.", 
 				"icon_emoji": ":coffee:",
