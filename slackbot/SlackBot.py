@@ -354,9 +354,10 @@ class SlackBot():
     """
     def fireSlackBotTyping(self, channel):
         self.slack.server.send_to_websocket({
-            id: 1,
-            type: "typing",
-            channel:channel
+            "id": 1,
+            "type": "typing",
+            "channel": channel,
+            "user": self.slackBotUser["user_id"]
         })
 
     """

@@ -6,6 +6,7 @@
 # Creates Zoinks raspberry pi image, rasbian
 #
 FROM resin/rpi-raspbian
+#FROM debian:stretch-slim
 
 LABEL maintainer="lspii@kapsi.fi"
 LABEL lsipii.tshzoink.version=1
@@ -19,9 +20,6 @@ LABEL lsipii.tshzoink.release-date="2018-03-02"
 
 RUN apt-get update -yqq && \
     apt-get install -y python3-pip wget sudo
-
-# Workdir
-WORKDIR /usr/local/src
 
 #
 #--------------------------------------------------------------------------
@@ -128,25 +126,28 @@ ADD ./docker/nginx/404/404.jpg /var/www/html/
 
 #
 #--------------------------------------------------------------------------
-# Install the zoinks app
+# Install the coffeesituation app
 #--------------------------------------------------------------------------
 #
+
+ENV COFFEE_SITUATION_APP_PATH /usr/local/src/coffeesituation
 
 #####################################
 # Copy app files
 #####################################
-RUN mkdir -p zoinks/app
-RUN mkdir -p zoinks/settings
 
-ADD ./device/ zoinks/app/
-ADD ./settings zoinks/settings/
-ADD ./deviceApp.py zoinks/
-ADD ./requirements.txt zoinks/app/
+RUN mkdir -p ${COFFEE_SITUATION_APP_PATH}/device
+RUN mkdir -p ${COFFEE_SITUATION_APP_PATH}/settings
+
+COPY ./device/ ${COFFEE_SITUATION_APP_PATH}/device/
+COPY ./settings ${COFFEE_SITUATION_APP_PATH}/settings/
+COPY ./deviceApp.py ${COFFEE_SITUATION_APP_PATH}/
+COPY ./requirements.txt ${COFFEE_SITUATION_APP_PATH}/
 
 #####################################
 # Install the app requirements
 #####################################
-RUN pip3 install -r zoinks/app/requirements.txt
+RUN pip3 install -r ${COFFEE_SITUATION_APP_PATH}/requirements.txt
 
 #
 #--------------------------------------------------------------------------
@@ -154,7 +155,10 @@ RUN pip3 install -r zoinks/app/requirements.txt
 #--------------------------------------------------------------------------
 #
 
+# Workdir
+WORKDIR ${COFFEE_SITUATION_APP_PATH}
+
 #####################################
 # The app run command
 #####################################
-CMD /usr/local/src/zoinks/deviceApp.py --production &
+CMD ${COFFEE_SITUATION_APP_PATH}/deviceApp.py --production &
