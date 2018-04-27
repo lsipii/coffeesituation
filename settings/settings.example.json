@@ -4,7 +4,7 @@
         "settings": {
             "CoffeeSituationResolverEnabled": false,
             "imageBlurrerFilter": false,
-            "sendSlackNotifications": true
+            "sendSlackNotifications": false
         },
         "storage_driver": "local"
     },

@@ -2,8 +2,12 @@
 """
 @author lsipii
 """
-import cv2
-import numpy as np
+try:
+	import cv2
+	import numpy as np
+	openCvNotInstalled=False
+except Exception:
+	openCvNotInstalled=True
 
 """
 Checks if there is coffee using Haar classification
@@ -36,6 +40,8 @@ class CoffeeSituationResolver():
 	@return (bool)
 	"""
 	def isEnabled(self):
+		if openCvNotInstalled:
+			return False
 		return self.coffeeSituationResolverEnabled
 
 	"""

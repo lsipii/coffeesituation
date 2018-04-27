@@ -79,23 +79,54 @@ sudo sed -i 's/daemon off/daemon on/g' /etc/motion/motion.conf && \
 3. Clone the repository if not yet done
 
 ```
-git clone https://github.com/tamperestartuphup/tshzoinks.git 
+git clone https://github.com/tamperestartuphub/coffeesituation.git 
 ```
 
 4. nginx configs
 ```
-sudo cp ./docker/nginx/sites/default.conf /etc/nginx/sites-available/default.conf && \
-	sudo cp ./docker/nginx/404/404.jpg /var/www/html/
+sudo cp ./coffeesituation/docker/nginx/sites/default.conf /etc/nginx/sites-available/default.conf && \
+	sudo cp ./coffeesituation/docker/nginx/404/404.jpg /var/www/html/
 ```
 
 5. Zoinks python requirements
 ```
-pip3 install -r zoinks/app/requirements.txt
+pip3 install -r ./coffeesituation/requirements.txt
 ```
 
 ###### Deployment instructions
 
-@TODO: Rasberry Pi setups
+1. Copy example device configuration file
+```
+cp ./coffeesituation/settings/settings.example.json ./coffeesituation/settings/settings.json
+```
+
+2. Fill important parts of the json file
+
+> 1. app.host: the devices public address
+> 2. app.storage_driver: "local" or "S3"
+> 3. apiAccess.Coffee Related Communication And Relations Facilitator.api_token: the SlackBot access token
+> 4. storage.local or storage.S3
+
+3. Configure cronjobs
+
+by
+
+```
+crontab -e
+```
+
+add lines:
+
+```
+20,57 * * * * /home/pi/coffeesituation/shell/ensureDeviceAppRunning.sh
+10,35,44 * * * * /home/pi/coffeesituation/shell/ensureRaspberryPiNetwork.sh
+```
+
+If using S3 storage, add also a:
+
+```
+2 * * * * /home/pi/coffeesituation/S3BucketGC_cronjob.py
+```
 
 ### Who do I talk to? ###
 
