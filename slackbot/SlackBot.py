@@ -133,7 +133,7 @@ class SlackBot():
 
         # Loop through the events, fire!
         for event in slackEvents:
-            
+
             # Only read valid eventes
             if validateEvent(event):
                 if self.checkForDirectBotCommand(event):
@@ -243,7 +243,7 @@ class SlackBot():
             req =  urllib.request.Request(apiEndPointAddr, data=data)
             resp = urllib.request.urlopen(req).read()
         except Exception as e:
-            raise ConnectionException()
+            raise ConnectionException(e)
     
         if callback is None:
 
