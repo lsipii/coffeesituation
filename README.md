@@ -13,7 +13,7 @@ DRAFT
 
 The app consists of a Rasbperry Pi device taking pictures and a Slack app reporting the results. Thus there are two different setups and configurations.  
 
-##### Slackbot
+##### Setup Uno: Slackbot
 
 ###### Dependencies
 
@@ -67,7 +67,7 @@ add lines, for example (fix the paths):
 10,27 * * * * /path/to/coffeesituation/shell/ensureSlackBotAppRunning.sh.sh
 ```
 
-##### The Rasperry Pi Observation device
+##### Setup Dos: The Rasperry Pi Observation device
 
 @TODO: Raspberry Pi setups
 
