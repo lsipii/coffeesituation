@@ -351,7 +351,7 @@ class SlackBot():
     @see: https://github.com/slackapi/node-slack-sdk/issues/98
     """
     def fireSlackBotTyping(self, channel):
-        self.slack._send({
+        self.slack.rtm_send_message({
             id: 1,
             type: "typing",
             channel:channel
