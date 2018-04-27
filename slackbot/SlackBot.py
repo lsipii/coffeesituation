@@ -80,28 +80,8 @@ class SlackBot():
             while True:
 
                 if not self.commandInProgress:
-                    try:
-                        # Read the message
-                        self.resolveAndFireCommand(self.slack.rtm_read())
-
-                    except (urllib.error.HTTPError, urllib.error.URLError) as e:
-
-                        # Flags as in progress
-                        self.commandInProgress = False
-
-                        self.printDebugMessage("resolveAndFireCommand http exception")
-                        self.printDebugMessage(e)
-                        self.sendBotConnectionErrorMsg(event["channel"])
-
-                    except Exception as e:
-
-                        # Flags as in progress
-                        self.commandInProgress = False
-
-                        self.printDebugMessage("resolveAndFireCommand exception")
-                        self.printDebugMessage(e)
-                        self.sendBotDefaultErrorMsg(event["channel"])
-                              
+                    # Read the message
+                    self.resolveAndFireCommand(self.slack.rtm_read())   
                 time.sleep(self.slackRTMReadDelay)
         else:
             self.printDebugMessage("Slackbot connection failed", 1, True)
@@ -113,36 +93,54 @@ class SlackBot():
     """
     def resolveAndFireCommand(self, slackEvents):
 
-        """
-        Validates the event
-        
-        @param (SlackEvent dict) event
-        @return (bool) weWantThisEvent
-        """
-        def validateEvent(event):
-            isValidEvent = False
-            if event["type"] == "message" or event["type"] == "message.im":
-                isValidEvent = True
-            if isValidEvent and "subtype" in event:
-                isValidEvent = False
-            if isValidEvent and "user" not in event:
-                isValidEvent = False
-            return isValidEvent
-
         # Loop through the events, fire!
         for event in slackEvents:
 
             # Only read valid eventes
-            if validateEvent(event):
-                if self.checkForDirectBotCommand(event):
-                    self.fireSlackBotTyping(event["channel"])
-                    self.fireBotControlCommand(event)
-                    break
-                elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
-                    self.fireSlackBotTyping(event["channel"])
-                    self.fireAskForCoffeeEventResponse(event)
-                    break
+            if self.validateEvent(event):
+                try:
+                    if self.checkForDirectBotCommand(event):
+                        self.fireSlackBotTyping(event["channel"])
+                        self.fireBotControlCommand(event)
+                    elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
+                        self.fireSlackBotTyping(event["channel"])
+                        self.fireAskForCoffeeEventResponse(event)      
 
+                except (urllib.error.HTTPError, urllib.error.URLError) as e:
+
+                    # Flags as in progress
+                    self.commandInProgress = False
+
+                    self.printDebugMessage("resolveAndFireCommand http exception")
+                    self.printDebugMessage(e)
+                    self.sendBotConnectionErrorMsg(event["channel"])
+
+                except Exception as e:
+
+                    # Flags as in progress
+                    self.commandInProgress = False
+
+                    self.printDebugMessage("resolveAndFireCommand exception")
+                    self.printDebugMessage(e)
+                    self.sendBotDefaultErrorMsg(event["channel"])
+
+                break
+
+    """
+    Validates the event
+    
+    @param (SlackEvent dict) event
+    @return (bool) weWantThisEvent
+    """
+    def validateEvent(self, event):
+        isValidEvent = False
+        if event["type"] == "message" or event["type"] == "message.im":
+            isValidEvent = True
+        if isValidEvent and "subtype" in event:
+            isValidEvent = False
+        if isValidEvent and "user" not in event:
+            isValidEvent = False
+        return isValidEvent
 
     """
     Resolves and fires slack bot control command
