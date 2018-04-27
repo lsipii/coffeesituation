@@ -7,8 +7,7 @@
 #
 FROM resin/rpi-raspbian
 
-MAINTAINER Lassi Piironen "lspii@kapsi.fi"
-
+LABEL maintainer="lspii@kapsi.fi"
 LABEL lsipii.tshzoink.version=1
 LABEL lsipii.tshzoink.release-date="2018-03-02"
 
@@ -141,7 +140,7 @@ RUN mkdir -p zoinks/settings
 
 ADD ./device/ zoinks/app/
 ADD ./settings zoinks/settings/
-ADD ./zoinks.py zoinks/app/
+ADD ./deviceApp.py zoinks/
 ADD ./requirements.txt zoinks/app/
 
 #####################################
@@ -158,4 +157,4 @@ RUN pip3 install -r zoinks/app/requirements.txt
 #####################################
 # The app run command
 #####################################
-CMD /usr/local/src/zoinks/zoinks.py --production &
+CMD /usr/local/src/zoinks/deviceApp.py --production &

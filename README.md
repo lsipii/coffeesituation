@@ -48,9 +48,54 @@ pip3 install -r slackbot_requirements.txt
 
 ##### The Rasperry Pi Observation device
 
-###### Configurations
+@TODO: Raspberry Pi setups
+
 ###### Dependencies
+
+The dependency installations are better described in the Dockerfile
+
+Thought, multiliner and multistepper without OpenCV support would be
+
+1. Base requirements
+```
+sudo apt-get update -y && sudo apt-get install -y git python3-pip nginx motion git
+```
+
+2. Motion configs
+```
+sudo sed -i 's/daemon off/daemon on/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/stream_localhost on/stream_localhost off/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/stream_port 0/stream_port 8081/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/output_pictures on/output_pictures off/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/ffmpeg_output_movies on/ffmpeg_output_movies off/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/stream_maxrate 1/stream_maxrate 25/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/framerate 100/framerate 25/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/width 352/width 640/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/height 288/height 480/g' /etc/motion/motion.conf && \
+	sudo sed -i 's/start_motion_daemon=no/start_motion_daemon=yes/g' /etc/default/motion && \
+	sudo systemctl disable motion
+```
+
+3. Clone the repository if not yet done
+
+```
+git clone https://github.com/tamperestartuphup/tshzoinks.git 
+```
+
+4. nginx configs
+```
+sudo cp ./docker/nginx/sites/default.conf /etc/nginx/sites-available/default.conf && \
+	sudo cp ./docker/nginx/404/404.jpg /var/www/html/
+```
+
+5. Zoinks python requirements
+```
+pip3 install -r zoinks/app/requirements.txt
+```
+
 ###### Deployment instructions
+
+@TODO: Rasberry Pi setups
 
 ### Who do I talk to? ###
 
