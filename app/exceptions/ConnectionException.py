@@ -3,3 +3,4 @@
 @author lsipii
 """
 class ConnectionException(Exception):
+	pass
