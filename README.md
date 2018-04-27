@@ -11,7 +11,7 @@ DRAFT
 
 #### Summary of set 
 
-The app consists of a rasperry pi device taking pictures and a slackbot app reporting the results. Thus there are two different setups and configurations.  
+The app consists of a Rasbperry Pi device taking pictures and a Slack app reporting the results. Thus there are two different setups and configurations.  
 
 ##### Common dependencies
 
@@ -88,7 +88,7 @@ sudo cp ./coffeesituation/docker/nginx/sites/default.conf /etc/nginx/sites-avail
 	sudo cp ./coffeesituation/docker/nginx/404/404.jpg /var/www/html/
 ```
 
-5. Zoinks python requirements
+5. The deviceApp python requirements
 ```
 pip3 install -r ./coffeesituation/requirements.txt
 ```
@@ -98,21 +98,21 @@ pip3 install -r ./coffeesituation/requirements.txt
 @TODO: better decribe the setup using dataplicity, 
 - but for now it's pretty straightforward: https://www.dataplicity.com/devices/
 - enable the wormhole
-- get the public address
+- get the public address and reference where called for a COFFEE_BOT_URL setting
 
 @TODO: setup using resin.io
 - ...
 
-1. Copy example device configuration file
+1. Copy the example device configuration file
 ```
 cp ./coffeesituation/settings/settings.example.json ./coffeesituation/settings/settings.json
 ```
 
 2. Fill important parts of the json file
 
-> 1. app.host: the devices public address, resinio/dataplicity address
+> 1. app.host: the devices public address eg. the COFFEE_BOT_URL
 > 2. app.storage_driver: "local" or "S3"
-> 3. apiAccess.Coffee Related Communication And Relations Facilitator.api_token: the SlackBot access token
+> 3. apiAccess.Coffee Related Communication And Relations Facilitator.api_token: the SlackBot access token, the COFFEE_BOT_TOKEN setting of the SlackBot
 > 4. storage.local or storage.S3
 
 3. Test if the app starts running
@@ -134,6 +134,7 @@ crontab -e
 add lines:
 
 ```
+@reboot /home/pi/coffeesituation/shell/ensureDeviceAppRunning.sh
 20,57 * * * * /home/pi/coffeesituation/shell/ensureDeviceAppRunning.sh
 10,35,44 * * * * /home/pi/coffeesituation/shell/ensureRaspberryPiNetwork.sh
 ```
