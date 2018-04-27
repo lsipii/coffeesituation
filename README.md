@@ -13,38 +13,59 @@ DRAFT
 
 The app consists of a Rasbperry Pi device taking pictures and a Slack app reporting the results. Thus there are two different setups and configurations.  
 
-##### Common dependencies
+##### Slackbot
+
+###### Dependencies
+
+The slackbot app runs and installs with:
 
 * python3
 * pip3
 
-##### Slackbot
+1. Clone the repository
 
- 
-1. Clone the repo to the hosting server, where the bot will be ran
+```
+git clone https://github.com/tamperestartuphub/coffeesituation.git 
+```
 
-2. Copy the example configurations:
-
-cp settings/slackbot.example.json settings/slackbot.json
-
-3. Configure very much
-
-* SLACK_BOT_TOKEN: The slack access key, by which the bot connects to the Slack workplace
-* SLACK_BOT_MAINTAINER: Slack user ID, eg. W012A3CDE
-* COFFEE_BOT_TOKEN: The access key to the coffee observation device (Raspberry Pi)
-* COFFEE_BOT_URL: The public access url of the coffee bot device, eg. https://xxXXxxXXXXxx.dataplicity.io
-
-
-###### Dependencies
+2. Install the bot requirements
 
 For the slackbot hosting server the reqs are listed in the slackbot_requirements.txt file
 
-* Install by:
+```
+pip3 install -r coffeesituation/slackbot_requirements.txt
+```
 
-pip3 install -r slackbot_requirements.txt
 
-* Deployment instructions
+###### Deployment instructions
 
+1. Copy the example configurations:
+
+```
+cp settings/slackbot.example.json settings/slackbot.json
+```
+
+2. Configure at the very least
+
+> 1. SLACK_BOT_TOKEN: The slack access key, by which the bot connects to the Slack workplace
+> 2. SLACK_BOT_MAINTAINER: Slack user ID, eg. W012A3CDE
+> 3. COFFEE_BOT_TOKEN: The access key to the coffee observation device, self generated shared secret
+> 4. COFFEE_BOT_URL: The public access url of the coffee bot device, eg. https://xxXXxxXXXXxx.dataplicity.io
+
+3. Configure cronjobs
+
+by
+
+```
+crontab -e
+```
+
+add lines, for example (fix the paths):
+
+```
+@reboot /path/to/coffeesituation/shell/ensureSlackBotAppRunning.sh.sh
+10,27 * * * * /path/to/coffeesituation/shell/ensureSlackBotAppRunning.sh.sh
+```
 
 ##### The Rasperry Pi Observation device
 
