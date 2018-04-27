@@ -106,14 +106,27 @@ class SlackBot():
                         self.fireSlackBotTyping(event["channel"])
                         self.fireAskForCoffeeEventResponse(event)      
 
-                except (urllib.error.HTTPError, urllib.error.URLError) as e:
+                except urllib.error.URLError as e:
+
+                    # Flags as in progress
+                    self.commandInProgress = False
+
+                    self.printDebugMessage("resolveAndFireCommand url exception")
+                    self.printDebugMessage(e)
+                    self.sendBotConnectionErrorMsg(event["channel"])
+
+                except urllib.error.HTTPError as e:
 
                     # Flags as in progress
                     self.commandInProgress = False
 
                     self.printDebugMessage("resolveAndFireCommand http exception")
                     self.printDebugMessage(e)
-                    self.sendBotConnectionErrorMsg(event["channel"])
+
+                    if e.code == 429:
+                        self.sendBotConnectionErrorMsg(event["channel"], "Too many requests at a time!")
+                    else:
+                        self.sendBotDefaultErrorMsg(event["channel"])
 
                 except Exception as e:
 
@@ -319,9 +332,12 @@ class SlackBot():
     Sends the connection error message
 
     @param (Slack channel string) channel
+    @param (string) message = None
     """
-    def sendBotConnectionErrorMsg(self, channel):
+    def sendBotConnectionErrorMsg(self, channel, message = None):
         helpText = "Sorry, there was an error in forming the QEC (Quantum Entanglement Communicators) connection"
+        if message is not None:
+            helpText += ", Message: "+message
         self.sendSlackBotResponse(channel, helpText)
 
 
