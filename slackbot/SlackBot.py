@@ -349,9 +349,11 @@ class SlackBot():
 
     @param (Slack channel string) channel
     @see: https://github.com/slackapi/node-slack-sdk/issues/98
+    @see: https://api.slack.com/rtm
+    @see: https://github.com/slackapi/python-slackclient/blob/master/slackclient/server.py
     """
     def fireSlackBotTyping(self, channel):
-        self.slack.rtm_send_message({
+        self.slack.server.send_to_websocket({
             id: 1,
             type: "typing",
             channel:channel
