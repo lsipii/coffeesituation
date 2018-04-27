@@ -112,9 +112,11 @@ class SlackBot():
             try:
                 if validateEvent(event):
                     if self.checkForDirectBotCommand(event):
+                        self.fireSlackBotTyping(event["channel"])
                         self.fireBotControlCommand(event)
                         break
                     elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
+                        self.fireSlackBotTyping(event["channel"])
                         self.fireAskForCoffeeEventResponse(event)
                         break
             except Exception as e:
@@ -152,7 +154,7 @@ class SlackBot():
             self.sendBotDefaultErrorMsg(channel)
 
         # Flags as not in progress
-        self.commandInProgress = False
+        self.commandInProgress = False  
 
     """
     Asks for coffee
@@ -341,6 +343,19 @@ class SlackBot():
                 postArgs["unfurl_links"] = slackResponseData["unfurl_links"]
 
         self.slack.api_call("chat.postMessage", **postArgs)
+
+    """
+    Indicates the bot is a work in progress
+
+    @param (Slack channel string) channel
+    @see: https://github.com/slackapi/node-slack-sdk/issues/98
+    """
+    def fireSlackBotTyping(self, channel):
+        self.slack._send({
+            id: 1,
+            type: "typing",
+            channel:channel
+        })
 
     """
     Checks for bot control commands
