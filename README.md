@@ -84,7 +84,7 @@ git clone https://github.com/tamperestartuphub/coffeesituation.git
 
 4. nginx configs
 ```
-sudo cp ./coffeesituation/docker/nginx/sites/default.conf /etc/nginx/sites-available/default.conf && \
+sudo cp ./coffeesituation/docker/nginx/sites/default.conf /etc/nginx/sites-available/default && \
 	sudo cp ./coffeesituation/docker/nginx/404/404.jpg /var/www/html/
 ```
 
