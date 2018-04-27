@@ -95,6 +95,14 @@ pip3 install -r ./coffeesituation/requirements.txt
 
 ###### Deployment instructions
 
+@TODO: better decribe the setup using dataplicity, 
+- but for now it's pretty straightforward: https://www.dataplicity.com/devices/
+- enable the wormhole
+- get the public address
+
+@TODO: setup using resin.io
+- ...
+
 1. Copy example device configuration file
 ```
 cp ./coffeesituation/settings/settings.example.json ./coffeesituation/settings/settings.json
@@ -102,12 +110,20 @@ cp ./coffeesituation/settings/settings.example.json ./coffeesituation/settings/s
 
 2. Fill important parts of the json file
 
-> 1. app.host: the devices public address
+> 1. app.host: the devices public address, resinio/dataplicity address
 > 2. app.storage_driver: "local" or "S3"
 > 3. apiAccess.Coffee Related Communication And Relations Facilitator.api_token: the SlackBot access token
 > 4. storage.local or storage.S3
 
-3. Configure cronjobs
+3. Test if the app starts running
+
+```
+./coffeesituation/deviceApp.py 
+```
+
+- Stop by ctrl-c
+
+4. Configure cronjobs
 
 by
 
@@ -126,6 +142,11 @@ If using S3 storage, add also a:
 
 ```
 2 * * * * /home/pi/coffeesituation/S3BucketGC_cronjob.py
+```
+
+5. Reboot
+```
+sudo reboot
 ```
 
 ### Who do I talk to? ###
