@@ -8,8 +8,6 @@ import urllib
 import json
 import time
 
-from app.exceptions import ConnectionException
-
 class SlackBot():
 
     """
@@ -86,12 +84,12 @@ class SlackBot():
                         # Read the message
                         self.resolveAndFireCommand(self.slack.rtm_read())
 
-                    except ConnectionException as e:
+                    except (urllib.error.HTTPError, urllib.error.URLError) as e:
 
                         # Flags as in progress
                         self.commandInProgress = False
 
-                        self.printDebugMessage("resolveAndFireCommand exception")
+                        self.printDebugMessage("resolveAndFireCommand http exception")
                         self.printDebugMessage(e)
                         self.sendBotConnectionErrorMsg(event["channel"])
 
@@ -238,12 +236,8 @@ class SlackBot():
             'app_version': self.app.getAppVersion()
         }).encode()
 
-        # Make the request
-        try:
-            req =  urllib.request.Request(apiEndPointAddr, data=data)
-            resp = urllib.request.urlopen(req).read()
-        except Exception as e:
-            raise ConnectionException(e)
+        req =  urllib.request.Request(apiEndPointAddr, data=data)
+        resp = urllib.request.urlopen(req).read()
     
         if callback is None:
 
