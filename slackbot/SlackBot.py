@@ -8,6 +8,8 @@ import urllib
 import json
 import time
 
+from app.exceptions import ConnectionException
+
 class SlackBot():
 
     """
@@ -34,7 +36,7 @@ class SlackBot():
         # Slack variables
         self.slack = SlackClient(self.config["SLACK_BOT_TOKEN"])
         self.slackBotUser = None
-        self.slackRTMReadDelay = 1 # 1 sec read delay
+        self.slackRTMReadDelay = 3 # seconds of read delay
         self.slackbotMaintainerIdentifier = self.config["SLACK_BOT_MAINTAINER"]
 
         # Internal flags
@@ -78,8 +80,30 @@ class SlackBot():
             
             # The primary loop
             while True:
+
                 if not self.commandInProgress:
-                    self.resolveAndFireCommand(self.slack.rtm_read())            
+                    try:
+                        # Read the message
+                        self.resolveAndFireCommand(self.slack.rtm_read())
+
+                    except ConnectionException as e:
+
+                        # Flags as in progress
+                        self.commandInProgress = False
+
+                        self.printDebugMessage("resolveAndFireCommand exception")
+                        self.printDebugMessage(e)
+                        self.sendBotConnectionErrorMsg(event["channel"])
+
+                    except Exception as e:
+
+                        # Flags as in progress
+                        self.commandInProgress = False
+
+                        self.printDebugMessage("resolveAndFireCommand exception")
+                        self.printDebugMessage(e)
+                        self.sendBotDefaultErrorMsg(event["channel"])
+                              
                 time.sleep(self.slackRTMReadDelay)
         else:
             self.printDebugMessage("Slackbot connection failed", 1, True)
@@ -109,20 +133,18 @@ class SlackBot():
 
         # Loop through the events, fire!
         for event in slackEvents:
-            try:
-                if validateEvent(event):
-                    if self.checkForDirectBotCommand(event):
-                        self.fireSlackBotTyping(event["channel"])
-                        self.fireBotControlCommand(event)
-                        break
-                    elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
-                        self.fireSlackBotTyping(event["channel"])
-                        self.fireAskForCoffeeEventResponse(event)
-                        break
-            except Exception as e:
-                self.printDebugMessage("resolveAndFireCommand exception: "+str(e))
-                self.sendBotDefaultErrorMsg(event["channel"])
-                break
+            
+            # Only read valid eventes
+            if validateEvent(event):
+                if self.checkForDirectBotCommand(event):
+                    self.fireSlackBotTyping(event["channel"])
+                    self.fireBotControlCommand(event)
+                    break
+                elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
+                    self.fireSlackBotTyping(event["channel"])
+                    self.fireAskForCoffeeEventResponse(event)
+                    break
+
 
     """
     Resolves and fires slack bot control command
@@ -130,28 +152,25 @@ class SlackBot():
     @param (SlackEvent dict) event
     """
     def fireBotControlCommand(self, event):
+
         message = event["text"].lower()
         channel = event["channel"]
 
         # Flags as in progress
         self.commandInProgress = True
 
-        try:
-            if message.find("help") > -1 or message.find("ohje") > -1:
-                self.sendBotHelpResponse(channel)
-            elif message.find("list") > -1:
-               self.sendBotCoffeeKeywordsResponse(channel)
-            elif message.find("status") > -1:
-               self.fireCoffeeSituationAppStatusQueryResponse(event)
-            elif message.find("joke") > -1 or message.find("vitsi") > -1:
-               self.sendPyJokesResponse(channel)
-            elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
-                self.fireAskForCoffeeEventResponse(event)
-            else:
-                self.sendBotHelpResponse(channel, "Sorry, the command not recognized")
-        except Exception as e:
-            self.printDebugMessage("fireBotControlCommand exception: "+str(e))
-            self.sendBotDefaultErrorMsg(channel)
+        if message.find("help") > -1 or message.find("ohje") > -1:
+            self.sendBotHelpResponse(channel)
+        elif message.find("list") > -1:
+           self.sendBotCoffeeKeywordsResponse(channel)
+        elif message.find("status") > -1:
+           self.fireCoffeeSituationAppStatusQueryResponse(event)
+        elif message.find("joke") > -1 or message.find("vitsi") > -1:
+           self.sendPyJokesResponse(channel)
+        elif self.checkIfShouldAskForACoffee(event["user"], event["text"]):
+            self.fireAskForCoffeeEventResponse(event)
+        else:
+            self.sendBotHelpResponse(channel, "Sorry, the command not recognized")
 
         # Flags as not in progress
         self.commandInProgress = False  
@@ -202,46 +221,44 @@ class SlackBot():
     @param (callable) callback = None
     """
     def fireCoffeeCherkerAppQuery(self, event, apiEndPointAddr, callback = None):
+
         # Flags as in progress
         self.commandInProgress = True
 
+        network = self.slackBotUser["url"].replace("https://", "").replace(".slack.com/", "")
+
+        # Arrange request data
+        data = urllib.parse.urlencode({
+            'api_token': self.config["COFFEE_BOT_TOKEN"], 
+            'channel': event["channel"], 
+            'network': network,
+            'message': event["text"],
+            'username': event["user"],
+            'app': self.app.getAppName(), 
+            'app_version': self.app.getAppVersion()
+        }).encode()
+
+        # Make the request
         try:
-
-            network = self.slackBotUser["url"].replace("https://", "").replace(".slack.com/", "")
-
-            # Arrange request data
-            data = urllib.parse.urlencode({
-                'api_token': self.config["COFFEE_BOT_TOKEN"], 
-                'channel': event["channel"], 
-                'network': network,
-                'message': event["text"],
-                'username': event["user"],
-                'app': self.app.getAppName(), 
-                'app_version': self.app.getAppVersion()
-            }).encode()
-
-            # Make the request
             req =  urllib.request.Request(apiEndPointAddr, data=data)
             resp = urllib.request.urlopen(req).read()
-        
-            if callback is None:
-
-                # Parsing the response
-                responseData = json.loads(resp.decode('utf-8'))
-
-                # Expects a notify container with a message in the response
-                if "notify" in responseData and "message" in responseData["notify"]:
-                    self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
-                else:
-                    self.printDebugMessage("fireCoffeeCherkerAppQuery response:")
-                    self.printDebugMessage(responseData)
-                    self.sendBotDefaultErrorMsg(event["channel"])
-            else:
-                callback(resp)
-
         except Exception as e:
-            self.printDebugMessage("fireAskForCoffeeEvent exception: "+str(e))
-            self.sendBotDefaultErrorMsg(event["channel"])
+            raise ConnectionException()
+    
+        if callback is None:
+
+            # Parsing the response
+            responseData = json.loads(resp.decode('utf-8'))
+
+            # Expects a notify container with a message in the response
+            if "notify" in responseData and "message" in responseData["notify"]:
+                self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
+            else:
+                self.printDebugMessage("fireCoffeeCherkerAppQuery response:")
+                self.printDebugMessage(responseData)
+                self.sendBotDefaultErrorMsg(event["channel"])
+        else:
+            callback(resp)
 
         # Flags as in progress
         self.commandInProgress = False
@@ -298,13 +315,23 @@ class SlackBot():
             self.sendSlackBotResponse(channel, "jokes lib not installed, out of jokes haha")
 
     """
-    Sets the bot in debugmode
+    Sends the default error message
 
-    @param (bool) debugMode
+    @param (Slack channel string) channel
     """
     def sendBotDefaultErrorMsg(self, channel):
         helpText = "Sorry, the bot is busy solving a random encounter"
         self.sendSlackBotResponse(channel, helpText)
+
+    """
+    Sends the connection error message
+
+    @param (Slack channel string) channel
+    """
+    def sendBotConnectionErrorMsg(self, channel):
+        helpText = "Sorry, there was an error in forming the QEC (Quantum Entanglement Communicators) connection"
+        self.sendSlackBotResponse(channel, helpText)
+
 
     """
     Sends a bot response back to the channel
@@ -353,12 +380,17 @@ class SlackBot():
     @see: https://github.com/slackapi/python-slackclient/blob/master/slackclient/server.py
     """
     def fireSlackBotTyping(self, channel):
-        self.slack.server.send_to_websocket({
-            "id": 1,
-            "type": "typing",
-            "channel": channel,
-            "user": self.slackBotUser["user_id"]
-        })
+
+        try:
+            self.slack.server.send_to_websocket({
+                "id": 1,
+                "type": "typing",
+                "channel": channel,
+                "user": self.slackBotUser["user_id"]
+            })
+        except Exception as e:
+            self.printDebugMessage("fireSlackBotTyping exception:")
+            self.printDebugMessage(e)
 
     """
     Checks for bot control commands
