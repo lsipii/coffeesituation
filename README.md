@@ -7,6 +7,47 @@ DRAFT
 * The coffee situation bot observes the current office coffee machines situation as it is important to know the status of the coffee situation
 * Version v1.1
 
+#### Description ####
+
+On a slack channel, the bot app listens for specific keywords eg. coffee, kahavia.. and on a match it responds with a situation message that has an image link attached to it. The image is taken by the coffee observation device and it is from the office coffee machine.
+
+The user sees two things:
+
+* The response:
+![The response](app/data/images/slackResponse.png)
+
+	* The responses have some randomness on the icon and the affix text
+
+* The image:
+![The image](app/data/images/observationResponse.png)
+
+	* Image contents vary depending on the observation device positioning
+	* should the device positioning resulted images reveal too much of for example some corporate secrets or public spaces the resulting image can be filtered with visual blocks or even face blurring :sparkles: 
+	* images have a limited lifetime and are automaticly truncated
+
+:sparkles: results may vary
+
+#### Usage ####
+
+##### Slackbot app direct commands #####
+
+> - Help: Prints this usage text
+> - Status: Checks if the coffee situation monitoring device is online
+> - Joke: Well, why not?
+> - List: Prints accepted coffee related keywords
+> - `Coffee keyword`: Takes a photo of the current coffee situation
+
+##### The observation device configurations #####
+
+@TODO
+
+#### Coming up in the next episode ####
+
+* In coming versions there should be some real coffee situation senseness
+* automaticish area visual blocking
+* improvements on the face blurring
+* OpenCV related device stability
+
 ### How do I get set up? ###
 
 #### Summary of set 
