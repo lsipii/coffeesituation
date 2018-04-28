@@ -25,13 +25,15 @@ Status | ![The connection error response](app/data/images/slackStatusResponse.pn
 Connection error	| ![The connection error response](app/data/images/slackConnectionErrorResponse.png)
 Unspecified error	| ![The error response](app/data/images/slackErrorResponse.png)
 
-** The responses have some randomness on the icon and the affix text **
+The responses have some randomness on the icon and the affix text
+
 
 ##### The Image:
 
 The observation device takes an image and reports it as a temporary link
 
 ![The image](app/data/images/observationResponse.png)
+Example situation image with some visual blocking
 
 * Image contents vary depending on the observation device positioning
 * should the device positioning resulted images reveal too much of for example some corporate secrets or public spaces the resulting image can be filtered with visual blocks or even face blurring :sparkles: 
