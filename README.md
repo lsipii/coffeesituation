@@ -2,34 +2,41 @@
 
 DRAFT
 
-### What is this repository for? ###
+### What is this repository for?
 
 * The coffee situation bot observes the current office coffee machines situation as it is important to know the status of the coffee situation
 * Version v1.1
 
-#### Description ####
+#### Description
 
 On a slack channel, the bot app listens for specific keywords eg. coffee, kahavia.. and on a match it responds with a situation message that has an image link attached to it. The image is taken by the coffee observation device and it is from the office coffee machine.
 
 The user sees two things:
 
-* The response:
-![The response](app/data/images/slackResponse.png)
+##### The response:
 
-	* The responses have some randomness on the icon and the affix text
+Action	     | Response 
+------------ | -------------
+Coffee keyword | ![The response](app/data/images/slackResponse.png)
+Joke | ![The response](app/data/images/slackJokeResponse.png)
 
-* The image:
+* The responses have some randomness on the icon and the affix text
+
+##### The Image:
+
 ![The image](app/data/images/observationResponse.png)
 
-	* Image contents vary depending on the observation device positioning
-	* should the device positioning resulted images reveal too much of for example some corporate secrets or public spaces the resulting image can be filtered with visual blocks or even face blurring :sparkles: 
-	* images have a limited lifetime and are automaticly truncated
+
+* Image contents vary depending on the observation device positioning
+* should the device positioning resulted images reveal too much of for example some corporate secrets or public spaces the resulting image can be filtered with visual blocks or even face blurring :sparkles: 
+* images have a limited lifetime and are automaticly truncated
+
 
 :sparkles: results may vary
 
-#### Usage ####
+#### Usage
 
-##### Slackbot app direct commands #####
+##### Slackbot app direct commands
 
 > - Help: Prints this usage text
 > - Status: Checks if the coffee situation monitoring device is online
