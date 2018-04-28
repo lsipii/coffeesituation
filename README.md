@@ -78,6 +78,7 @@ The slackbot app runs and installs with:
 
 * python3
 * pip3
+* cron
 
 1. Clone the repository
 
@@ -109,7 +110,7 @@ cp settings/slackbot.example.json settings/slackbot.json
 > 3. COFFEE_BOT_TOKEN: The access key to the coffee observation device, self generated shared secret
 > 4. COFFEE_BOT_URL: The public access url of the coffee bot device, eg. https://xxXXxxXXXXxx.dataplicity.io
 
-3. Configure cronjobs
+3. Cronjob configurations
 
 by
 
@@ -139,7 +140,7 @@ Thought, multiliner and multistepper without OpenCV support would be
 sudo apt-get update -y && sudo apt-get install -y git python3-pip nginx motion git
 ```
 
-2. Motion configs
+2. Motion configurations
 ```
 sudo sed -i 's/daemon off/daemon on/g' /etc/motion/motion.conf && \
 	sudo sed -i 's/stream_localhost on/stream_localhost off/g' /etc/motion/motion.conf && \
@@ -160,7 +161,7 @@ sudo sed -i 's/daemon off/daemon on/g' /etc/motion/motion.conf && \
 git clone https://github.com/tamperestartuphub/coffeesituation.git 
 ```
 
-4. nginx configs
+4. nginx configurations
 ```
 sudo cp ./coffeesituation/docker/nginx/sites/default.conf /etc/nginx/sites-available/default && \
 	sudo cp ./coffeesituation/docker/nginx/404/404.jpg /var/www/html/
@@ -201,7 +202,7 @@ cp ./coffeesituation/settings/settings.example.json ./coffeesituation/settings/s
 
 - Stop by ctrl-c
 
-4. Configure cronjobs
+4. Cronjob configurations
 
 by
 
