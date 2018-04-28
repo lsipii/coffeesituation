@@ -17,13 +17,13 @@ The user sees couple of things
 
 The slack bot responses to different events
 
-Event	     | Response 
------------- | -------------
-Coffee keyword | ![The situation response](app/data/images/slackResponse.png)
-Joke | ![The joke response](app/data/images/slackJokeResponse.png)
-Status | ![The connection error response](app/data/images/slackStatusResponse.png)
-Connection error	| ![The connection error response](app/data/images/slackConnectionErrorResponse.png)
-Unspecified error	| ![The error response](app/data/images/slackErrorResponse.png)
+Event	     | Message type	 | Response 
+------------ | ------------- | -------------
+Coffee keyword | On a channel | ![The situation response](app/data/images/slackResponse.png)
+Joke | Direct message | ![The joke response](app/data/images/slackJokeResponse.png)
+Status | Direct message | ![The connection error response](app/data/images/slackStatusResponse.png)
+Connection error | -	| ![The connection error response](app/data/images/slackConnectionErrorResponse.png)
+Unspecified error | - | ![The error response](app/data/images/slackErrorResponse.png)
 
 The responses have some randomness on the icon and the affix text
 
