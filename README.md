@@ -11,25 +11,31 @@ DRAFT
 
 On a slack channel, the bot app listens for specific keywords eg. coffee, kahavia.. and on a match it responds with a situation message that has an image link attached to it. The image is taken by the coffee observation device and it is from the office coffee machine.
 
-The user sees two things:
+The user sees couple of things
 
 ##### The response:
 
-Action	     | Response 
------------- | -------------
-Coffee keyword | ![The response](app/data/images/slackResponse.png)
-Joke | ![The response](app/data/images/slackJokeResponse.png)
+The slack bot responses to different events
 
-* The responses have some randomness on the icon and the affix text
+Event	     | Response 
+------------ | -------------
+Coffee keyword | ![The situation response](app/data/images/slackResponse.png)
+Joke | ![The joke response](app/data/images/slackJokeResponse.png)
+Status | ![The connection error response](app/data/images/slackStatusResponse.png)
+Connection error	| ![The connection error response](app/data/images/slackConnectionErrorResponse.png)
+Unspecified error	| ![The error response](app/data/images/slackErrorResponse.png)
+
+** The responses have some randomness on the icon and the affix text **
 
 ##### The Image:
 
-![The image](app/data/images/observationResponse.png)
+The observation device takes an image and reports it as a temporary link
 
+![The image](app/data/images/observationResponse.png)
 
 * Image contents vary depending on the observation device positioning
 * should the device positioning resulted images reveal too much of for example some corporate secrets or public spaces the resulting image can be filtered with visual blocks or even face blurring :sparkles: 
-* images have a limited lifetime and are automaticly truncated
+* images have a limited lifetime and are automatically truncated
 
 
 :sparkles: results may vary
