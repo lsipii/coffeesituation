@@ -49,6 +49,7 @@ class SlackBot():
             "kohvi",
             "kaffe",
             "kahavi",
+            "kahhavi",
             "sumppi",
             "suppii",
             "sumpe",
