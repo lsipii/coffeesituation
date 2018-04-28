@@ -46,7 +46,7 @@ Joke | ![The response](app/data/images/slackJokeResponse.png)
 
 ##### The observation device configurations #####
 
-@TODO
+TODO
 
 #### Coming up in the next episode ####
 
@@ -117,7 +117,7 @@ add lines, for example (fix the paths):
 
 ##### Setup Dos: The Rasperry Pi Observation device
 
-@TODO: Raspberry Pi setups
+TODO: Raspberry Pi setups
 
 ###### Dependencies
 
@@ -164,12 +164,12 @@ pip3 install -r ./coffeesituation/requirements.txt
 
 ###### Deployment instructions
 
-@TODO: better decribe the setup using dataplicity, 
+TODO: better decribe the setup using dataplicity, 
 - but for now it's pretty straightforward: https://www.dataplicity.com/devices/
 - enable the wormhole
 - get the public address and reference where called for a COFFEE_BOT_URL setting
 
-@TODO: setup using resin.io
+TODO: setup using resin.io
 - ...
 
 1. Copy the example device configuration file
