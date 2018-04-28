@@ -33,6 +33,7 @@ The responses have some randomness on the icon and the affix text
 The observation device takes an image and reports it as a temporary link
 
 ![The image](app/data/images/observationResponse.png)
+
 Example situation image with some visual blocking
 
 * Image contents vary depending on the observation device positioning
