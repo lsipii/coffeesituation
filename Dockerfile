@@ -6,7 +6,7 @@
 # Creates Zoinks raspberry pi image, rasbian
 #
 FROM resin/rpi-raspbian
-#FROM debian:stretch-slim
+#FROM debian:stretch
 
 LABEL maintainer="lspii@kapsi.fi"
 LABEL lsipii.tshzoink.version=1
@@ -62,6 +62,10 @@ RUN apt-get update -yqq && \
 # Install opencv
 #####################################
 
+# Create a build dir
+RUN mkdir -p /opencv
+WORKDIR /opencv
+
 RUN wget -q -O opencv.tar.gz https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.tar.gz && \
 	tar -xzf opencv.tar.gz && \
 	rm opencv.tar.gz
@@ -77,16 +81,19 @@ RUN cd opencv-${OPENCV_VERSION} && \
 	cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	    -D CMAKE_INSTALL_PREFIX=/usr/local \
 	    -D INSTALL_PYTHON_EXAMPLES=ON \
-	    -D BUILD_EXAMPLES=ON ..
-
-RUN make -j4
-RUN make install
-RUN ldconfig
+	    -D BUILD_EXAMPLES=ON .. && \
+	make -j4 && \
+	make install && \
+	ldconfig
 
 # Revert the optimizations
 RUN if [ -f /etc/dphys-swapfile ]; then \
 	RUN sed -i 's/CONF_SWAPSIZE=1024/CONF_SWAPSIZE=100/g' /etc/dphys-swapfile \
 ;fi
+
+# Cleanup
+WORKDIR /
+RUN rm -rf /opencv
 
 #
 #--------------------------------------------------------------------------
@@ -121,8 +128,8 @@ RUN mkdir -p /var/www/html
 RUN apt-get update -yqq && \
     apt-get install -y nginx
 
-ADD ./docker/nginx/sites/default.conf /etc/nginx/sites-available/default.conf
-ADD ./docker/nginx/404/404.jpg /var/www/html/
+COPY ./docker/nginx/sites/default.conf /etc/nginx/sites-available/default
+COPY ./docker/nginx/404/404.jpg /var/www/html/
 
 #
 #--------------------------------------------------------------------------
