@@ -1,11 +1,9 @@
- # README #
-
-DRAFT
+ 
+ # Coffee Situation #
 
 ### What is this repository for?
 
-* The coffee situation bot observes the current office coffee machines situation as it is important to know the status of the coffee situation
-* Version v1.1
+The coffee situation bot observes the current office coffee machines situation as it is important to know the status of the coffee situation
 
 #### Description
 
@@ -38,7 +36,7 @@ Example situation image with some visual blocking
 
 * Image contents vary depending on the observation device positioning
 * should the device positioning resulted images reveal too much of for example some corporate secrets or public spaces the resulting image can be filtered with visual blocks or even face blurring :sparkles: 
-* images have a limited lifetime and are automatically truncated
+* images have a limited lifetime
 
 
 :sparkles: results may vary
@@ -55,7 +53,7 @@ Example situation image with some visual blocking
 
 ##### The observation device configurations #####
 
-TODO
+**TODO:** Description of the different device mode configurations
 
 #### Coming up in the next episode ####
 
@@ -69,7 +67,6 @@ TODO
 #### Summary of set 
 
 The app consists of a Rasbperry Pi device taking pictures and a Slack app reporting the results. Thus there are two different setups and configurations.  
-
 ##### Setup Uno: Slackbot
 
 ###### Dependencies
@@ -77,8 +74,9 @@ The app consists of a Rasbperry Pi device taking pictures and a Slack app report
 The slackbot app runs and installs with:
 
 * python3
-* pip3
 * cron
+* pip3
+* git
 
 1. Clone the repository
 
@@ -127,7 +125,7 @@ add lines, for example (fix the paths):
 
 ##### Setup Dos: The Rasperry Pi Observation device
 
-TODO: Raspberry Pi setups
+**TODO:** Raspberry Pi setups
 
 ###### Dependencies
 
@@ -174,12 +172,12 @@ pip3 install -r ./coffeesituation/requirements.txt
 
 ###### Deployment instructions
 
-TODO: better decribe the setup using dataplicity, 
+**TODO:** better decribe the setup using dataplicity, 
 - but for now it's pretty straightforward: https://www.dataplicity.com/devices/
 - enable the wormhole
 - get the public address and reference where called for a COFFEE_BOT_URL setting
 
-TODO: setup using resin.io
+**TODO:** setup using resin.io
 - ...
 
 1. Copy the example device configuration file
@@ -204,7 +202,7 @@ cp ./coffeesituation/settings/settings.example.json ./coffeesituation/settings/s
 
 4. Cronjob configurations
 
-by
+by a crontab editing command:
 
 ```
 crontab -e
