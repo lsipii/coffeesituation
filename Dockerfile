@@ -3,14 +3,17 @@
 # Image Setup
 #--------------------------------------------------------------------------
 #
-# Creates Zoinks raspberry pi image, rasbian
+# Coffee situation Raspberry Pi resin.io image 
 #
+# Image tag: lsipii/coffeesituation
+# Image version tags: https://hub.docker.com/r/lsipii/coffeesituation/tags/
+# Image Github repository: https://github.com/tamperestartuphub/coffeesituation
+#
+
 FROM resin/rpi-raspbian
 #FROM debian:stretch
 
 LABEL maintainer="lspii@kapsi.fi"
-LABEL lsipii.tshzoink.version=1
-LABEL lsipii.tshzoink.release-date="2018-03-02"
 
 #
 #--------------------------------------------------------------------------
