@@ -156,6 +156,14 @@ COPY ./requirements.txt ${COFFEE_SITUATION_APP_PATH}/
 #####################################
 RUN pip3 install -r ${COFFEE_SITUATION_APP_PATH}/requirements.txt
 
+#####################################
+# Crontab
+#####################################
+
+COPY ./docker/crontab /etc/cron.d
+
+RUN chmod -R 644 /etc/cron.d
+
 #
 #--------------------------------------------------------------------------
 # Finalize, cleanup

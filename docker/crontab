@@ -1,0 +1,4 @@
+@reboot /usr/local/src/coffeesituation/shell/ensureDeviceAppRunning.sh
+20,57 * * * * /usr/local/src/coffeesituation/shell/ensureDeviceAppRunning.sh
+10,35,44 * * * * /usr/local/src/coffeesituation/shell/ensureRaspberryPiNetwork.sh
+2 * * * * /usr/local/src/coffeesituation/S3BucketGC_cronjob.py
