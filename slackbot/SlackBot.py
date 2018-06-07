@@ -82,7 +82,12 @@ class SlackBot():
 
                 if not self.commandInProgress:
                     # Read the message
-                    self.resolveAndFireCommand(self.slack.rtm_read())   
+                    try:
+                        self.resolveAndFireCommand(self.slack.rtm_read())
+                    except Exception as e:
+                        self.printDebugMessage("engage rtm_read() exception")
+                        self.printDebugMessage(e)
+                       
                 time.sleep(self.slackRTMReadDelay)
         else:
             self.printDebugMessage("Slackbot connection failed", 1, True)
