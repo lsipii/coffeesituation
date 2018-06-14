@@ -65,32 +65,36 @@ class SlackBot():
     Engages the client using Slacks Real Time Messaging websocket API
     """
     def engage(self):
-        if self.slack.rtm_connect(with_team_state=False):
-            
-            # Configures the connection
-            self.slackBotUser = self.slack.api_call("auth.test")
-            
-            # Validates the connection
-            if not self.slackBotUser["ok"]:
-                self.printDebugMessage("Slackbot authentication error", 1, True)
+        try:
 
-            self.printDebugMessage("Slack connection successful")
-            self.printDebugMessage("Listening..")
-            
-            # The primary loop
-            while True:
+            if self.slack.rtm_connect(with_team_state=False):
+                
+                # Configures the connection
+                self.slackBotUser = self.slack.api_call("auth.test")
+                
+                # Validates the connection
+                if not self.slackBotUser["ok"]:
+                    self.printDebugMessage("Slackbot authentication error", 1, True)
 
-                if not self.commandInProgress:
-                    # Read the message
-                    try:
-                        self.resolveAndFireCommand(self.slack.rtm_read())
-                    except Exception as e:
-                        self.printDebugMessage("engage rtm_read() exception")
-                        self.printDebugMessage(e)
-                       
-                time.sleep(self.slackRTMReadDelay)
-        else:
-            self.printDebugMessage("Slackbot connection failed", 1, True)
+                self.printDebugMessage("Slack connection successful")
+                self.printDebugMessage("Listening..")
+                
+                # The primary loop
+                while True:
+
+                    if not self.commandInProgress:
+                        # Read the message
+                        self.resolveAndFireCommand(self.slack.rtm_read())   
+                    time.sleep(self.slackRTMReadDelay)
+            else:
+                self.printDebugMessage("Slackbot connection failed", 1, True)
+
+        except Exception as e:
+            self.printDebugMessage("engage rtm_read() exception")
+            self.printDebugMessage(e)
+            self.printDebugMessage("Re-engaging in 30 secs..")
+            time.sleep(30)
+            self.engage() 
 
     """
     Parses the slack events for commands to fire, fires commands 
