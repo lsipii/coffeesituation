@@ -12,4 +12,7 @@ if [ $? != 0 ]; then
 	sudo ifup wlan0
 	sleep 10
 	sudo ifup wlan0
+elif ! ps -ef | grep dataplicity | grep python > /dev/null;then
+	echo "Restarting the tuxtunnel.."
+	sudo supervisorctl restart tuxtunnel
 fi
