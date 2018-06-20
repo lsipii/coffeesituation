@@ -212,6 +212,7 @@ add lines:
 
 ```
 @reboot /home/pi/coffeesituation/shell/ensureDeviceAppRunning.sh
+16 2 * * 1 git -C "/home/pi/coffeesituation/" pull
 20,57 * * * * /home/pi/coffeesituation/shell/ensureDeviceAppRunning.sh
 10,35,44 * * * * /home/pi/coffeesituation/shell/ensureRaspberryPiNetwork.sh
 ```
