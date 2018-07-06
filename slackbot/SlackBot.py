@@ -7,6 +7,7 @@ from slackclient import SlackClient
 import urllib
 import json
 import time
+import traceback
 
 class SlackBot():
 
@@ -90,10 +91,10 @@ class SlackBot():
                 self.printDebugMessage("Slackbot connection failed", 1, True)
 
         except Exception as e:
-            self.printDebugMessage("engage rtm_read() exception")
-            self.printDebugMessage(e)
-            self.printDebugMessage("Re-engaging in 30 secs..")
-            time.sleep(30)
+            self.printDebugMessage("rtm_read() exception")
+            self.printDebugException(e)
+            self.printDebugMessage("Re-engaging in 10 secs..")
+            time.sleep(10)
             self.engage() 
 
     """
@@ -122,7 +123,7 @@ class SlackBot():
                     self.commandInProgress = False
 
                     self.printDebugMessage("resolveAndFireCommand url exception")
-                    self.printDebugMessage(e)
+                    self.printDebugException(e)
                     self.sendBotConnectionErrorMsg(event["channel"])
 
                 except urllib.error.HTTPError as e:
@@ -131,7 +132,7 @@ class SlackBot():
                     self.commandInProgress = False
 
                     self.printDebugMessage("resolveAndFireCommand http exception")
-                    self.printDebugMessage(e)
+                    self.printDebugException(e)
 
                     if e.code == 429:
                         self.sendBotConnectionErrorMsg(event["channel"], "Too many requests at a time!")
@@ -144,7 +145,7 @@ class SlackBot():
                     self.commandInProgress = False
 
                     self.printDebugMessage("resolveAndFireCommand exception")
-                    self.printDebugMessage(e)
+                    self.printDebugException(e)
                     self.sendBotDefaultErrorMsg(event["channel"])
 
                 break
@@ -157,8 +158,13 @@ class SlackBot():
     """
     def validateEvent(self, event):
         isValidEvent = False
-        if event["type"] == "message" or event["type"] == "message.im":
+        if isinstance(event, dict) and "type" in event:
             isValidEvent = True
+        if isValidEvent:
+            if event["type"] == "message" or event["type"] == "message.im":
+                isValidEvent = True
+            else:
+                isValidEvent = False
         if isValidEvent and "subtype" in event:
             isValidEvent = False
         if isValidEvent and "user" not in event:
@@ -257,23 +263,33 @@ class SlackBot():
             'app_version': self.app.getAppVersion()
         }).encode()
 
+        success=False
         req =  urllib.request.Request(apiEndPointAddr, data=data)
-        resp = urllib.request.urlopen(req).read()
-    
-        if callback is None:
+        try:
+            resp = urllib.request.urlopen(req).read()
+            success=True
+        except urllib.error.HTTPError as e:
+            self.printDebugException(e)
+        except urllib.error.URLError as e:
+            self.printDebugException(e)
 
-            # Parsing the response
-            responseData = json.loads(resp.decode('utf-8'))
+        if success:
+            if callback is None:
 
-            # Expects a notify container with a message in the response
-            if "notify" in responseData and "message" in responseData["notify"]:
-                self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
+                # Parsing the response
+                responseData = json.loads(resp.decode('utf-8'))
+
+                # Expects a notify container with a message in the response
+                if "notify" in responseData and "message" in responseData["notify"]:
+                    self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
+                else:
+                    self.printDebugMessage("fireCoffeeCherkerAppQuery response:")
+                    self.printDebugMessage(responseData)
+                    self.sendBotDefaultErrorMsg(event["channel"])
             else:
-                self.printDebugMessage("fireCoffeeCherkerAppQuery response:")
-                self.printDebugMessage(responseData)
-                self.sendBotDefaultErrorMsg(event["channel"])
+                callback(resp)
         else:
-            callback(resp)
+            self.sendSlackBotResponse(event["channel"], "The monitoring app did not respond")
 
         # Flags as in progress
         self.commandInProgress = False
@@ -408,7 +424,7 @@ class SlackBot():
             })
         except Exception as e:
             self.printDebugMessage("fireSlackBotTyping exception:")
-            self.printDebugMessage(e)
+            self.printDebugException(e)
 
     """
     Checks for bot control commands
@@ -506,6 +522,18 @@ class SlackBot():
     """
     def setDebugMode(self, debugMode):
         self.debugMode = debugMode
+
+    """
+    Prints a debug exception in the runner console
+    
+    @param (Exception) exception
+    @param (int) exitCode = None, exits in debug mode if set
+    @param (bool) exitAnyHow = False, disregards the debug mode
+    """
+    def printDebugException(self, exception, exitCode = None, exitAnyHow = False):
+        if self.debugMode:
+            traceback.print_exc()
+        self.printDebugMessage(exception, exitCode, exitAnyHow)
 
     """
     Prints a debug message in the runner console
