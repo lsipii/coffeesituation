@@ -218,13 +218,11 @@ class SlackBot():
         """
         Handles the response
 
-        @param (Response) resp
+        @param (Response dict) responseData
         """
-        def responseHandler(resp):
+        def responseHandler(responseData):
             try:
                 # Parsing the response
-                responseData = json.loads(resp.decode('utf-8'))
-
                 if "status" in responseData:
                     if responseData["status"] == "OK":
                         self.sendSlackBotResponse(event["channel"], "The monitoring app is running")
@@ -267,18 +265,17 @@ class SlackBot():
         req =  urllib.request.Request(apiEndPointAddr, data=data)
         try:
             resp = urllib.request.urlopen(req).read()
+            responseData = json.loads(resp.decode('utf-8'))
             success=True
         except urllib.error.HTTPError as e:
             self.printDebugException(e)
         except urllib.error.URLError as e:
             self.printDebugException(e)
+        except Exception as e:
+            self.printDebugException(e)
 
         if success:
             if callback is None:
-
-                # Parsing the response
-                responseData = json.loads(resp.decode('utf-8'))
-
                 # Expects a notify container with a message in the response
                 if "notify" in responseData and "message" in responseData["notify"]:
                     self.sendSlackBotResponse(event["channel"], responseData["notify"]["message"], responseData["notify"])
@@ -287,7 +284,7 @@ class SlackBot():
                     self.printDebugMessage(responseData)
                     self.sendBotDefaultErrorMsg(event["channel"])
             else:
-                callback(resp)
+                callback(responseData)
         else:
             self.sendSlackBotResponse(event["channel"], "The monitoring app did not respond")
 
