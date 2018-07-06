@@ -93,8 +93,8 @@ class SlackBot():
         except Exception as e:
             self.printDebugMessage("rtm_read() exception")
             self.printDebugException(e)
-            self.printDebugMessage("Re-engaging in 10 secs..")
-            time.sleep(10)
+            self.printDebugMessage("Re-engaging in 5 secs..")
+            time.sleep(5)
             self.engage() 
 
     """
