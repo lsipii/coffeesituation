@@ -119,8 +119,9 @@ crontab -e
 add lines, for example (fix the paths):
 
 ```
-@reboot /path/to/coffeesituation/shell/ensureSlackBotAppRunning.sh.sh
-10,27 * * * * /path/to/coffeesituation/shell/ensureSlackBotAppRunning.sh.sh
+@reboot /path/to/coffeesituation/shell/ensureSlackBotAppRunning.sh
+16 2 * * * /path/to/coffeesituation/shell/selfUpdate.sh
+10,27 * * * * /path/to/coffeesituation/shell/ensureSlackBotAppRunning.sh
 ```
 
 ##### Setup Dos: The Rasperry Pi Observation device
@@ -212,7 +213,7 @@ add lines:
 
 ```
 @reboot /home/pi/coffeesituation/shell/ensureDeviceAppRunning.sh
-16 2 * * 1 git -C "/home/pi/coffeesituation/" pull
+15 2 * * * /home/pi/coffeesituation/shell/selfUpdate.sh
 20,57 * * * * /home/pi/coffeesituation/shell/ensureDeviceAppRunning.sh
 10,35,44 * * * * /home/pi/coffeesituation/shell/ensureRaspberryPiNetwork.sh
 ```
