@@ -188,7 +188,7 @@ class SlackBot():
             self.sendBotHelpResponse(channel)
         elif message.find("list") > -1:
            self.sendBotCoffeeKeywordsResponse(channel)
-        elif message.find("status") > -1:
+        elif message.find("status") > -1 or message.find("tilanne") > -1:
            self.fireCoffeeSituationAppStatusQueryResponse(event)
         elif message.find("joke") > -1 or message.find("vitsi") > -1:
            self.sendPyJokesResponse(channel)
