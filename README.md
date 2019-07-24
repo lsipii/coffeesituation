@@ -17,11 +17,11 @@ The slack bot responses to different events
 
 Event	     | Message type	 | Response 
 ------------ | ------------- | -------------
-Coffee keyword | On a channel | ![The situation response](app/data/images/slackResponse.png)
-Joke | Direct message | ![The joke response](app/data/images/slackJokeResponse.png)
-Status | Direct message | ![The connection error response](app/data/images/slackStatusResponse.png)
-Connection error | -	| ![The connection error response](app/data/images/slackConnectionErrorResponse.png)
-Unspecified error | - | ![The error response](app/data/images/slackErrorResponse.png)
+Coffee keyword | On a channel | ![The situation response](assets/images/slackResponse.png)
+Joke | Direct message | ![The joke response](assets/images/slackJokeResponse.png)
+Status | Direct message | ![The connection error response](assets/images/slackStatusResponse.png)
+Connection error | -	| ![The connection error response](assets/images/slackConnectionErrorResponse.png)
+Unspecified error | - | ![The error response](assets/images/slackErrorResponse.png)
 
 The responses have some randomness on the icon and the affix text
 
@@ -30,7 +30,7 @@ The responses have some randomness on the icon and the affix text
 
 The observation device takes an image and reports it as a temporary link
 
-![The image](app/data/images/observationResponse.png)
+![The image](assets/images/observationResponse.png)
 
 Example situation image with some visual blocking
 
@@ -98,7 +98,7 @@ pip3 install -r coffeesituation/slackbot_requirements.txt
 1. Copy the example configurations:
 
 ```
-cp settings/slackbot.example.json settings/slackbot.json
+cp config/slackbot.example.json config/slackbot.json
 ```
 
 2. Configure at the very least
@@ -183,7 +183,7 @@ pip3 install -r ./coffeesituation/requirements.txt
 
 1. Copy the example device configuration file
 ```
-cp ./coffeesituation/settings/settings.example.json ./coffeesituation/settings/settings.json
+cp ./coffeesituation/config/config.example.json ./coffeesituation/config/config.json
 ```
 
 2. Fill important parts of the json file
@@ -228,10 +228,3 @@ If using S3 storage, add also a:
 ```
 sudo reboot
 ```
-
-### Who do I talk to? ###
-
-* Project owner: @lsipii 
-* Administrator for the Slack bot for the Tampere Startup Hub channels: @lsipii
-* Administrator for the observation device in Tampere Startup Hub: @lsipii
-* Tampere Startup Hub: http://www.startuphub.fi

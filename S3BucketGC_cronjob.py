@@ -3,9 +3,9 @@
 @author lsipii
 """
 import sys, getopt
-from app.AppInfo import AppInfo
-from app.ConfigReader import ConfigReader
-from device.hardware.storage.MediaStorageFactory import MediaStorageFactory
+from apps.utils.AppInfo import AppInfo
+from apps.utils.ConfigReader import ConfigReader
+from apps.DeviceApp.hardware.storage.MediaStorageFactory import MediaStorageFactory
 
 # App runner
 if __name__ == '__main__':

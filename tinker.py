@@ -2,7 +2,7 @@
 """
 @author lsipii
 """
-from app.utils.images.filters.AreaBlurrer import AreaBlurrer
+from apps.utils.images.filters.AreaBlurrer import AreaBlurrer
 
 imageName = "mismoro.png"
 imagePath = "device/data/testimages/"+imageName

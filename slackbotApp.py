@@ -3,8 +3,8 @@
 @author lsipii
 """
 import sys, getopt
-from slackbot.SlackBotApp import SlackBotApp
-from slackbot.SlackBot import SlackBot
+from apps.SlackBotApp.SlackBotApp import SlackBotApp
+from apps.SlackBotApp.SlackBot import SlackBot
 
 # App runner
 if __name__ == '__main__':
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	def printHelp():
 		print(app.getFullAppName())
 		print("Mission statement: "+ app.getAppMissionStatement(), "\n")
-		print("Usage: slackbot.py --help|--version|--production") 
+		print("Usage: apps.SlackBotApp.py --help|--version|--production") 
 		exit()
 		
 	try:

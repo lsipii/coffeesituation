@@ -7,7 +7,7 @@
 #
 # Image tag: lsipii/coffeesituation
 # Image version tags: https://hub.docker.com/r/lsipii/coffeesituation/tags/
-# Image Github repository: https://github.com/tamperestartuphub/coffeesituation
+# Image Github repository: https://github.com/lsipii/coffeesituation
 #
 
 FROM resin/rpi-raspbian
@@ -147,10 +147,11 @@ ENV COFFEE_SITUATION_APP_PATH /usr/local/src/coffeesituation
 #####################################
 
 RUN mkdir -p ${COFFEE_SITUATION_APP_PATH}/device
-RUN mkdir -p ${COFFEE_SITUATION_APP_PATH}/settings
+RUN mkdir -p ${COFFEE_SITUATION_APP_PATH}/config
+RUN mkdir -p ${COFFEE_SITUATION_APP_PATH}/apps/DeviceApp
 
-COPY ./device/ ${COFFEE_SITUATION_APP_PATH}/device/
-COPY ./settings ${COFFEE_SITUATION_APP_PATH}/settings/
+COPY ./apps/DeviceApp/ ${COFFEE_SITUATION_APP_PATH}/apps/DeviceApp/
+COPY ./config ${COFFEE_SITUATION_APP_PATH}/config/
 COPY ./deviceApp.py ${COFFEE_SITUATION_APP_PATH}/
 COPY ./requirements.txt ${COFFEE_SITUATION_APP_PATH}/
 

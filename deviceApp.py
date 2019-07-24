@@ -4,8 +4,8 @@
 """
 import sys, getopt
 from flask import Flask
-from device.DeviceApp import DeviceApp
-from device.http.controllers.CoffeesHasWeController import CoffeesHasWeController
+from apps.DeviceApp.DeviceApp import DeviceApp
+from apps.DeviceApp.http.controllers.CoffeesHasWeController import CoffeesHasWeController
 
 # Creates the device app
 app = DeviceApp()
