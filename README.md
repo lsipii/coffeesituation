@@ -81,7 +81,7 @@ The slackbot app runs and installs with:
 1. Clone the repository
 
 ```
-git clone https://github.com/tamperestartuphub/coffeesituation.git 
+git clone https://github.com/lsipii/coffeesituation.git 
 ```
 
 2. Install the bot requirements
@@ -157,7 +157,7 @@ sudo sed -i 's/daemon off/daemon on/g' /etc/motion/motion.conf && \
 3. Clone the repository if not yet done
 
 ```
-git clone https://github.com/tamperestartuphub/coffeesituation.git 
+git clone https://github.com/lsipii/coffeesituation.git 
 ```
 
 4. nginx configurations
