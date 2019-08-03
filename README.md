@@ -98,7 +98,7 @@ pip3 install -r coffeesituation/slackbot_requirements.txt
 1. Copy the example configurations:
 
 ```
-cp config/slackbot.example.json config/slackbot.json
+cp config/slackbotApp.example.json config/slackbotApp.json
 ```
 
 2. Configure at the very least
@@ -183,7 +183,7 @@ pip3 install -r ./coffeesituation/requirements.txt
 
 1. Copy the example device configuration file
 ```
-cp ./coffeesituation/config/config.example.json ./coffeesituation/config/config.json
+cp ./coffeesituation/config/deviceApp.example.json ./coffeesituation/config/deviceApp.json
 ```
 
 2. Fill important parts of the json file

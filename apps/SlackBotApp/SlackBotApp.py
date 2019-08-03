@@ -11,7 +11,7 @@ class SlackBotApp(AppInfo):
 	App initialization
 	"""
 	def __init__(self):
-		self.config = ConfigReader("slackbot").getConfig() 
+		self.config = ConfigReader("slackbotApp").getConfig() 
 
 	"""
 	Gets the app name

@@ -53,7 +53,7 @@ class ConfigReader:
 				secretsFileName = secretsFileName+".json"
 
 			dir = os.path.dirname(__file__)
-			secretsFilePath = os.path.join(dir, '..', secretsFolder, secretsFileName)
+			secretsFilePath = os.path.join(dir, '..', '..', secretsFolder, secretsFileName)
 
 			with open(secretsFilePath) as dataFile:
 				secrets = json.load(dataFile)

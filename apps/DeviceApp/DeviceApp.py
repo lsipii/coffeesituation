@@ -12,7 +12,7 @@ class DeviceApp(AppInfo):
 	App initialization
 	"""
 	def __init__(self):
-		self.config = ConfigReader("config").getConfig() 
+		self.config = ConfigReader("deviceApp").getConfig() 
 
 	"""
 	Gets the app name
