@@ -1,5 +1,5 @@
  
- # Coffee Situation #
+# Coffee Situation #
 
 ### What is this repository for?
 
@@ -163,7 +163,7 @@ git clone https://github.com/lsipii/coffeesituation.git
 4. nginx configurations
 ```
 sudo cp ./coffeesituation/docker/nginx/sites/default.conf /etc/nginx/sites-available/default && \
-	sudo cp ./coffeesituation/docker/nginx/404/404.jpg /var/www/html/
+	sudo mkdir -p /var/www/html/images && sudo cp ./coffeesituation/docker/nginx/404/404.jpg /var/www/html/images
 ```
 
 5. The deviceApp python requirements
@@ -224,7 +224,13 @@ If using S3 storage, add also a:
 2 * * * * /home/pi/coffeesituation/S3BucketGC_cronjob.py
 ```
 
-5. Reboot
+5. Finalize by a reboot
 ```
 sudo reboot
 ```
+
+
+# References:
+
+Turtle photo: https://www.pexels.com/fi-fi/kuva/elain-elainkuvaus-kilpikonna-lahikuva-2289601/
+

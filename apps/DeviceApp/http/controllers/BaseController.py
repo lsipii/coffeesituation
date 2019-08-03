@@ -11,7 +11,7 @@ class BaseController():
 	Base controller module initialization
 	@var (array) knownHttpMethods
 	"""
-	knownHttpMethods = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH']
+	knownHttpMethods = ['GET', 'POST']
 
 	"""
 	The base request handler
