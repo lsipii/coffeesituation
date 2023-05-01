@@ -1,4 +1,4 @@
-Flask==1.1.1
+Flask==2.3.2
 Flask-Responses==0.2
 sh==1.12.14
 boto3==1.9.194
